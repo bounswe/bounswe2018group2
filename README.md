@@ -1,6 +1,6 @@
 # bounswe2018group2 (Alesta)
 
-Welcome to our github repository! :anchor:
+Welcome to Alesta. This is CMPE 352/451 project repository. You can take a look at our [wiki](https://github.com/bounswe/bounswe2018group2/wiki) :anchor:
 
 ### Our team members:
 * [Nilsu Pamuk(Communicator)]()
