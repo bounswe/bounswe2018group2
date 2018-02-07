@@ -9,7 +9,7 @@ Welcome to Alesta. This is CMPE 352/451 project repository. You can take a look 
 * [Bartu İnce]()
 * [Zeki Tel]()
 * [Huriye Özdemir]()
-* [Harun Eren]()
+* [Harun Eren](https://github.com/bounswe/bounswe2018group2/wiki/haruneren)
 * [Şükrü Can Gültop]()
 * [Fatih Mehmet Kiriş]()
 * [Selamettin Dirik]()
