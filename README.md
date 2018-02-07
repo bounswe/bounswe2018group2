@@ -4,7 +4,7 @@ Welcome to our github repository! :anchor:
 
 ### Our team members:
 * [Nilsu Pamuk(Communicator)]()
-* [Ali Torğutalp]()
+* [Ali Torğutalp](https://github.com/bounswe/bounswe2018group2/wiki/aliturgutalp)
 * [Ergün Erdoğmuş]()
 * [Bartu İnce]()
 * [Zeki Tel]()
