@@ -6,7 +6,7 @@ Welcome to Alesta. This is CMPE 352/451 project repository. You can take a look 
 * [Nilsu Pamuk(Communicator)]()
 * [Ali Torğutalp](https://github.com/bounswe/bounswe2018group2/wiki/aliturgutalp)
 * [Ergün Erdoğmuş]()
-* [Bartu İnce]()
+* [Bartu İnce](https://github.com/bounswe/bounswe2018group2/wiki/Bartu-%C4%B0nce)
 * [Zeki Tel]()
 * [Huriye Özdemir](https://github.com/bounswe/bounswe2018group2/wiki/huriozdmr)
 * [Harun Eren](https://github.com/bounswe/bounswe2018group2/wiki/haruneren)
