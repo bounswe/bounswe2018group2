@@ -1,5 +1,5 @@
 # ALESTA :anchor:
-## BOUN-CmpE 352/451 Project Repository
+## BOUN-CmpE 352/451 Project
 
 ![created](https://img.shields.io/badge/Created-February%2C%202018-ff69b4.svg?style=for-the-badge)
 [![description](https://img.shields.io/badge/Description-page-green.svg?style=for-the-badge)](https://github.com/bounswe/bounswe2018group2/wiki/Project-Description)
