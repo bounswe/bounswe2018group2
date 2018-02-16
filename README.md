@@ -1,11 +1,11 @@
-# ALESTA
-## Welcome to Alesta! :anchor: This is BOUN-CmpE 352/451 project repository.
+# ALESTA :anchor:
+## BOUN-CmpE 352/451 Project Repository
 
 ![created](https://img.shields.io/badge/Created-February%2C%202018-ff69b4.svg?style=for-the-badge)
 [![description](https://img.shields.io/badge/Description-page-green.svg?style=for-the-badge)](https://github.com/bounswe/bounswe2018group2/wiki/Project-Description)
 [![requirements](https://img.shields.io/badge/Project-Requirements-red.svg?style=for-the-badge)](https://github.com/bounswe/bounswe2018group2/wiki/Project-Requirements)
 <p align="center"><img src="https://raw.githubusercontent.com/bounswe/bounswe2018group2/master/logo.jpeg"></p>
-<p align="center"><img width=100% height=300px src="https://media.giphy.com/media/11WYpnf4aKECqY/giphy.gif" width="400"></p>
+
 
 # Introduction 📝
 
@@ -34,3 +34,4 @@
 | :---: | :---: | :---: | :---: | :---: |
 | [<img src="https://avatars3.githubusercontent.com/u/34218732?s=400&v=4" width="100px;"/><br /><sub><b>huriozdmr</b></sub>](https://github.com/huriozdmr)<br />[💻](https://github.com/bounswe/bounswe2018group2/issues?utf8=%E2%9C%93&q=author%3Ahuriozdmr "Issues") [⚓️](https://github.com/bounswe/bounswe2018group2/wiki/huriozdmr "introduction") | [<img src="https://avatars3.githubusercontent.com/u/36169809?s=400&v=4" width="100px;"/><br /><sub><b>nilsupamuk</b></sub>](https://github.com/nilsupamuk)<br />[💻](https://github.com/bounswe/bounswe2018group2/issues?utf8=%E2%9C%93&q=author%3Anilsupamuk "Issiues") [🎊](https://github.com/bounswe/bounswe2018group2/wiki/Nilsu-Pamuk "introduction") | [<img src="https://avatars3.githubusercontent.com/u/24979306?s=400&v=4" width="100px;"/><br /><sub><b>sukrugultop </b></sub>](https://github.com/sukrugultop)<br />[💻](https://github.com/bounswe/bounswe2018group2/issues?utf8=%E2%9C%93&q=author%3Asukrugultop "Issues") [👐](https://github.com/bounswe/bounswe2018group2/wiki/%C5%9E%C3%BCkr%C3%BC-Can-G%C3%BCltop "introduction") | [<img src="https://avatars1.githubusercontent.com/u/25776420?s=400&v=4" width="100px;"/><br /><sub><b>zekitel</b></sub>](https://github.com/zekitel)<br />[💻](https://github.com/bounswe/bounswe2018group2/issues?utf8=%E2%9C%93&q=author%3Azekitel "Issues") [🙌](https://github.com/bounswe/bounswe2018group2/wiki/Zeki-TEL "introduction") |
 
+<p align="center"><img width=100% height=300px src="https://media.giphy.com/media/11WYpnf4aKECqY/giphy.gif" width="400"></p>
