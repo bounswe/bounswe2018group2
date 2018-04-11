@@ -22,10 +22,11 @@ function stealTweet(tweetContent) {
     console.log(tweetContent);
 }
 
-function getTweets() {
+function getTweets(hashtag) {
+    console.log("Ben hashtag parametresinin en iyilerini çektim", hashtag);
     return Promise.resolve([{
         "id": "1",
-        "user": "ergunerdogmus",
+        "user": hashtag,
         "content": "Alesta Rocks",
         "rt_count": 999,
         "like_count": 999
