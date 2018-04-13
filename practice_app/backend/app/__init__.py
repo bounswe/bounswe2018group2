@@ -10,11 +10,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from flask_migrate import Migrate, MigrateCommand
 from flask_user import UserManager
-from flask_wtf.csrf import CSRFProtect
 
 
 # Instantiate Flask extensions
-csrf_protect = CSRFProtect()
 db = SQLAlchemy()
 mail = Mail()
 migrate = Migrate()
@@ -42,9 +40,6 @@ def create_app(extra_config_settings={}):
     # Setup Flask-Mail
     mail.init_app(app)
 
-    # Setup WTForms CSRFProtect
-    csrf_protect.init_app(app)
-
     # Register blueprints
     from .views import register_blueprints
     register_blueprints(app)
@@ -62,7 +57,6 @@ def create_app(extra_config_settings={}):
 
     # Setup Flask-User to handle user account related forms
     from .models.user_models import User
-    from .views.main_views import user_profile_page
 
     # Setup Flask-User
     user_manager = UserManager(app, db, User)
