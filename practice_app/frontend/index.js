@@ -1,6 +1,7 @@
-(() => {
+(function () {
     const singleTweetTemplate = document.querySelector("#singleTweet");
     const tweetsContainer = document.querySelector("#tweetsContainer");
+    const searchContainer = document.querySelector("#searchContainer");
 
     function populateSingleTweet(tweetData) {
         const singleTweetImportedNode = document.importNode(singleTweetTemplate.content, true);
@@ -21,7 +22,37 @@
         tweetsContainer.appendChild(singleTweetImportedNode);
     }
 
-    getTweets().then(tweets => {
-        tweets.forEach(populateSingleTweet);
-    });
+    function flushTweets() {
+        tweetsContainer.innerHTML = "";
+    }
+
+    function debounceFn(fn, input) {
+        let timeout;
+        return function () {
+            let later = function () {
+                timeout = null;
+                fn(input);
+            }
+            clearTimeout(timeout);
+            timeout = setTimeout(later, 1000);
+        }
+    }
+
+    function initializeSearch() {
+        const $input = searchContainer.querySelector("input");
+        const $button = searchContainer.querySelector("button");
+        const realFn = function ($input) {
+            const inputContent = $input.value;
+            getTweets(inputContent).then(function (tweets) {
+                flushTweets();
+                tweets.forEach(populateSingleTweet);
+            });
+        };
+        const debouncedFn = debounceFn(realFn, $input);
+        $input.addEventListener("input", function () {
+            debouncedFn($input);
+        });
+    }
+
+    initializeSearch();
 })();
