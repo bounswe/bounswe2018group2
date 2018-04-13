@@ -3,7 +3,7 @@
 # Authors: Ling Thio <ling.thio@gmail.com>
 
 
-from flask import Blueprint, redirect
+from flask import Blueprint, redirect, Response, request
 from flask import request, url_for
 
 
@@ -28,13 +28,17 @@ def send_direct_message():
 def send_tweet():
     content = request.form["content"]
     tweetapi.postTweet(content)
-    return ""
+    resp = Response("gonderdim")
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 @main_blueprint.route('/searchkey', methods=['GET'])
 def get_search_results():
     key = request.args.get('key')
     limit = int(request.args.get('limit'))
-    return tweetapi.searchKey(key,limit);
+    resp = Response(tweetapi.searchKey(key,limit))
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 @main_blueprint.route('/gettweets', methods=['GET'])
 def get_self_tweets():

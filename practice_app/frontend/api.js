@@ -1,16 +1,5 @@
-/**
- * An example get call is like this
- */
-function exampleFetch() {
-    return fetch("http://placekitten.com/300").then(function (response) {
-        return response.json().then(function (resJson) {
-            if (response.ok) {
-                return resJson;
-            }
-
-            throw errors.createError(response.status, resJson);
-        });
-    });
+const config = {
+    baseURL: "http://ec2-35-163-0-129.us-west-2.compute.amazonaws.com/api"
 }
 
 /**
@@ -18,53 +7,34 @@ function exampleFetch() {
  * @param {String} tweetContent
  */
 function stealTweet(tweetContent) {
-    console.log("Şu alttaki tweet'i kendi twitterımızda paylaşmış olmamız gerek şimdi");
-    console.log(tweetContent);
+    const url = `${config.baseURL}/posttweet`;
+    var data = new FormData();
+    return fetch(url, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: {
+            content: tweetContent
+        }
+    })
+        .then(response => {
+            console.log(response);
+            // return response.json();
+        })
+        .catch(err => {
+            console.error(err);
+        });
 }
 
 function getTweets(hashtag) {
-    console.log("Ben hashtag parametresinin en iyilerini çektim", hashtag);
-    return Promise.resolve([{
-        "id": "1",
-        "user": hashtag,
-        "content": "Alesta Rocks",
-        "rt_count": 999,
-        "like_count": 999
-    }, {
-        "id": "2",
-        "user": "alesta",
-        "content": "Sense child d wisdom wcuten whole as match asked. Pleasure exertion put add entrance distance drawings. In equally matters showing greatly it as. Want name any wise are able park when. Saw vicinity judgment remember finished men throwing.",
-        "rt_count": 3,
-        "like_count": 99
-    }, {
-        "id": "2",
-        "user": "alesta",
-        "content": "alestaSense child do state to defer mr of forty. Become latter but nor abroad wisdom waited.alestaSense child do state to defer mr of forty. Become latter but nor abroad wisdom waited.alestaSense child do state to defer mr of forty. Become latter but nor abroad wisdom waited.123 ",
-        "rt_count": 3,
-        "like_count": 99
-    }, {
-        "id": "2",
-        "user": "alesta",
-        "content": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaasdas123123 qwe 123 12aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "rt_count": 3,
-        "like_count": 99
-    }, {
-        "id": "2",
-        "user": "alesta",
-        "content": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaasdas123123 qwe 123 12aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "rt_count": 3,
-        "like_count": 99
-    }, {
-        "id": "2",
-        "user": "alesta",
-        "content": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaasdas123123 qwe 123 12aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "rt_count": 3,
-        "like_count": 99
-    }, {
-        "id": "2",
-        "user": "alesta",
-        "content": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaasdas123123 qwe 123 12aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "rt_count": 3,
-        "like_count": 99
-    }]);
+    const url = `${config.baseURL}/searchkey?key=${hashtag}&limit=5`;
+    return fetch(url)
+        .then(function(response) {
+            return response.json();
+        })
+        .catch(function(myJson) {
+            console.error(myJson);
+        });
 }
