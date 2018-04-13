@@ -32,6 +32,11 @@ def get_search_results():
     limit = int(request.args.get('limit'))
     return tweetapi.searchKey(key,limit);
 
+@main_blueprint.route('/gettweets', methods=['GET'])
+def get_self_tweets():
+    count = int(request.args.get('count'))
+    return tweetapi.getSelfTweets(count);
+
 
 # The User page is accessible to authenticated users (users that have logged in)
 @main_blueprint.route('/member')
