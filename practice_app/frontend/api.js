@@ -11,9 +11,8 @@ function stealTweet(tweetContent) {
     var data = new FormData();
     return fetch(url, {
         method: "POST",
-        mode: "no-cors",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "multipart/formdata"
         },
         body: {
             content: tweetContent
@@ -21,7 +20,7 @@ function stealTweet(tweetContent) {
     })
         .then(response => {
             console.log(response);
-            // return response.json();
+            return response.json();
         })
         .catch(err => {
             console.error(err);
