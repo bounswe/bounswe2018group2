@@ -12,12 +12,12 @@
         const $likeCount = singleTweetImportedNode.querySelector(".js-like-count");
         const $stealButton = singleTweetImportedNode.querySelector(".js-steal-tweet");
 
-        $user.innerText = tweetData.user;
-        $content.innerText = tweetData.content;
-        $rtCount.innerText = tweetData.rt_count;
-        $likeCount.innerText = tweetData.like_count;
+        $user.innerText = tweetData.user.name;
+        $content.innerText = tweetData.text;
+        $rtCount.innerText = tweetData.retweet_count;
+        $likeCount.innerText = tweetData.favorite_count;
         $stealButton.addEventListener("click", () => {
-            stealTweet(tweetData.content);
+            stealTweet(tweetData.text);
         });
         tweetsContainer.appendChild(singleTweetImportedNode);
     }
