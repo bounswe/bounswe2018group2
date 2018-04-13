@@ -34,7 +34,6 @@ def getTimeline():
    	    print tweet.text
 
 
-searchKey('BESIKTAS', 2, True)
 
 
 # send direct message to bartu
