@@ -46,7 +46,7 @@ def sendDirectMessage(name, content):
 
 def postTweet(sts):
     api.update_status(sts)
-postTweet("camiry2aslkdfjo")
+
 #x = searchKey("BESIKTAS", 5);
 #print x
 #with open("merged_file.json", "wb") as outfile:
