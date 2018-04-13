@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Tweety</title>
     <script src="./api.js"></script>
+    <link rel="stylesheet" type="text/css" href="frontend.css">
 </head>
 <body>
     <template id="singleTweet">
@@ -14,11 +15,11 @@
             <div class="js-content">Tweet içeriği bunun gibi bi yerde olsuns</div>
             <div class="js-rt-count">RT Count burda olsun</div>
             <div class="js-like-count">Likelar burda olsun</div>
-            <button class="js-steal-tweet">Bunu çal</button>
+            <button class="js-steal-tweet">Share</button>
         </div>
     </template>
-    <div id="searchContainer">
-        <input type="text" placeholder="#bıdıbıdı">
+    <div id="searchContainer" class="searchContainer">
+        <input type="text" placeholder="#bıdıbıdı" class="effect-1">
     </div>
     <div id="tweetsContainer">
     </div>
