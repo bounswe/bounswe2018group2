@@ -5,19 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Tweety</title>
+     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"/>
+      <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah" rel="stylesheet">
     <script src="./api.js"></script>
     <link rel="stylesheet" type="text/css" href="frontend.css">
 </head>
 <body>
-    <template id="singleTweet">
+    <template id="singleTweet" >
+
         <div class="js-container">
             <div class="js-user">@ergunerdogmus</div>
             <div class="js-content">Tweet içeriği bunun gibi bi yerde olsuns</div>
+            <div class="meta">
             <div class="js-rt-count">RT Count burda olsun</div>
             <div class="js-like-count">Likelar burda olsun</div>
+            </div>
             <button class="js-steal-tweet">Share</button>
         </div>
     </template>
+
+    <div class="ustAlan">  
+        <h1>TWEETY</h1>
+        <div class="text"> Hunt popular tweets! </div>
+    </div>
+
     <div id="searchContainer" class="searchContainer">
         <input type="text" placeholder="#bıdıbıdı" class="effect-1">
     </div>
