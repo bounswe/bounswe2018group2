@@ -1,23 +1,23 @@
 body{
 
 	background-color: #c1d166;
-   background:#ffffe0; 
-   font-family: 'Gloria Hallelujah';  
-   line-height: 21px; 
-   color: #ffffff; 
+   background:#ffffe0;
+   font-family: 'Gloria Hallelujah';
+   line-height: 21px;
+   color: #ffffff;
    font-size: 15px;
 
 }
 
 .ustAlan { height: 300px; width:800px;
- line-height:50px; 
- background:url(images/bird.png); 
+ line-height:50px;
+ background:url(images/bird.png);
  color:#ffffff;
  margin-left: auto;
  margin-right: auto;
 }
 
-.text {text-align: center; 
+.text {text-align: center;
 	padding: 100px; font-size: 30px;
 	line-height: 150px;}
 
@@ -26,13 +26,13 @@ button,
 div.searchContainer{
 	position: relative;
   	text-align: center;
-	
-	
+
+
 	margin:8px 0;
-	
+
 	padding: 8px;
-	
-	transition:.3s; 
+
+	transition:.3s;
 }
 div.searchContainer input[type=text]{
 	position: relative;
@@ -70,7 +70,7 @@ div.js-container{
 	box-sizing: border-box;
 	transition:.3s;
 	font-family: 'Gloria Hallelujah';
-    
+
    border: none;
    border-radius: 22px;
 
@@ -97,7 +97,7 @@ background-size: auto auto;
 
 .js-container .meta{
 	text-align: left;
-	position: absolute; 
+	position: absolute;
 	left: 30px;
 	bottom: 10px;
 
@@ -112,7 +112,7 @@ content: "retweets:";
 }
 
 .js-steal-tweet {
-  
+
   background: #ffe7ba;
   font-family: 'Gloria Hallelujah';
   color: #000000;
@@ -136,7 +136,7 @@ content: "retweets:";
 
 }
 
-#tweetsContainer {     
+#tweetsContainer {
 	display: flex;
     flex-direction: row;
     align-content: center;
