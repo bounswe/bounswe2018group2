@@ -9,7 +9,7 @@ APP_NAME = "Flask-User starter app"
 APP_SYSTEM_ERROR_SUBJECT_LINE = APP_NAME + " system error"
 
 # Flask settings
-CSRF_ENABLED = True
+CSRF_ENABLED = False
 
 # Flask-SQLAlchemy settings
 SQLALCHEMY_TRACK_MODIFICATIONS = False

@@ -14,12 +14,13 @@ auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 api = tweepy.API(auth)
 
 # get tweets
-def searchKey(keyname, limit, showuser):
-    tweetlist = tweepy.Cursor(api.search, q='#' + keyname, show_user = showuser,result_type='popular', lang = 'tr').items(limit)
+def searchKey(keyname, limit = 5):
+    result = []
+    tweetlist = tweepy.Cursor(api.search, q='#' + keyname, show_user = True,result_type='popular', lang = 'tr').items(limit)
     for tweet in tweetlist:
-        print json.dumps(tweet._json)
+        result.append(tweet._json)
+    return json.dumps(result);
         
-
 def getUser(username):
     user = api.get_user(username)
 
@@ -28,14 +29,33 @@ def getUser(username):
     for friend in user.friends():
        print friend.screen_name
 
+def getSelfTweets(count = 10):
+    result = []
+    userTL = tweepy.Cursor(api.user_timeline, count = count).items(count)
+    for t in userTL:
+        result.append(t._json)
+    return json.dumps(result)
+
 def getTimeline():
     public_tweets = api.home_timeline()
     for tweet in public_tweets:
-   	    print tweet.text
+        print tweet.text
 
+def sendDirectMessage(name, content):
+    api.send_direct_message(screen_name = name, text = content);
 
-searchKey('BESIKTAS', 2, True)
+#x = searchKey("BESIKTAS", 5);
+#print x
+#with open("merged_file.json", "wb") as outfile:
+#    outfile.write(x)
 
+# User ID of ZipperQR (that's me!) : 4170632968
+#sendDirectMessage("ZipperQR", "I'm baaaaack!");
 
-# send direct message to bartu
+#x = getSelfTweets(5);
+#print x
+#with open("merged_file.json", "wb") as outfile:
+#    outfile.write(x)
+
+# send direct message to bartu : DONE
 # post tweet
