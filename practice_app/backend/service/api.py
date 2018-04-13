@@ -16,11 +16,11 @@ api = tweepy.API(auth)
 # get tweets
 def searchKey(keyname, limit = 5):
     result = []
-    tweetlist = tweepy.Cursor(api.search, q='#' + keyname, show_user = True,result_type='popular', lang = 'tr').items(limit)
+    tweetlist = tweepy.Cursor(api.search, q=keyname, show_user = True,result_type='popular', lang = 'tr').items(limit)
     for tweet in tweetlist:
         result.append(tweet._json)
     return json.dumps(result);
-        
+
 def getUser(username):
     user = api.get_user(username)
 
