@@ -26,7 +26,7 @@ def send_direct_message():
 
 @main_blueprint.route('/posttweet', methods=['POST'])
 def send_tweet():
-    content = request.form["content"]
+    content = request.get_json()["content"]
     tweetapi.postTweet(content)
     resp = Response("gonderdim")
     resp.headers['Access-Control-Allow-Origin'] = '*'

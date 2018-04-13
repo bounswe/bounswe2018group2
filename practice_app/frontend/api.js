@@ -12,11 +12,11 @@ function stealTweet(tweetContent) {
     return fetch(url, {
         method: "POST",
         headers: {
-            "Content-Type": "multipart/formdata"
+            "Content-Type": "application/json"
         },
-        body: {
+        body: JSON.stringify({
             content: tweetContent
-        }
+        })
     })
         .then(response => {
             console.log(response);
