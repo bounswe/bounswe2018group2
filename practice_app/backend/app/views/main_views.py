@@ -26,6 +26,11 @@ def send_direct_message():
     message = request.args.get('message')
     tweetapi.sendDirectMessage(screen_name, message)
 
+@main_blueprint.route('/posttweet', methods=['POST'])
+def send_direct_message():
+    screen_name = request.args.get('content')
+    tweetapi.postTweet(content)
+
 @main_blueprint.route('/searchkey', methods=['GET'])
 def get_search_results():
     key = request.args.get('key')
