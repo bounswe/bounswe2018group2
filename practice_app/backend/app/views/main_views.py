@@ -10,12 +10,27 @@ from flask_user import current_user, login_required, roles_required
 from app import db
 from app.models.user_models import UserProfileForm
 
+from service import api as tweetapi
+
 main_blueprint = Blueprint('main', __name__, template_folder='templates')
 
 # The Home page is accessible to anyone
 @main_blueprint.route('/')
 def home_page():
     return 'hasan.json'
+
+
+@main_blueprint.route('/directmessage', methods=['POST'])
+def send_direct_message():
+    screen_name = request.args.get('screen_name')
+    message = request.args.get('message')
+    tweetapi.sendDirectMessage(screen_name, message)
+
+@main_blueprint.route('/searchkey', methods=['GET'])
+def get_search_results():
+    key = request.args.get('key')
+    limit = int(request.args.get('limit'))
+    return tweetapi.searchKey(key,limit);
 
 
 # The User page is accessible to authenticated users (users that have logged in)
