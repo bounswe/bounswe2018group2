@@ -25,9 +25,10 @@ def send_direct_message():
     return ""
 
 @main_blueprint.route('/posttweet', methods=['POST'])
-def send_direct_message():
-    screen_name = request.args.get('content')
+def send_tweet():
+    content = request.form["content"]
     tweetapi.postTweet(content)
+    return ""
 
 @main_blueprint.route('/searchkey', methods=['GET'])
 def get_search_results():
