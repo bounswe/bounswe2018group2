@@ -1,0 +1,19 @@
+{
+  "name": "bounswe2018group2",
+  "version": "1.0.0",
+  "description": "monorepo of bounswe2018group2 projects",
+  "scripts": {
+    "build": "node ./scripts/build",
+    "start": "node ./scripts/start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bounswe/bounswe2018group2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bounswe/bounswe2018group2/issues"
+  },
+  "homepage": "https://github.com/bounswe/bounswe2018group2#readme"
+}
