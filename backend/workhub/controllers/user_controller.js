@@ -3,9 +3,8 @@ const user = db.User;
 
 exports.create = function (req, res) {
 	const { email, firstName, lastName, password } = req.body;
-	//console.log(req.body);
-	//console.log('so far so good');
 	
+	//see if that email already exists.
 	user.findOne({
 		where: {email: email}
 	}).then(users => {
@@ -15,7 +14,7 @@ exports.create = function (req, res) {
 				msg: "This e-mail has already been registered."
 			})
 		} else {
-			console.log('no clashes');
+			console.log('no email clashes with existing data');
 			user.create({
 				email,
 				firstName,
@@ -27,7 +26,7 @@ exports.create = function (req, res) {
 					msg: "User successfully created."
 				})
 			}).catch(e => {
-				console.log('oh shit');
+				console.log('Either a validation failed or something went horribly wrong.');
 				res.status(500).json({
 					msg: "Something bad happened."
 				})
