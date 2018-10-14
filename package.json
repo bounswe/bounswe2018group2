@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "monorepo of bounswe2018group2 projects",
   "scripts": {
-    "build": "cd frontend && npm run build",
-    "start": "cd backend && npm run start"
+    "build": "cd frontend && npm install && npm run build",
+    "start": "cd backend && npm install && npm run start"
   },
   "repository": {
     "type": "git",
