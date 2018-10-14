@@ -3,9 +3,9 @@ const user = db.User;
 
 exports.create = function (req, res) {
 	const { email, firstName, lastName, password } = req.body;
-	//user.validate(req.body);
-	console.log(req.body);
-	console.log('so far so good');
+	//console.log(req.body);
+	//console.log('so far so good');
+	
 	user.findOne({
 		where: {email: email}
 	}).then(users => {
@@ -20,7 +20,7 @@ exports.create = function (req, res) {
 				email,
 				firstName,
 				lastName,
-				password,
+				password
 			}).then(users => {
 				console.log('Bitchin\'!');
 				res.send({
