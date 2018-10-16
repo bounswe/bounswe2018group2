@@ -7,4 +7,7 @@ router.get('/', function(req, res, next) {
   res.json({ title: 'hoppa' });
 });
 
+var user = require('../controllers/user_controller.js');
+router.post('/user/create', user.create);
+
 module.exports = router;
