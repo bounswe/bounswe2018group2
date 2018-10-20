@@ -1,0 +1,195 @@
+import React from 'react';
+import { Tab, Pane, Tablist, SidebarTab, Paragraph, map, Box, Text } from 'evergreen-ui'
+
+class ClientProfileArea extends React.Component {
+  constructor() {
+    super()
+    this.state = { selectedIndex: 0 }
+
+  }
+  render() {
+    return (
+      <Pane padding={16} background="tint1" display="flex" >
+
+      
+        <Pane>
+          <Pane
+            height={240}
+            width={200}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            border="default"
+          >
+            <Text>Image</Text>
+          </Pane>
+
+          <Pane>
+            <Tablist marginBottom={16} flexBasis={240} marginRight={24}>
+
+              <SidebarTab
+                key="tab0"
+                id="tab0"
+                onSelect={() => this.setState({ selectedIndex: 0 })}
+                isSelected={0 === this.state.selectedIndex}
+                aria-controls={`panel-$"tab1"`}
+              >
+                Homepage
+    </SidebarTab>
+
+
+              <SidebarTab
+                key="tab1"
+                id="tab1"
+                onSelect={() => this.setState({ selectedIndex: 1 })}
+                isSelected={1 === this.state.selectedIndex}
+                aria-controls={`panel-$"tab1"`}
+              >
+                Connections
+    </SidebarTab>
+
+
+              <SidebarTab
+                key="tab2"
+                id="tab2"
+                onSelect={() => this.setState({ selectedIndex: 2 })}
+                isSelected={2 === this.state.selectedIndex}
+                aria-controls={`panel-$"tab1"`}
+              >
+                Set Filters
+    </SidebarTab>
+
+
+              <SidebarTab
+                key="tab3"
+                id="tab3"
+                onSelect={() => this.setState({ selectedIndex: 3 })}
+                isSelected={3 === this.state.selectedIndex}
+                aria-controls={`panel-$"tab1"`}
+              >
+                Edit Profile
+    </SidebarTab>
+
+
+              <SidebarTab
+                key="tab4"
+                id="tab4"
+                onSelect={() => this.setState({ selectedIndex: 4 })}
+                isSelected={4 === this.state.selectedIndex}
+                aria-controls={`panel-$"tab1"`}
+              >
+                Skills
+    </SidebarTab>
+
+
+              <SidebarTab
+                key="tab5"
+                id="tab5"
+                onSelect={() => this.setState({ selectedIndex: 5 })}
+                isSelected={5 === this.state.selectedIndex}
+                aria-controls={`panel-$"tab1"`}
+              >
+                Delete Account
+    </SidebarTab>
+
+            </Tablist>
+
+
+
+          </Pane>
+        </Pane>
+        <Pane display="flex">
+          <Pane
+            key="tab0"
+            id={`panel-$"tab0"`}
+            role="tabpanel"
+            aria-labelledby="tab0"
+            aria-hidden={0 !== this.state.selectedIndex}
+            display={0 === this.state.selectedIndex ? 'block' : 'none'}
+          >
+            <Paragraph>Panel Content 0 </Paragraph>
+          </Pane>
+
+
+          <Pane
+            key="tab1"
+            id={`panel-$"tab1"`}
+            role="tabpanel"
+            aria-labelledby="tab1"
+            aria-hidden={1 !== this.state.selectedIndex}
+            display={1 === this.state.selectedIndex ? 'block' : 'none'}
+          >
+            <Paragraph>Panel Content 1 </Paragraph>
+          </Pane>
+
+
+          <Pane
+            key="tab2"
+            id={`panel-$"tab2"`}
+            role="tabpanel"
+            aria-labelledby="tab2"
+            aria-hidden={2 !== this.state.selectedIndex}
+            display={2 === this.state.selectedIndex ? 'block' : 'none'}
+          >
+            <Paragraph>Panel Content 2 </Paragraph>
+          </Pane>
+
+
+          <Pane
+            key="tab3"
+            id={`panel-$"tab3"`}
+            role="tabpanel"
+            aria-labelledby="tab3"
+            aria-hidden={3 !== this.state.selectedIndex}
+            display={3 === this.state.selectedIndex ? 'block' : 'none'}
+          >
+            <Paragraph>Panel Content 3 </Paragraph>
+          </Pane>
+
+
+
+          <Pane
+            key="tab4"
+            id={`panel-$"tab4"`}
+            role="tabpanel"
+            aria-labelledby="tab4"
+            aria-hidden={4 !== this.state.selectedIndex}
+            display={4 === this.state.selectedIndex ? 'block' : 'none'}
+          >
+            <Paragraph>Panel Content 4 </Paragraph>
+          </Pane>
+
+
+
+          <Pane
+            key="tab5"
+            id={`panel-$"tab5"`}
+            role="tabpanel"
+            aria-labelledby="tab5"
+            aria-hidden={5 !== this.state.selectedIndex}
+            display={5 === this.state.selectedIndex ? 'block' : 'none'}
+          >
+            <Paragraph>Panel Content 5 </Paragraph>
+          </Pane>
+
+
+          <Pane
+            key="tab6"
+            id={`panel-$"tab6"`}
+            role="tabpanel"
+            aria-labelledby="tab6"
+            aria-hidden={6 !== this.state.selectedIndex}
+            display={6 === this.state.selectedIndex ? 'block' : 'none'}
+          >
+            <Paragraph>Panel Content 6 </Paragraph>
+          </Pane>
+
+        </Pane>
+      </Pane>
+    )
+  }
+
+
+};
+
+export default ClientProfileArea;
