@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run: cd frontend && npm install
       - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          key: dependency-cache-{{ checksum "frontend/package-lock.json" }}
           paths:
             - ./frontend/node_modules
       - run: cd frontend && npm run build
@@ -21,6 +21,7 @@ jobs:
       - NODE_ENV: dev
     steps:
       - checkout
+      - run: cd backend && npm install --production
       - run: scripts/deploy_backend.sh
 workflows:
   version: 2
