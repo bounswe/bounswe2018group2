@@ -1,47 +1,43 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
-    "react-scripts": "2.0.4",
-    "serve": "^10.0.2"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "now-start": "serve build/ -s",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "./node_modules/.bin/eslint ."
-  },
-  "eslintConfig": {
-    "extends": "@zeplin/eslint-config/browser",
-    "settings": {
-      "react": {
-        "pragma": "React",
-        "version": "16.5.2"
-      }
+    "name": "frontend",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "husky": "^1.1.2",
+        "prettier": "^1.14.3",
+        "react": "^16.5.2",
+        "react-dom": "^16.5.2",
+        "react-scripts": "2.0.4",
+        "serve": "^10.0.2"
     },
-    "globals": {
-      "process": true
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "now-start": "serve build/",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject",
+        "format": "prettier --write src/**/*.{js,jsx}"
     },
-    "env": {
-      "jest": true
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{js,json,jsx,css,md}": [
+            "prettier --write",
+            "git add"
+        ]
+    },
+    "browserslist": [
+        ">0.2%",
+        "not dead",
+        "not ie <= 11",
+        "not op_mini all"
+    ],
+    "devDependencies": {
+        "evergreen-ui": "^4.0.2",
+        "lint-staged": "^7.3.0",
+        "react-router-dom": "^4.3.1"
     }
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
-  "devDependencies": {
-    "@zeplin/eslint-config": "^1.3.3",
-    "eslint": "^5.6.1",
-    "eslint-plugin-react": "^7.11.1",
-    "evergreen-ui": "^4.0.2",
-    "react-router-dom": "^4.3.1"
-  }
 }

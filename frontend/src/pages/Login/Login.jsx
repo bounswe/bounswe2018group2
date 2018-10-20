@@ -1,7 +1,5 @@
 import React from "react";
-import {
-    Button, Pane, Heading, Strong, TextInputField
-} from "evergreen-ui";
+import { Button, Pane, Heading, Strong, TextInputField } from "evergreen-ui";
 import "./style.css";
 
 function LoginPage(props) {
@@ -18,9 +16,7 @@ function LoginPage(props) {
                 background="white"
                 padding="24px"
                 width="440px">
-                <Heading
-                    className="textAlignCenter"
-                    size={700}>
+                <Heading className="textAlignCenter" size={700}>
                     Log in to WorkHub
                 </Heading>
                 <form className="loginPageForm">
@@ -28,12 +24,14 @@ function LoginPage(props) {
                         type="email"
                         required
                         label="Email"
-                        placeholder="somethinglike@this.com"/>
+                        placeholder="somethinglike@this.com"
+                    />
                     <TextInputField
                         label="Password"
                         type="password"
                         required
-                        placeholder="somethinglike@this.com"/>
+                        placeholder="somethinglike@this.com"
+                    />
                 </form>
                 <Button
                     className="textAlignCenter"
