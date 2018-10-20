@@ -2,7 +2,6 @@ import React from "react";
 import {
     Button, Pane, Heading, Strong, TextInputField, SegmentedControl
 } from "evergreen-ui";
-import "./style.css";
 
 const UserType = {
     FREELANCER: "Freelancer",
