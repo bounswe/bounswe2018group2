@@ -14,6 +14,10 @@ jobs:
             - ./frontend/node_modules
       - run: cd frontend && npm run build
       - run: scripts/deploy_frontend.sh
+    branches:
+      only:
+        - develop
+        - master
   deploy_backend_dev:
     docker:
       - image: circleci/node:8
@@ -23,15 +27,7 @@ jobs:
       - checkout
       - run: cd backend && npm install --production
       - run: scripts/deploy_backend.sh
-workflows:
-  version: 2
-  deploy:
-    jobs:
-      - deploy_frontend_dev
-      - deploy_backend_dev
-      - test:
-          filters:
-            branches:
-              only:
-                - develop
-                - master
+    branches:
+      only:
+        - develop
+        - master
