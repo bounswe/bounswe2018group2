@@ -1,5 +1,16 @@
 version: 2
 jobs:
+  build:
+    docker:
+      - image: circleci/node:8
+    steps:
+      - checkout
+      - run: cd frontend && npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "frontend/package-lock.json" }}
+          paths:
+            - ./frontend/node_modules
+      - run: cd frontend && npm run build
   deploy_frontend_dev:
     docker:
       - image: circleci/node:8
