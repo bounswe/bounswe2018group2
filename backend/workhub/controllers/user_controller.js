@@ -49,7 +49,37 @@ exports.create = function (req, res) {
 exports.login = function(req,res){
   var email= req.body.email;
   var password = req.body.password;
-  connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
+  user.findOne({
+		where: {email: email}
+	}).then(users => {
+		//console.log('searched the database');
+		if (users){
+			//if(users.length >0){
+     			//if(users[0].password == password){
+     		var pass = bcrypt.compare(users[0].password, password);
+
+     		if(pass){
+     			res.status(200).send({
+					msg: "Logged in successfully."
+            	})
+      		}
+     	 	else{
+    		 	res.status(204).send({
+					msg: "E-mail and password does not match."
+           		})        			
+      		}
+      		//}			
+		} else {
+			res.status(204).send({ //could be status 400?
+				msg: "This e-mail does not exist."
+			})
+
+		}
+
+	}
+
+
+  /*connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
   if (error) {
     // console.log("error ocurred",error);
     res.send({
@@ -79,5 +109,6 @@ exports.login = function(req,res){
           });
     }
   }
-  });
+  });*/
+
 }
