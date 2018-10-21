@@ -3,8 +3,6 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
-        "husky": "^1.1.2",
-        "prettier": "^1.14.3",
         "react": "^16.5.2",
         "react-dom": "^16.5.2",
         "react-scripts": "2.0.4",
@@ -15,19 +13,7 @@
         "build": "react-scripts build",
         "now-start": "serve build/",
         "test": "react-scripts test",
-        "eject": "react-scripts eject",
-        "format": "prettier --write src/**/*.{js,jsx}"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged"
-        }
-    },
-    "lint-staged": {
-        "*.{js,json,jsx,css,md}": [
-            "prettier --write",
-            "git add"
-        ]
+        "eject": "react-scripts eject"
     },
     "browserslist": [
         ">0.2%",
@@ -37,7 +23,6 @@
     ],
     "devDependencies": {
         "evergreen-ui": "^4.0.2",
-        "lint-staged": "^7.3.0",
         "react-router-dom": "^4.3.1"
     }
 }
