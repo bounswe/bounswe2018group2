@@ -54,23 +54,22 @@ exports.login = function(req,res){
 	}).then(users => {
 		//console.log('searched the database');
 		if (users){
-			//if(users.length >0){
-     			//if(users[0].password == password){
-     		var pass = bcrypt.compare(users[0].password, password);
+			//??user.password or users.password?
+     		bcrypt.compare(req.body.password, users.password, function (err, result) {
 
-     		if(pass){
-     			res.status(200).send({
-					msg: "Logged in successfully."
-            	})
-      		}
-     	 	else{
-    		 	res.status(204).send({
-					msg: "E-mail and password does not match."
-           		})        			
-      		}
-      		//}			
+     			if(result == true){
+     				res.status(200).send({
+						msg: "Logged in successfully."
+            		})
+      			}
+     	 		else{
+    		 		res.status(204).send({
+						msg: "E-mail and password does not match."
+           			})        			
+      			}
+      		}			
 		} else {
-			res.status(204).send({ //could be status 400?
+			res.status(204).send({ //??could be status 400?
 				msg: "This e-mail does not exist."
 			})
 
