@@ -1,0 +1,23 @@
+{
+    "apps": [
+        {
+            "name": "frontend",
+            "cwd": "frontend/",
+            "script": "yarn",
+            "args": "now-start",
+            "watch": true,
+            "env": {
+                "NODE_ENV": "prod"
+            }
+        },
+        {
+            "name": "backend",
+            "cwd": "backend/",
+            "script": "yarn",
+            "args": "start",
+            "env": {
+              "NODE_ENV": "prod"
+          }
+        }
+    ]
+}
