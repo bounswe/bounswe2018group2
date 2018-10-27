@@ -1,0 +1,24 @@
+{
+    "apps": [
+        {
+            "name": "frontend",
+            "cwd": "~/latest/frontend/",
+            "script": "yarn",
+            "args": "now-start",
+            "watch": true,
+            "env": {
+                "NODE_ENV": "prod"
+            }
+        },
+        {
+            "name": "backend",
+            "cwd": "~/latest/backend/workhub",
+            "script": "npm",
+            "args": "run start",
+            "watch": true,
+            "env": {
+              "NODE_ENV": "prod"
+          }
+        }
+    ]
+}
