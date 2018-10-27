@@ -25,18 +25,15 @@ jobs:
       - run: cd backend && npm install --production
       - run: cd frontend && yarn build
       - run: scripts/deploy.sh
-    branches:
-      only:
-        - develop
-        - master
 
 workflows:
   version: 2
   build_and_deploy:
     jobs:
       - build:
-        filters:
-          only: /frontend\/*/
+          filters:
+            branches:
+              only: /frontend\/*/
       - deploy:
           requires:
             - build
