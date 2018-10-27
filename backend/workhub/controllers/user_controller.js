@@ -1,6 +1,8 @@
 const db = require('../models');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const user = db.User;
+const sessions = db.Sessions;
 
 const saltRounds = 10;
 
@@ -59,8 +61,32 @@ exports.login = function(req,res){
      		bcrypt.compare(req.body.password, users.password, function (err, result) {
 				
      			if(result == true){
+
+     				var token = crypto.randomBytes(48).toString('hex');
+
+     				sessions.findOne({
+     					//check if a user session already exists
+     					where: {
+     						user_id : users.id
+     					}
+     				}).then(sess => {
+     					//if so, update it
+     					if (sess) {
+     						sess.updateAttributes({
+     							user_token : token
+     						})
+     					//otherwise, create it
+     					}else{
+     						sessions.create({
+     							user_id : users.id,
+     							user_token : token
+     						})
+     					}
+     				})		
+
      				res.status(200).send({
-						msg: "Logged in successfully."
+						msg: "Logged in successfully.",
+						token: token
             		})
       			}
      	 		else if(result == false){
