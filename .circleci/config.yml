@@ -11,33 +11,21 @@ jobs:
           paths:
             - ./frontend/node_modules
       - run: cd frontend && npm run build
-  deploy_frontend_dev:
+  deploy:
     docker:
       - image: circleci/node:8
     environment:
-      - NODE_ENV: dev
+      - NODE_ENV: prod
     steps:
       - checkout
       - run: cd frontend && npm install
+      - run: cd backend && npm install
       - save_cache:
           key: dependency-cache-{{ checksum "frontend/package-lock.json" }}
           paths:
             - ./frontend/node_modules
       - run: cd frontend && npm run build
-      - run: scripts/deploy_frontend.sh
-    branches:
-      only:
-        - develop
-        - master
-  deploy_backend_dev:
-    docker:
-      - image: circleci/node:8
-    environment:
-      - NODE_ENV: dev
-    steps:
-      - checkout
-      - run: cd backend && npm install --production
-      - run: scripts/deploy_backend.sh
+      - run: scripts/deploy.sh
     branches:
       only:
         - develop
