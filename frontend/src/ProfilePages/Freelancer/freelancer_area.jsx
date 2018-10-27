@@ -28,6 +28,7 @@ class FreelancerProfileArea extends React.Component {
         <Pane padding={16} background="tint1" display="flex" >
 
           <Pane>
+
             <Pane
               height={240}
               width={200}
@@ -123,7 +124,7 @@ class FreelancerProfileArea extends React.Component {
 
                 <Button appearance="primary"
                   marginTop={20}
-                > START PROJECT!
+                > GET PROJECT!
               </Button>
 
               </Tablist>
