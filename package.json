@@ -1,0 +1,36 @@
+{
+    "name": "bounswe2018group2",
+    "version": "1.0.1",
+    "description": "monorepo of bounswe2018group2 projects",
+    "scripts": {
+        "build": "cd frontend && npm install && npm run build",
+        "start": "cd frontend && npm run now-start",
+        "format": "prettier --write **/*.{js,jsx}  !**/static/*.{js.jsx} !practice_app/**/*.{js,jsx} !android/**/*.{js,jsx} !frontend/build/**/*.{js,jsx}"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bounswe/bounswe2018group2.git"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{js,json,jsx,css,md}": [
+            "prettier --write",
+            "git add"
+        ]
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/bounswe/bounswe2018group2/issues"
+    },
+    "homepage": "https://github.com/bounswe/bounswe2018group2#readme",
+    "devDependencies": {
+        "husky": "^1.1.2",
+        "lint-staged": "^7.3.0",
+        "prettier": "^1.14.3"
+    }
+}
