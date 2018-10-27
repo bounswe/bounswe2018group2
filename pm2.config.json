@@ -2,7 +2,7 @@
     "apps": [
         {
             "name": "frontend",
-            "cwd": "~/latest/frontend/",
+            "cwd": "frontend",
             "script": "yarn",
             "args": "now-start",
             "watch": true,
@@ -12,7 +12,7 @@
         },
         {
             "name": "backend",
-            "cwd": "~/latest/backend/workhub",
+            "cwd": "backend/workhub",
             "script": "npm",
             "args": "run start",
             "watch": true,
