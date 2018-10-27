@@ -26,7 +26,7 @@ jobs:
       - run: cd frontend && yarn build
       - add_ssh_keys:
           fingerprints:
-            - "10:0d:a6:f2:e7:1b:65:be:f6:e2:31:95:ce:0c:99:97"
+            - "9a:e7:9a:45:fe:64:90:02:df:54:8d:0f:ea:bd:ca:95"
       - run: scripts/deploy.sh
 
 workflows:
