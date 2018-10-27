@@ -24,6 +24,9 @@ jobs:
       - run: cd frontend && yarn
       - run: cd backend && npm install --production
       - run: cd frontend && yarn build
+      - add_ssh_keys:
+          fingerprints:
+            - "10:0d:a6:f2:e7:1b:65:be:f6:e2:31:95:ce:0c:99:97"
       - run: scripts/deploy.sh
 
 workflows:
