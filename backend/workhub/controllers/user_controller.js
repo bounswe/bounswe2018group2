@@ -5,7 +5,7 @@ const user = db.User;
 const saltRounds = 10;
 
 exports.create = function (req, res) {
-	const { email, firstName, lastName, password } = req.body;
+	const { email, firstName, lastName, password, type } = req.body;
 	
 	//see if that email already exists.
 	user.findOne({
@@ -30,7 +30,8 @@ exports.create = function (req, res) {
 				email: email,
 				firstName: firstName,
 				lastName: lastName,
-				password: hashedpass
+				password: hashedpass,
+				type: type
 			}).then(users => {
 				console.log('Bitchin\'!');
 				res.send({
