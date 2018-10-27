@@ -16,6 +16,7 @@ TAR_EXCLUDES=(
 PM2="pm2"
 DEPLOYMENT_FOLDER="latest"
 NVM_DIR="\$HOME/.nvm"
+ENV="MYSQL_HOST=\"$MYSQL_HOST\"\nMYSQL_USERNAME=\"$MYSQL_USERNAME\"\nMYSQL_PASSWORD=\"$MYSQL_PASSWORD\"\nMYSQL_DATABASE=\"$MYSQL_DATABASE\""
 TARBALL=$PKG_NAME-$GIT_REVISION.tar.gz
 
 SSH_LOAD_NVM="source /home/ubuntu/.nvm/nvm.sh"
@@ -26,6 +27,10 @@ SSH_COMMAND="$SSH_LOAD_NVM && $SSH_EXTRACT_TARBALL && $SSH_LOAD_NVM && $SSH_REST
 
 rm -rf $TEMP_DIR
 mkdir $TEMP_DIR
+
+echo "Setting environment variables"
+printf $ENV > "./backend/workhub/.env.prod"
+printf "\n"
 
 echo "Compressing built project files"
 tar $(printf -- "--exclude=%s " "${TAR_EXCLUDES[@]}") -czf $TEMP_DIR/$TARBALL ./frontend pm2.config.json ./backend
