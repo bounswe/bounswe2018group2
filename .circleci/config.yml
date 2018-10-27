@@ -5,12 +5,15 @@ jobs:
       - image: circleci/node:8
     steps:
       - checkout
-      - run: cd frontend && npm install
+      - restore_cache:
+            keys:
+              - dependency-cache-{{ checksum "frontend/yarn.lock" }}
+      - run: cd frontend && yarn
       - save_cache:
-          key: dependency-cache-{{ checksum "frontend/package-lock.json" }}
+          key: dependency-cache-{{ checksum "frontend/yarn.lock" }}
           paths:
             - ./frontend/node_modules
-      - run: cd frontend && npm run build
+      - run: cd frontend && yarn build
   deploy:
     docker:
       - image: circleci/node:8
@@ -18,13 +21,9 @@ jobs:
       - NODE_ENV: prod
     steps:
       - checkout
-      - run: cd frontend && npm install
-      - run: cd backend && npm install
-      - save_cache:
-          key: dependency-cache-{{ checksum "frontend/package-lock.json" }}
-          paths:
-            - ./frontend/node_modules
-      - run: cd frontend && npm run build
+      - run: cd frontend && yarn
+      - run: cd backend && npm install --production
+      - run: cd frontend && yarn build
       - run: scripts/deploy.sh
     branches:
       only:
