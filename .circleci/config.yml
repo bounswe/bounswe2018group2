@@ -33,7 +33,10 @@ workflows:
       - build:
           filters:
             branches:
-              only: /frontend\/*/
+              only:
+                - /frontend\/*/
+                - develop
+                - master
       - deploy:
           requires:
             - build
