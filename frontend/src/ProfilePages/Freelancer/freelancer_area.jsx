@@ -1,8 +1,8 @@
 import React from 'react';
 import { Tab, Pane, Tablist, SidebarTab, Paragraph, map, Box, Text, Textarea, TagInput, Table, Button, UnorderedList, Heading, ListItem } from 'evergreen-ui'
-import imgclient from "./images.png";
+import imgfreelancer from "./images.jpg";
 import StarRatingComponent from 'react-star-rating-component';
-class ClientProfileArea extends React.Component {
+class FreelancerProfileArea extends React.Component {
   constructor() {
     super()
     this.state = { selectedIndex: 0 }
@@ -37,7 +37,7 @@ class ClientProfileArea extends React.Component {
               border="default"
             >
               <br />
-              <img src={imgclient}
+              <img src={imgfreelancer}
                 height={240}
                 width={200}
               />
@@ -147,9 +147,10 @@ class ClientProfileArea extends React.Component {
               border="default"
             >
               <Text>
-                <Heading is="h3">İlber Tatlıcı, 55 Ankara </Heading>
+                <Heading is="h3">Elenore Deren Yıldız </Heading>
                 <Paragraph size={400} marginTop="default">
-                  Works in Finance sector. Is CEO of a company. Has 3 kids and 1 dog.
+                  Translator : English, French, Turkish, both ways.
+                  Looking to find short and simple jobs to earn money, as I can not afford a full time job.
   </Paragraph>
 
 
@@ -315,4 +316,4 @@ class ClientProfileArea extends React.Component {
 
 };
 
-export default ClientProfileArea;
+export default FreelancerProfileArea;
