@@ -39,7 +39,7 @@ exports.create = function (req, res) {
 				})
 			}).catch(e => {
 				console.log(e);
-				res.status(500).json({
+				res.status(400).send({
 					msg: "Something bad happened."
 				})
 			})
@@ -64,13 +64,13 @@ exports.login = function(req,res){
             		})
       			}
      	 		else if(result == false){
-    		 		res.status(500).send({
+    		 		res.status(400).send({
 						msg: "E-mail and password does not match."
            			})        			
       			}
       		})			
 		} else {
-			res.status(500).send({
+			res.status(400).send({
 				msg: "This e-mail does not exist."
 			})
 
