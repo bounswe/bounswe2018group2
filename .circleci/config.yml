@@ -22,7 +22,7 @@ jobs:
     steps:
       - checkout
       - run: cd frontend && yarn
-      - run: cd backend && npm install --production
+      - run: cd backend/workhub && npm install
       - run: cd frontend && yarn build
       - add_ssh_keys:
           fingerprints:
