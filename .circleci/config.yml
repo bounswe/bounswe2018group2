@@ -27,6 +27,9 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "9a:e7:9a:45:fe:64:90:02:df:54:8d:0f:ea:bd:ca:95"
+      - run:
+           name: Add app to known hosts
+           command: ssh-keyscan -H 34.210.153.98 >> ~/.ssh/known_hosts
       - run: scripts/deploy.sh
 
 workflows:
