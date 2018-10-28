@@ -62,7 +62,7 @@ exports.login = function(req,res){
 			
      		bcrypt.compare(req.body.password, users.password, function (err, result) {
 				
-     			if(result == true){
+     			if(result){
 
      				var token = crypto.randomBytes(48).toString('hex');
 
@@ -91,7 +91,7 @@ exports.login = function(req,res){
 						token: token
             		})
       			}
-     	 		else if(result == false){
+     	 		else{
     		 		res.status(500).send({
 						msg: "E-mail and password does not match."
            			})        			
@@ -132,8 +132,6 @@ exports.profileInfo = function(req,res){
 			lastName = info.user.lastName;
 			desc = info.description;
 			rating = info.rating;
-
-			console.log(desc);
 
 			res.status(200).send({
 				firstName: firstName,
