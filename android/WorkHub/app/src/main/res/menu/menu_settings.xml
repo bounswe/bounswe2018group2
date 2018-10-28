@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <item
+        android:id="@+id/menu_login"
+        android:title="Login"
+        app:showAsAction="never"
+        android:visible="false"/>
+    <item
+        android:id="@+id/menu_signup"
+        android:title="Sign Up"
+        app:showAsAction="never"
+        android:visible="false"/>
+    <item android:id="@+id/menu_logout"
+        android:title="Logout"
+        app:showAsAction="never"
+        android:visible="false"/>
+
+</menu>
