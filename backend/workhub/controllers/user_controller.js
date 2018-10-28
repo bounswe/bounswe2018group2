@@ -1,8 +1,10 @@
 const db = require('../models');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+
 const user = db.User;
 const sessions = db.Sessions;
+const profile = db.Profile;
 
 const saltRounds = 10;
 
@@ -102,6 +104,49 @@ exports.login = function(req,res){
 
 		}
 
+	})
+
+}
+
+
+exports.profileInfo = function(req,res){
+	var user_id = req.params.userId;
+
+
+
+	var firstName;
+	var lastName;
+	var desc;
+	var rating;
+
+	profile.findOne({
+		where: {user_id : user_id},
+		include: [{
+			model: user,
+			as: 'user',
+			where: {id : user_id}
+		}]
+	}).then(info => {
+		if (info){
+			firstName = info.user.firstName;
+			lastName = info.user.lastName;
+			desc = info.description;
+			rating = info.rating;
+
+			console.log(desc);
+
+			res.status(200).send({
+				firstName: firstName,
+				lastName: lastName,
+				description: desc,
+				rating: rating,
+				msg: "got 'em"
+			})
+		}else{
+			res.status(400).send({
+				msg: "User not fou- oh who am I kidding, you fucked up the function call."
+			})
+		}
 	})
 
 }

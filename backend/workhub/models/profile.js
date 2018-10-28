@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     rating: DataTypes.FLOAT
   }, {});
   Profile.associate = function(models) {
-    // associations can be defined here
+    Profile.belongsTo(models.User, {foreignKey: 'user_id', targetKey:'id', as: 'user'});
   };
   return Profile;
 };
