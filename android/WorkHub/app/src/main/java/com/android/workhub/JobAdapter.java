@@ -14,8 +14,10 @@ import android.widget.TextView;
 
 import com.android.workhub.models.JobModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class JobAdapter extends ArrayAdapter {
 
@@ -37,14 +39,17 @@ public class JobAdapter extends ArrayAdapter {
 
         JobModel currentNavigationItem = jobList.get(position);
 
-        TextView name = (TextView) listItem.findViewById(R.id.name);
-        name.setText(currentNavigationItem.getName());
+        TextView title = (TextView) listItem.findViewById(R.id.title);
+        title.setText(currentNavigationItem.getTitle());
 
         TextView description = (TextView) listItem.findViewById(R.id.description);
         description.setText(currentNavigationItem.getDescription());
 
-        ImageView image = (ImageView) listItem.findViewById(R.id.image);
-        image.setImageBitmap(currentNavigationItem.getImage());
+        TextView dueDate = (TextView) listItem.findViewById(R.id.dueDate);
+
+        String date = new SimpleDateFormat("dd/MM/yyyy",
+                Locale.getDefault()).format(currentNavigationItem.getDueTo());
+        dueDate.setText(date);
 
         return listItem;
     }

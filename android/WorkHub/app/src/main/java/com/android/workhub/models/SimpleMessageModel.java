@@ -1,13 +1,13 @@
 package com.android.workhub.models;
 
 public class SimpleMessageModel {
-    private String message;
+    private String msg;
 
-    public String getMessage() {
-        return message;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 }

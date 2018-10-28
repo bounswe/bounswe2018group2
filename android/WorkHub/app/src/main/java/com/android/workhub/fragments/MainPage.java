@@ -1,9 +1,7 @@
-package com.android.workhub;
+package com.android.workhub.fragments;
 
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,9 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.android.workhub.JobAdapter;
+import com.android.workhub.R;
 import com.android.workhub.models.JobModel;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 
 /**
@@ -36,15 +37,15 @@ public class MainPage extends Fragment {
                              Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.fragment_main_page, container, false);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_username);
+        Date dueTo = new Date();
 
-        JobModel jobModel1 = new JobModel(1,"first","asd\nasdasd\n\n",bitmap);
-        JobModel jobModel2 = new JobModel(2,"first","asd\nasdasd\n\n",bitmap);
+        JobModel jobModel1 = new JobModel(1,"first","asd\nasdasd\n\n",dueTo);
+        JobModel jobModel2 = new JobModel(2,"second","asd\nasdasd\n\n",dueTo);
 
-        JobModel jobModel3 = new JobModel(3,"first","asd\nasdasd\n\n",bitmap);
+        JobModel jobModel3 = new JobModel(3,"third","asd\nasdasd\n\n",dueTo);
 
 
-        JobModel jobModel4 = new JobModel(4,"first","asd\nasdasd\n\n",bitmap);
+        JobModel jobModel4 = new JobModel(4,"forth","asd\nasdasd\n\n",dueTo);
 
 
         jobList.add(jobModel1);

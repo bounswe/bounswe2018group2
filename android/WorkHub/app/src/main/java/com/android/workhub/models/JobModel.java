@@ -1,19 +1,19 @@
 package com.android.workhub.models;
 
-import android.graphics.Bitmap;
+import java.util.Date;
 
 public class JobModel {
 
     private int id;
-    private String name;
+    private String title;
     private String description;
-    private Bitmap image;
+    private Date dueTo;
 
-    public JobModel(int id, String name, String description, Bitmap image) {
+    public JobModel(int id, String title, String description, Date dueTo) {
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.description = description;
-        this.image = image;
+        this.dueTo = dueTo;
     }
 
     public int getId() {
@@ -24,12 +24,12 @@ public class JobModel {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -40,11 +40,11 @@ public class JobModel {
         this.description = description;
     }
 
-    public Bitmap getImage() {
-        return image;
+    public Date getDueTo() {
+        return dueTo;
     }
 
-    public void setImage(Bitmap image) {
-        this.image = image;
+    public void setDueTo(Date dueTo) {
+        this.dueTo = dueTo;
     }
 }
