@@ -140,11 +140,11 @@ exports.profileInfo = function(req,res){
 				lastName: lastName,
 				description: desc,
 				rating: rating,
-				msg: "got 'em"
+				msg: "User found successfully."
 			})
 		}else{
 			res.status(400).send({
-				msg: "User not fou- oh who am I kidding, you fucked up the function call."
+				msg: "User not found."
 			})
 		}
 	})
