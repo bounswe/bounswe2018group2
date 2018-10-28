@@ -6,7 +6,6 @@
         "react": "^16.5.2",
         "react-dom": "^16.5.2",
         "react-scripts": "2.0.4",
-        "react-star-rating-component": "^1.4.1",
         "serve": "^10.0.2"
     },
     "scripts": {
@@ -24,6 +23,7 @@
     ],
     "devDependencies": {
         "evergreen-ui": "^4.0.2",
+        "react-star-rating-component": "^1.4.1",
         "react-router-dom": "^4.3.1"
     }
 }
