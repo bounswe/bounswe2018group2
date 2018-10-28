@@ -1,6 +1,6 @@
 {
     "name": "bounswe2018group2",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "monorepo of bounswe2018group2 projects",
     "scripts": {
         "build": "cd frontend && npm install && npm run build",

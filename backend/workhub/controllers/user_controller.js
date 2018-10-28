@@ -63,7 +63,6 @@ exports.login = function(req,res){
      		bcrypt.compare(req.body.password, users.password, function (err, result) {
 				
      			if(result){
-
      				var token = crypto.randomBytes(48).toString('hex');
 
      				sessions.findOne({
@@ -146,5 +145,4 @@ exports.profileInfo = function(req,res){
 			})
 		}
 	})
-
 }

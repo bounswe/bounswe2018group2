@@ -1,0 +1,53 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8
+    steps:
+      - checkout
+      - restore_cache:
+            keys:
+              - dependency-cache-{{ checksum "frontend/yarn.lock" }}
+      - run: cd frontend && yarn
+      - save_cache:
+          key: dependency-cache-{{ checksum "frontend/yarn.lock" }}
+          paths:
+            - ./frontend/node_modules
+      - run: cd frontend && yarn build
+  deploy:
+    docker:
+      - image: circleci/node:8
+    environment:
+      - NODE_ENV: prod
+    steps:
+      - checkout
+      - run: cd frontend && yarn
+      - run: cd backend/workhub && npm install
+      - run: cd frontend && yarn build
+      - add_ssh_keys:
+          fingerprints:
+            - "9a:e7:9a:45:fe:64:90:02:df:54:8d:0f:ea:bd:ca:95"
+      - run:
+           name: Add app to known hosts
+           command: ssh-keyscan -H 34.210.153.98 >> ~/.ssh/known_hosts
+      - run: scripts/deploy.sh
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - /frontend\/*/
+                - develop
+                - master
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+                - develop
