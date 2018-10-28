@@ -23,7 +23,8 @@ SSH_LOAD_NVM="source /home/ubuntu/.nvm/nvm.sh"
 SSH_CREATE_DEPLOYMENT_FOLDER="rm -rf ~/$DEPLOYMENT_FOLDER && mkdir ~/$DEPLOYMENT_FOLDER && printf '* Flushed latest deployment folder\n'"
 SSH_EXTRACT_TARBALL="$SSH_CREATE_DEPLOYMENT_FOLDER && tar --extract --file=$TARBALL -C ~/$DEPLOYMENT_FOLDER && printf '* Extracted project files\n'"
 SSH_RESTART_APPS="$PM2 startOrRestart ~/$DEPLOYMENT_FOLDER/pm2.config.json && printf '* Restarted apps\n'"
-SSH_COMMAND="$SSH_LOAD_NVM && $SSH_EXTRACT_TARBALL && $SSH_LOAD_NVM && $SSH_RESTART_APPS"
+SSH_RUN_MIGRATE="NODE_ENV='prod' npm run migrate --prefix ~/$DEPLOYMENT_FOLDER/backend/workhub/ && printf '* Ran migrations\n'"
+SSH_COMMAND="$SSH_LOAD_NVM && $SSH_EXTRACT_TARBALL && $SSH_RUN_MIGRATE && $SSH_RESTART_APPS"
 
 rm -rf $TEMP_DIR
 mkdir $TEMP_DIR
