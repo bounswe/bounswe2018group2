@@ -30,11 +30,22 @@ module.exports = (sequelize, DataTypes) => {
 	  		msg: "Password has to be between 8 and 64 characters."
 	  	}
 	  }
-	}
+  },
+
+  type: {
+    type: DataTypes.ENUM('freelancer', 'client'),
+    validate: {
+      notEmpty: true
+    }
+  },
+
+  profile_image_id: {
+    type: DataTypes.INTEGER
+  }
 
   }, {});
   User.associate = function(models) {
-	// associations can be defined here
+	User.hasOne(models.Profile, {foreignKey: 'user_id', targetKey:'id', as:'user'})
   };
   return User;
 };
