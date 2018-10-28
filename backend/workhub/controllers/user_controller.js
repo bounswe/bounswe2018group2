@@ -5,7 +5,7 @@ const user = db.User;
 const saltRounds = 10;
 
 exports.create = function (req, res) {
-	const { email, firstName, lastName, password } = req.body;
+	const { email, firstName, lastName, password, type } = req.body;
 	
 	//see if that email already exists.
 	user.findOne({
@@ -30,7 +30,8 @@ exports.create = function (req, res) {
 				email: email,
 				firstName: firstName,
 				lastName: lastName,
-				password: hashedpass
+				password: hashedpass,
+				type: type
 			}).then(users => {
 				console.log('Bitchin\'!');
 				res.send({
@@ -38,7 +39,7 @@ exports.create = function (req, res) {
 				})
 			}).catch(e => {
 				console.log(e);
-				res.status(500).json({
+				res.status(400).send({
 					msg: "Something bad happened."
 				})
 			})
@@ -63,13 +64,13 @@ exports.login = function(req,res){
             		})
       			}
      	 		else if(result == false){
-    		 		res.status(500).send({
+    		 		res.status(400).send({
 						msg: "E-mail and password does not match."
            			})        			
       			}
       		})			
 		} else {
-			res.status(500).send({
+			res.status(400).send({
 				msg: "This e-mail does not exist."
 			})
 

@@ -1,8 +1,12 @@
 import React from "react";
+<<<<<<< HEAD
 import {
     Button, Pane, Heading, Strong, TextInputField
 } from "evergreen-ui";
 import properties from "../../Properties";
+=======
+import { Button, Pane, Heading, Strong, TextInputField } from "evergreen-ui";
+>>>>>>> 2b39db9ab6c6985a3f3cc44e55697fd0b54339f0
 import "./style.css";
 
 
@@ -13,6 +17,7 @@ class LoginPage extends React.Component {
         this.state = {
             email: "",
             password: "",
+<<<<<<< HEAD
             errors: {email: "email is invalid", password :"password is too short"},
             emailValid : false,
             passwordValid : false,
@@ -81,6 +86,26 @@ class LoginPage extends React.Component {
     });
   }
     render() {
+=======
+        };
+    }
+    handleClick = (val) => {
+        fetch("http://34.210.153.98:3000/user/login", {
+            method: "post",
+            body: JSON.stringify(this.state)
+        }
+        ).then(function(response){
+            console.log(response);
+        })
+    }
+    handleEmailChange = (e) => {
+        this.setState({email: e.target.value});
+     }
+    handlePasswordChange =(e) => {
+        this.setState({password: e.target.value});
+     }
+    render(){
+>>>>>>> 2b39db9ab6c6985a3f3cc44e55697fd0b54339f0
         return (
             <Pane
                 background="tint1"
@@ -101,6 +126,7 @@ class LoginPage extends React.Component {
                     </Heading>
                     <form className="loginPageForm">
                         <TextInputField
+<<<<<<< HEAD
                             name = "email"
                             isInvalid = {!this.state.emailValid && this.state.touched.email}
                             value={this.state.email}
@@ -127,11 +153,33 @@ class LoginPage extends React.Component {
                     <Button
                         disabled = {!this.state.formValid}
                         onClick={this.handleClick}
+=======
+                            value = {this.state.email}
+                            onChange =  {this.handleEmailChange}
+                            type="email"
+                            required
+                            label="Email"
+                            placeholder="somethinglike@this.com"/>
+                        <TextInputField
+                            value = {this.state.password}
+                            onChange =  {this.handlePasswordChange}
+                            label="Password"
+                            type="password"
+                            required
+                            placeholder="somethinglike@this.com"/>
+
+                    </form>
+                    <Button
+                        onClick = {this.handleClick}
+>>>>>>> 2b39db9ab6c6985a3f3cc44e55697fd0b54339f0
                         className="textAlignCenter"
                         width="100%"
                         appearance="primary"
                         intent="success">
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2b39db9ab6c6985a3f3cc44e55697fd0b54339f0
                         <Strong color="white">Login now</Strong>
                     </Button>
                 </Pane>
