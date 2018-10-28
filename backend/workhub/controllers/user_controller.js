@@ -133,7 +133,6 @@ exports.profileInfo = function(req,res){
 			desc = info.description;
 			rating = info.rating;
 
-			console.log(desc);
 
 			res.status(200).send({
 				firstName: firstName,
