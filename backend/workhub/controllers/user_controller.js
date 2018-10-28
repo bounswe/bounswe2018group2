@@ -1,6 +1,10 @@
 const db = require('../models');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
+
 const user = db.User;
+const sessions = db.Sessions;
+const profile = db.Profile;
 
 const saltRounds = 10;
 
@@ -58,13 +62,36 @@ exports.login = function(req,res){
 			
      		bcrypt.compare(req.body.password, users.password, function (err, result) {
 				
-     			if(result == true){
+     			if(result){
+     				var token = crypto.randomBytes(48).toString('hex');
+
+     				sessions.findOne({
+     					//check if a user session already exists
+     					where: {
+     						user_id : users.id
+     					}
+     				}).then(sess => {
+     					//if so, update it
+     					if (sess) {
+     						sess.updateAttributes({
+     							user_token : token
+     						})
+     					//otherwise, create it
+     					}else{
+     						sessions.create({
+     							user_id : users.id,
+     							user_token : token
+     						})
+     					}
+     				})		
+
      				res.status(200).send({
-						msg: "Logged in successfully."
+						msg: "Logged in successfully.",
+						token: token
             		})
       			}
-     	 		else if(result == false){
-    		 		res.status(400).send({
+     	 		else{
+    		 		res.status(500).send({
 						msg: "E-mail and password does not match."
            			})        			
       			}
@@ -78,4 +105,44 @@ exports.login = function(req,res){
 
 	})
 
+}
+
+
+exports.profileInfo = function(req,res){
+	var user_id = req.params.userId;
+
+
+
+	var firstName;
+	var lastName;
+	var desc;
+	var rating;
+
+	profile.findOne({
+		where: {user_id : user_id},
+		include: [{
+			model: user,
+			as: 'user',
+			where: {id : user_id}
+		}]
+	}).then(info => {
+		if (info){
+			firstName = info.user.firstName;
+			lastName = info.user.lastName;
+			desc = info.description;
+			rating = info.rating;
+
+			res.status(200).send({
+				firstName: firstName,
+				lastName: lastName,
+				description: desc,
+				rating: rating,
+				msg: "User found successfully."
+			})
+		}else{
+			res.status(400).send({
+				msg: "User not found."
+			})
+		}
+	})
 }
