@@ -136,7 +136,10 @@ exports.profileInfo = function(req, res) {
     getProfilePromise.then(profile => {
         if (profile) {
             res.status(200).send({
-                ...req.user,
+                firstName: req.user.firstName,
+                lastName: req.user.lastName,
+                email: req.user.email,
+                type: req.user.type,
                 description: profile.description,
                 rating: profile.rating,
                 msg: "User found successfully."

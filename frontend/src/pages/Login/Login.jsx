@@ -69,9 +69,7 @@ class LoginPage extends React.Component {
             response.json().then(body => {
                 if (response.ok) {
                     Cookies.set("workhubToken", body.token);
-                    this.setState({
-                        redirect: true
-                    });
+                    window.location = "/";
                     return;
                 }
 

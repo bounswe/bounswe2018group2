@@ -12,6 +12,7 @@ import SignupPage from "./pages/SignupPage";
 import Page404 from "./pages/404";
 import { ClientProfilePage, FreelancerProfilePage } from "./pages/Profiles";
 import { doGetMember, doLogout } from "./data/api";
+import DashboardProxy from "./pages/Dashboards";
 
 import "./reset.css";
 import "./App.css";
@@ -73,6 +74,8 @@ class App extends React.Component {
             )
         }
 
+        console.log("user", user);
+
         return (
             <Router>
                 <Switch>
@@ -80,7 +83,7 @@ class App extends React.Component {
                         exact
                         loggedIn={user}
                         path="/"
-                        component={ClientProfilePage}
+                        component={props => <DashboardProxy type={user.type} {...props}/>}
                     />
                     <Route exact path="/login" component={LoginPage} />
                     <Route exact path="/register" component={SignupPage} />
