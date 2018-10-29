@@ -11,10 +11,10 @@ import LoginPage from "./pages/Login";
 import SignupPage from "./pages/SignupPage";
 import Page404 from "./pages/404";
 import { ClientProfilePage, FreelancerProfilePage } from "./pages/ProfilePages";
+import { doGetMember, doLogout } from "./data/api";
 
 import "./reset.css";
 import "./App.css";
-import { doGetMember } from "./data/api";
 
 class App extends React.Component {
     constructor(props) {
@@ -27,6 +27,18 @@ class App extends React.Component {
     }
     componentDidMount() {
         window.workhubToken = Cookies.get("workhubToken");
+        window.logout = () => {
+            Cookies.remove("workhubToken");
+
+            doLogout().then(() => {
+                this.setState({
+                    user: null
+                });
+            });
+
+            window.workhubToken = "";
+        };
+
         if (window.workhubToken) {
             this.setState({
                 loading: true

@@ -22,7 +22,18 @@ function doGetMember(id) {
     });
 }
 
+function doLogout() {
+    return fetch(properties.APIURLs.logout, {
+        method: "POST",
+        headers: {
+            ...defaultHeaders,
+            "userToken": window.workhubToken
+        }
+    });
+}
+
 export {
     doLogin,
-    doGetMember
+    doGetMember,
+    doLogout
 }
