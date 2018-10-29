@@ -23,6 +23,7 @@
     ],
     "devDependencies": {
         "evergreen-ui": "^4.0.2",
+        "react-star-rating-component": "^1.4.1",
         "react-router-dom": "^4.3.1"
     }
 }
