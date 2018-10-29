@@ -10,7 +10,7 @@ import PrivateRoute from "./utils/PrivateRoute";
 import LoginPage from "./pages/Login";
 import SignupPage from "./pages/SignupPage";
 import Page404 from "./pages/404";
-import { ClientProfilePage, FreelancerProfilePage } from "./pages/ProfilePages";
+import { ClientProfilePage, FreelancerProfilePage } from "./pages/Profiles";
 import { doGetMember, doLogout } from "./data/api";
 
 import "./reset.css";
