@@ -107,6 +107,22 @@ exports.login = function(req, res) {
     });
 };
 
+exports.logout = function(req, res) {
+    Sessions.destroy({
+        where: {
+            user_id: req.user.id
+        }
+    }).then(() => {
+        res.send({
+            msg: "success" // we should delete these messages
+        });
+    }).catch(() => {
+        res.status(400).send({
+            msg: "Cannot destroy session"
+        });
+    });
+}
+
 exports.profileInfo = function(req, res) {
     var user_id = req.params.userId;
     let getProfilePromise = Profile.findOne({

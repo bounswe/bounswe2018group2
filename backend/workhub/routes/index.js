@@ -10,6 +10,7 @@ router.get("/", function(req, res, next) {
 
 router.post("/user/create", user.create);
 router.post("/user/login", user.login);
+router.post("/user/logout", user.logout);
 
 router.get("/member", auth, user.profileInfo);
 router.get("/member/:userId", auth, user.profileInfo);
