@@ -1,8 +1,10 @@
-const properties = 
-{
-    APIURLs :{
-        login : "http://34.210.153.98:3000/user/login",
-        signup: "http://34.210.153.98:3000/user/create"
+const baseURL = "http://34.210.153.98:3000"
+const properties = {
+    APIURLs: {
+        login: `${baseURL}/user/login`,
+        signup: `${baseURL}/user/create`,
+        member: `${baseURL}/member`
     }
-}
-export default properties
+};
+
+export default properties;

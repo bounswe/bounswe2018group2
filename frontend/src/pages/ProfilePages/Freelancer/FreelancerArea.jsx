@@ -25,7 +25,7 @@ class FreelancerProfileArea extends React.Component {
                         height={30}
                         marginRight={16}
                         appearance="minimal"
-                        intent="default">
+                        intent="none">
                         Home Page
                     </Button>
                     <Button
@@ -33,7 +33,7 @@ class FreelancerProfileArea extends React.Component {
                         height={30}
                         marginRight={16}
                         appearance="minimal"
-                        intent="default">
+                        intent="none">
                         Messages
                     </Button>
                     <Button
@@ -41,7 +41,7 @@ class FreelancerProfileArea extends React.Component {
                         height={30}
                         marginRight={16}
                         appearance="minimal"
-                        intent="default">
+                        intent="none">
                         My Profile
                     </Button>
                     <Button
@@ -49,7 +49,7 @@ class FreelancerProfileArea extends React.Component {
                         height={30}
                         marginRight={16}
                         appearance="minimal"
-                        intent="default">
+                        intent="none">
                         Log-out
                     </Button>
                 </Pane>

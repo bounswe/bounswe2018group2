@@ -2,7 +2,7 @@ import React from "react";
 import Cookies from "js-cookie";
 import { Button, Pane, Heading, Strong, TextInputField } from "evergreen-ui";
 import { Redirect } from "react-router-dom";
-import properties from "../../Properties";
+import { doLogin } from "../../data/api";
 import "./style.css";
 
 class LoginPage extends React.Component {
@@ -25,6 +25,14 @@ class LoginPage extends React.Component {
                 password: false
             }
         };
+    }
+
+    componentDidMount() {
+        if (window.user) {
+            this.setState({
+                redirect: true
+            });
+        }
     }
 
     validateField(field, value) {
@@ -57,16 +65,7 @@ class LoginPage extends React.Component {
     }
 
     handleClick = () => {
-        fetch(properties.APIURLs.login, {
-            method: "post",
-            body: JSON.stringify({
-                email: this.state.email,
-                password: this.state.password
-            }),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then(response => {
+        doLogin(this.state.email, this.state.password).then(response => {
             response.json().then(body => {
                 if (response.ok) {
                     Cookies.set("workhubToken", body.token);
