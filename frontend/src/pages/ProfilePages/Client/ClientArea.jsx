@@ -46,11 +46,12 @@ class ClientProfileArea extends React.Component {
                     </Button>
                     <Button
                         iconBefore="log-out"
+                        onClick={window.logout}
                         height={30}
                         marginRight={16}
                         appearance="minimal"
                         intent="none">
-                        Log-out
+                        Log out
                     </Button>
                 </Pane>
                 <Pane padding={16} background="tint1" display="flex">

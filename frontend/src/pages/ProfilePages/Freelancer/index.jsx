@@ -1,1 +1,1 @@
-export { default } from "./Freelancer";
+export { default } from "./Freelancer.jsx";
