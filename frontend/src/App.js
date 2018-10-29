@@ -8,8 +8,7 @@ import {
 import LoginPage from "./pages/Login";
 import SignupPage from "./pages/SignupPage";
 import Page404 from "./pages/404";
-import Client from "./ProfilePages/Client";
-import Freelancer from "./ProfilePages/Freelancer";
+import { ClientProfilePage, FreelancerProfilePage } from "./pages/ProfilePages";
 
 import "./reset.css";
 import "./App.css";
@@ -21,11 +20,11 @@ function App() {
                 <Route exact path="/" render={() => <Redirect to="/login" />} />
                 <Route exact path="/login" component={LoginPage} />
                 <Route exact path="/register" component={SignupPage} />
-                <Route exact path="/profile/client" component={Client} />
+                <Route exact path="/profile/client" component={ClientProfilePage} />
                 <Route
                     exact
                     path="/profile/freelancer"
-                    component={Freelancer}
+                    component={FreelancerProfilePage}
                 />
                 <Route component={Page404} />
             </Switch>
