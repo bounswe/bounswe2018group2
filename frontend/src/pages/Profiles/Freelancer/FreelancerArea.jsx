@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
     Pane,
     Tablist,
@@ -26,7 +27,7 @@ class FreelancerProfileArea extends React.Component {
                         marginRight={16}
                         appearance="minimal"
                         intent="none">
-                        Home Page
+                        <Link to="/">Home Page</Link>
                     </Button>
                     <Button
                         iconBefore="envelope"

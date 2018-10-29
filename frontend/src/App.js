@@ -22,7 +22,7 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            loading: false,
+            loading: true,
             user: null
         };
     }
@@ -73,8 +73,6 @@ class App extends React.Component {
                 </Pane>
             )
         }
-
-        console.log("user", user);
 
         return (
             <Router>
