@@ -1,5 +1,7 @@
 import React from "react";
+import Cookies from "js-cookie";
 import { Button, Pane, Heading, Strong, TextInputField } from "evergreen-ui";
+import { Redirect } from "react-router-dom";
 import properties from "../../Properties";
 import "./style.css";
 
@@ -13,6 +15,8 @@ class LoginPage extends React.Component {
                 email: "email is invalid",
                 password: "password is too short"
             },
+            redirect: false,
+            error: "",
             emailValid: false,
             passwordValid: false,
             formValid: false,
@@ -36,7 +40,7 @@ class LoginPage extends React.Component {
                 validationErrors.email = emailValid ? "" : "email is invalid";
                 break;
             case "password":
-                passwordValid = value.length >= 6;
+                passwordValid = value.length >= 4;
                 validationErrors.password = passwordValid
                     ? ""
                     : "password is too short";
@@ -52,7 +56,7 @@ class LoginPage extends React.Component {
         });
     }
 
-    handleClick = val => {
+    handleClick = () => {
         fetch(properties.APIURLs.login, {
             method: "post",
             body: JSON.stringify({
@@ -62,17 +66,23 @@ class LoginPage extends React.Component {
             headers: {
                 "Content-Type": "application/json"
             }
-        })
-            .then(response => response.json())
-            .catch(error => console.error("Error:", error))
-            .then(function(response) {
+        }).then(response => {
+            response.json().then(body => {
                 if (response.ok) {
-                    alert("LOGGED IN SUCCESFULLY");
-                } else {
-                    alert(response.msg);
+                    Cookies.set("workhubToken", body.token);
+                    this.setState({
+                        redirect: true
+                    });
+                    return;
                 }
+
+                this.setState({
+                    error: body.msg
+                });
             });
+        }).catch(console.error);
     };
+
     handleUserInput(e) {
         const name = e.target.name;
         const value = e.target.value;
@@ -93,6 +103,7 @@ class LoginPage extends React.Component {
                 display="flex"
                 alignItems="center"
                 justifyContent="center">
+                {this.state.redirect && <Redirect to="/"/>}
                 <Pane
                     borderRadius={5}
                     elevation={1}
@@ -102,7 +113,7 @@ class LoginPage extends React.Component {
                     <Heading className="textAlignCenter" size={700}>
                         Log in to WorkHub
                     </Heading>
-                    <form className="loginPageForm">
+                    <form className="loginPageForm" onSubmit={this.handleClick}>
                         <TextInputField
                             name="email"
                             isInvalid={
