@@ -1,5 +1,5 @@
 import React from "react";
-import ProfileArea from "./client_area.jsx";
+import ProfileArea from "./ClientArea.jsx";
 
 class ClientProfilePage extends React.Component {
     render() {
