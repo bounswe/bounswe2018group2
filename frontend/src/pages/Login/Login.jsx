@@ -1,42 +1,45 @@
 import React from "react";
-import {
-    Button, Pane, Heading, Strong, TextInputField
-} from "evergreen-ui";
+import { Button, Pane, Heading, Strong, TextInputField } from "evergreen-ui";
 import properties from "../../Properties";
 import "./style.css";
 
-
 class LoginPage extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
             email: "",
             password: "",
-            errors: {email: "email is invalid", password :"password is too short"},
-            emailValid : false,
-            passwordValid : false,
-            formValid : false,
+            errors: {
+                email: "email is invalid",
+                password: "password is too short"
+            },
+            emailValid: false,
+            passwordValid: false,
+            formValid: false,
             touched: {
-                email : false,
+                email: false,
                 password: false
             }
         };
     }
 
-    validateField(field, value){
+    validateField(field, value) {
         let emailValid = this.state.emailValid;
         let passwordValid = this.state.passwordValid;
         let validationErrors = this.state.errors;
 
-        switch(field){
+        switch (field) {
             case "email":
-                emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-                validationErrors.email = emailValid ? '' : 'email is invalid';
+                emailValid = value.match(
+                    /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i
+                );
+                validationErrors.email = emailValid ? "" : "email is invalid";
                 break;
             case "password":
                 passwordValid = value.length >= 6;
-                validationErrors.password = passwordValid ? '': 'password is too short';
+                validationErrors.password = passwordValid
+                    ? ""
+                    : "password is too short";
                 break;
             default:
                 break;
@@ -45,41 +48,43 @@ class LoginPage extends React.Component {
             errors: validationErrors,
             passwordValid: passwordValid,
             emailValid: emailValid,
-            formValid: emailValid&&passwordValid
-        })
+            formValid: emailValid && passwordValid
+        });
     }
 
-    handleClick = (val) => {
+    handleClick = val => {
         fetch(properties.APIURLs.login, {
             method: "post",
-            body: JSON.stringify({ email: this.state.email, password : this.state.password }),
-            headers:{
-                'Content-Type': 'application/json'
-              }
-        }
-        ).then(response => response.json())
-        .catch(error => console.error('Error:', error))
-        .then(function(response){
-            if(response.ok){
-                alert("LOGGED IN SUCCESFULLY");
-            }else{
-                alert(response.msg);
+            body: JSON.stringify({
+                email: this.state.email,
+                password: this.state.password
+            }),
+            headers: {
+                "Content-Type": "application/json"
             }
-
-        });
-
-    }
-    handleUserInput (e) {
+        })
+            .then(response => response.json())
+            .catch(error => console.error("Error:", error))
+            .then(function(response) {
+                if (response.ok) {
+                    alert("LOGGED IN SUCCESFULLY");
+                } else {
+                    alert(response.msg);
+                }
+            });
+    };
+    handleUserInput(e) {
         const name = e.target.name;
         const value = e.target.value;
-        this.setState({[name]: value},
-            () => { this.validateField(name, value) });
+        this.setState({ [name]: value }, () => {
+            this.validateField(name, value);
+        });
     }
-    handleBlur = (field) => (evt) => {
-    this.setState({
-      touched: { ...this.state.touched, [field]: true },
-    });
-  }
+    handleBlur = field => evt => {
+        this.setState({
+            touched: { ...this.state.touched, [field]: true }
+        });
+    };
     render() {
         return (
             <Pane
@@ -94,38 +99,42 @@ class LoginPage extends React.Component {
                     background="white"
                     padding="24px"
                     width="440px">
-                    <Heading
-                        className="textAlignCenter"
-                        size={700}>
+                    <Heading className="textAlignCenter" size={700}>
                         Log in to WorkHub
                     </Heading>
                     <form className="loginPageForm">
                         <TextInputField
-                            name = "email"
-                            isInvalid = {!this.state.emailValid && this.state.touched.email}
+                            name="email"
+                            isInvalid={
+                                !this.state.emailValid &&
+                                this.state.touched.email
+                            }
                             value={this.state.email}
-                            onChange={(event) => this.handleUserInput(event)}
-                            onBlur = {this.handleBlur('email')}
+                            onChange={event => this.handleUserInput(event)}
+                            onBlur={this.handleBlur("email")}
                             type="email"
                             required
                             label="Email"
-                            placeholder="somethinglike@this.com" />
-
+                            placeholder="somethinglike@this.com"
+                        />
 
                         <TextInputField
                             name="password"
-                            isInvalid = {!this.state.passwordValid && this.state.touched.password}
+                            isInvalid={
+                                !this.state.passwordValid &&
+                                this.state.touched.password
+                            }
                             value={this.state.password}
-                            onChange={(event) => this.handleUserInput(event)}
-                            onBlur = {this.handleBlur('password')}
+                            onChange={event => this.handleUserInput(event)}
+                            onBlur={this.handleBlur("password")}
                             label="Password"
                             type="password"
                             required
-                            placeholder="somethinglike" />
-
+                            placeholder="somethinglike"
+                        />
                     </form>
                     <Button
-                        disabled = {!this.state.formValid}
+                        disabled={!this.state.formValid}
                         onClick={this.handleClick}
                         className="textAlignCenter"
                         width="100%"
@@ -136,7 +145,6 @@ class LoginPage extends React.Component {
                 </Pane>
             </Pane>
         );
-
     }
 }
 
