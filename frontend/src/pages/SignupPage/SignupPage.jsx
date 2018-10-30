@@ -109,7 +109,7 @@ class SignupPage extends React.Component {
             }
 
             this.setState({
-                loading: true
+                loading: false
             });
 
             response.json().then(body => toaster.danger(body.msg));
@@ -117,7 +117,7 @@ class SignupPage extends React.Component {
         .catch(error => {
             console.error('Error:', error);
             this.setState({
-                loading: true
+                loading: false
             });
         });
     }
