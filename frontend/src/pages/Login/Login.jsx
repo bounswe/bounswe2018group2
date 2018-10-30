@@ -148,7 +148,7 @@ class LoginPage extends React.Component {
                         width="100%"
                         appearance="primary"
                         intent="success">
-                        <Strong color="white">Login now</Strong>
+                        <Strong color={this.state.formValid ? "white" : "#707070"}>Login now</Strong>
                     </Button>
                 </Pane>
             </Pane>

@@ -200,7 +200,7 @@ class SignupPage extends React.Component {
                         onClick={this.handleClick}
                         appearance="primary"
                         intent="success">
-                        <Strong color="white">Register now</Strong>
+                        <Strong color={this.state.formValid ? "white" : "#707070"}>Register now</Strong>
                     </Button>
                 </Pane>
             </Pane>
