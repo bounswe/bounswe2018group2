@@ -1,5 +1,5 @@
 import React from "react";
-import { Pane, Button, SearchInput } from "evergreen-ui";
+import { Pane, Button } from "evergreen-ui";
 import { Link } from "react-router-dom";
 
 class HeaderBar extends React.Component {
