@@ -1,6 +1,6 @@
 import React from "react";
 import {
-    Button, Pane, Heading, Strong, TextInputField, SegmentedControl
+    Button, Pane, Heading, Strong, TextInputField, SegmentedControl, toaster
 } from "evergreen-ui";
 import properties from "../../Properties";
 
@@ -103,7 +103,7 @@ class SignupPage extends React.Component {
                 return;
             }
 
-            response.json().then(body => alert(body.msg));
+            response.json().then(body => toaster.danger(body.msg));
         })
         .catch(error => console.error('Error:', error));
     }
@@ -192,16 +192,16 @@ class SignupPage extends React.Component {
                             onChange={(event) => this.handleUserInput(event)}
                             onBlur = {this.handleBlur('conPassword')}
                             placeholder="Be sure"/>
+                            <Button
+                                className="textAlignCenter"
+                                disabled = {!this.state.formValid}
+                                width="100%"
+                                onClick={this.handleClick}
+                                appearance="primary"
+                                intent="success">
+                                <Strong color={this.state.formValid ? "white" : "#707070"}>Register now</Strong>
+                            </Button>
                     </form>
-                    <Button
-                        className="textAlignCenter"
-                        disabled = {!this.state.formValid}
-                        width="100%"
-                        onClick={this.handleClick}
-                        appearance="primary"
-                        intent="success">
-                        <Strong color={this.state.formValid ? "white" : "#707070"}>Register now</Strong>
-                    </Button>
                 </Pane>
             </Pane>
         );

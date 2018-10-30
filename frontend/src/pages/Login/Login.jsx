@@ -6,9 +6,10 @@ import {
     Heading,
     Strong,
     TextInputField,
+    Text,
     Alert
-} from "evergreen-ui";
-import { Redirect } from "react-router-dom";
+} from "evergreen-ui"
+import { Redirect, Link } from "react-router-dom";
 import { doLogin } from "../../data/api";
 import "./style.css";
 
@@ -193,6 +194,11 @@ class LoginPage extends React.Component {
                             </Strong>
                         </Button>
                     </form>
+                    <Pane marginTop="15px" display="flex" justifyContent="flex-end">
+                        <Link to="/register">
+                            <Text size={100} style={{ fontSize: "12px" }}>Not a user? Register</Text>
+                        </Link>
+                    </Pane>
                 </Pane>
             </Pane>
         );
