@@ -99,6 +99,7 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(SimpleMessageModel data) {
                         progressDialog.dismiss();
+                        // todo need to servercall.login to get token :(
                         editor = sharedPreferences.edit();
                         editor.putString("email", emailView.getText().toString());
                         editor.apply();

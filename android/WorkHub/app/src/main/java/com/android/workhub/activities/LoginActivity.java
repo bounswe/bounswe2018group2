@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.android.workhub.R;
 import com.android.workhub.models.LoginModel;
+import com.android.workhub.models.LoginReturnModel;
 import com.android.workhub.models.SimpleMessageModel;
 import com.android.workhub.utils.ServerCall;
 import com.android.workhub.utils.WorkHubServiceListener;
@@ -86,13 +87,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnKeyListen
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Logining...");
         progressDialog.show();
-        ServerCall.login(new LoginModel(emailView.getText().toString(),passwordView.getText().toString())
-                ,new WorkHubServiceListener<SimpleMessageModel>() {
+        ServerCall.login(new LoginModel(email,password),new WorkHubServiceListener<LoginReturnModel>() {
             @Override
-            public void onSuccess(SimpleMessageModel data) {
+            public void onSuccess(LoginReturnModel data) {
                 progressDialog.dismiss();
                 editor = sharedPreferences.edit();
-                if(rememberMeSwitch.isActivated()){
+                editor.putString("token",data.getToken());
+
+                if(rememberMeSwitch.isChecked()){
                     editor.putBoolean("rememberMe",true);
                 }else{
                     editor.putBoolean("rememberMe",false);
@@ -107,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnKeyListen
             @Override
             public void onFailure(Exception e) {
                 progressDialog.dismiss();
-                Log.e("login",e.getMessage());
+               // Log.e("login",e.getMessage());
                 Toast.makeText(LoginActivity.this,"Wrong email or password, please try again"
                         , Toast.LENGTH_SHORT).show();
             }

@@ -19,24 +19,30 @@ import android.widget.Toolbar;
 import com.android.workhub.fragments.MainPage;
 import com.android.workhub.R;
 import com.android.workhub.fragments.ProfilePage;
+import com.android.workhub.models.SimpleMessageModel;
+import com.android.workhub.utils.ServerCall;
+import com.android.workhub.utils.WorkHubServiceListener;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     Menu settingsMenu;
     SharedPreferences sharedPreferences;
     private String email;
+    private String token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         email = sharedPreferences.getString("email","");
+        token = sharedPreferences.getString("token","");
         if(!sharedPreferences.getBoolean("rememberMe",false)){
             sharedPreferences.edit()
                     .remove("email")
+                    .remove("token")
                     .apply();
         }
-        Toast.makeText(this, email, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, email, Toast.LENGTH_SHORT).show();
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -96,10 +102,24 @@ public class MainActivity extends AppCompatActivity {
             case (R.id.menu_logout):
                 sharedPreferences.edit()
                         .remove("email")
+                        .remove("token")
                         .apply();
-                Intent logoutIntent = new Intent(MainActivity.this,LoginActivity.class);
-                logoutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(logoutIntent);
+
+                ServerCall.logout(token, new WorkHubServiceListener<SimpleMessageModel>() {
+                    @Override
+                    public void onSuccess(SimpleMessageModel data) {
+                        Intent logoutIntent = new Intent(MainActivity.this,LoginActivity.class);
+                        logoutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(logoutIntent);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -110,10 +130,18 @@ public class MainActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
             return;
         }
+        if(token==null || token.equals("")){
+            Toast.makeText(this, "Error while receiving token",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         Fragment fragment = (Fragment) new ProfilePage();
+        Bundle bundle = new Bundle();
+        bundle.putString("token",token);
+        fragment.setArguments(bundle);
         transaction.replace(R.id.frame,fragment);
         transaction.commit();
     }
