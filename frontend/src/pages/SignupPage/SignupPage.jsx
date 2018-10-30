@@ -26,6 +26,7 @@ class SignupPage extends React.Component {
             name: "",
             lastName: "",
             email: "",
+            loading: false,
             password: "",
             conPassword: "",
             emailValid : false,
@@ -83,7 +84,11 @@ class SignupPage extends React.Component {
         touched: { ...this.state.touched, [field]: true },
         });
     }
-    handleClick = (val) => {
+    handleClick = e => {
+        e.preventDefault();
+        this.setState({
+            loading: true
+        });
         fetch(properties.APIURLs.signup, {
             method: "post",
             body: JSON.stringify({
@@ -103,9 +108,18 @@ class SignupPage extends React.Component {
                 return;
             }
 
+            this.setState({
+                loading: true
+            });
+
             response.json().then(body => toaster.danger(body.msg));
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error:', error);
+            this.setState({
+                loading: true
+            });
+        });
     }
 
     handleUserTypeChange = (value) => this.setState({
@@ -131,7 +145,7 @@ class SignupPage extends React.Component {
                         size={700}>
                         Register to Workhub
                     </Heading>
-                    <form className="registerPageForm">
+                    <form className="registerPageForm" onSubmit={this.handleClick}>
                         <SegmentedControl
                             marginTop="30px"
                             name="typeSwitch"
@@ -196,6 +210,8 @@ class SignupPage extends React.Component {
                                 className="textAlignCenter"
                                 disabled = {!this.state.formValid}
                                 width="100%"
+                                type="submit"
+                                isLoading={this.state.loading}
                                 onClick={this.handleClick}
                                 appearance="primary"
                                 intent="success">
