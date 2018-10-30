@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                     .remove("token")
                     .apply();
         }
-       // Toast.makeText(this, email, Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this, email, Toast.LENGTH_SHORT).show();
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-       goToOpeningScreen();
+        goToOpeningScreen();
     }
 
 
@@ -91,12 +91,12 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case(R.id.menu_login):
                 Intent loginIntent = new Intent(MainActivity.this,LoginActivity.class);
-             //   login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                //   login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(loginIntent);
                 break;
             case(R.id.menu_signup):
                 Intent signUpIntent = new Intent(MainActivity.this,SignupActivity.class);
-              //  signUpIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                //  signUpIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(signUpIntent);
                 break;
             case (R.id.menu_logout):
@@ -150,6 +150,9 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         Fragment fragment = (Fragment) new MainPage();
+        Bundle bundle = new Bundle();
+        bundle.putString("email",email);
+        fragment.setArguments(bundle);
         transaction.replace(R.id.frame,fragment);
         transaction.commit();
     }
