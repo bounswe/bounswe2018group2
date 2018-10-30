@@ -1,6 +1,13 @@
 import React from "react";
 import Cookies from "js-cookie";
-import { Button, Pane, Heading, Strong, TextInputField } from "evergreen-ui";
+import {
+    Button,
+    Pane,
+    Heading,
+    Strong,
+    TextInputField,
+    Alert
+} from "evergreen-ui";
 import { Redirect } from "react-router-dom";
 import { doLogin } from "../../data/api";
 import "./style.css";
@@ -11,9 +18,10 @@ class LoginPage extends React.Component {
         this.state = {
             email: "",
             password: "",
+            loading: false,
             errors: {
-                email: "email is invalid",
-                password: "password is too short"
+                email: "Email is invalid",
+                password: "Password is too short"
             },
             redirect: false,
             error: "",
@@ -34,6 +42,17 @@ class LoginPage extends React.Component {
             });
         }
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.error && !prevState.error) {
+            setTimeout(() => {
+                this.setState({
+                    error: ""
+                });
+            }, 3000)
+        }
+    }
+
 
     validateField(field, value) {
         let emailValid = this.state.emailValid;
@@ -65,19 +84,31 @@ class LoginPage extends React.Component {
     }
 
     handleClick = () => {
-        doLogin(this.state.email, this.state.password).then(response => {
-            response.json().then(body => {
-                if (response.ok) {
-                    Cookies.set("workhubToken", body.token);
-                    window.location = "/";
-                    return;
-                }
+        this.setState({
+            loading: true
+        });
 
+        doLogin(this.state.email, this.state.password)
+            .then(response => {
+                response.json().then(body => {
+                    if (response.ok) {
+                        Cookies.set("workhubToken", body.token);
+                        window.location = "/";
+                        return;
+                    }
+
+                    this.setState({
+                        error: body.msg,
+                        loading: false
+                    });
+                });
+            })
+            .catch(err => {
                 this.setState({
-                    error: body.msg
+                    error: err.message,
+                    loading: false
                 });
             });
-        }).catch(console.error);
     };
 
     handleUserInput(e) {
@@ -100,7 +131,14 @@ class LoginPage extends React.Component {
                 display="flex"
                 alignItems="center"
                 justifyContent="center">
-                {this.state.redirect && <Redirect to="/"/>}
+                {this.state.redirect && <Redirect to="/" />}
+                {this.state.error && (
+                    <Alert
+                        style={{ position: "absolute", right: "50px", bottom: "50px" }}
+                        intent="danger"
+                        title={this.state.error}
+                    />
+                )}
                 <Pane
                     borderRadius={5}
                     elevation={1}
@@ -140,16 +178,21 @@ class LoginPage extends React.Component {
                             required
                             placeholder="somethinglike"
                         />
+                        <Button
+                            disabled={!this.state.formValid}
+                            onClick={this.handleClick}
+                            className="textAlignCenter"
+                            width="100%"
+                            appearance="primary"
+                            type="submit"
+                            isLoading={this.state.loading}
+                            intent="success">
+                            <Strong
+                                color={this.state.formValid ? "white" : "#707070"}>
+                                Login now
+                            </Strong>
+                        </Button>
                     </form>
-                    <Button
-                        disabled={!this.state.formValid}
-                        onClick={this.handleClick}
-                        className="textAlignCenter"
-                        width="100%"
-                        appearance="primary"
-                        intent="success">
-                        <Strong color={this.state.formValid ? "white" : "#707070"}>Login now</Strong>
-                    </Button>
                 </Pane>
             </Pane>
         );
