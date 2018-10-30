@@ -21,7 +21,7 @@ class ClientProfileArea extends React.Component {
     render() {
         return (
             <Pane background="tint1">
-                <HeaderBar/>
+                <HeaderBar />
                 <Pane padding={16} background="tint1" display="flex">
                     <Pane>
                         <Pane
@@ -151,6 +151,9 @@ class ClientProfileArea extends React.Component {
                                     Freelancer
                                 </Table.TextHeaderCell>
                                 <Table.TextHeaderCell>
+                                    Project Name
+                                </Table.TextHeaderCell>
+                                <Table.TextHeaderCell>
                                     Last Activity
                                 </Table.TextHeaderCell>
                                 <Table.TextHeaderCell>ltv</Table.TextHeaderCell>
@@ -161,10 +164,11 @@ class ClientProfileArea extends React.Component {
                                         Jack Philips
                                     </Table.TextCell>
                                     <Table.TextCell>
-                                        6 minutes ago
+                                        Painting of my new village
                                     </Table.TextCell>
+                                    <Table.TextCell>6 month ago</Table.TextCell>
                                     <Table.TextCell isNumber>
-                                        $242
+                                        $150
                                     </Table.TextCell>
                                 </Table.Row>
 
@@ -173,10 +177,13 @@ class ClientProfileArea extends React.Component {
                                         Julia Williamson
                                     </Table.TextCell>
                                     <Table.TextCell>
-                                        10 minutes ago
+                                        Repairing my beautiful baby.
+                                    </Table.TextCell>
+                                    <Table.TextCell>
+                                        10 months ago
                                     </Table.TextCell>
                                     <Table.TextCell isNumber>
-                                        $242
+                                        $250
                                     </Table.TextCell>
                                 </Table.Row>
 
@@ -185,20 +192,9 @@ class ClientProfileArea extends React.Component {
                                         Jonathan Martin
                                     </Table.TextCell>
                                     <Table.TextCell>
-                                        6 minutes ago
+                                        Giving my cat hugs
                                     </Table.TextCell>
-                                    <Table.TextCell isNumber>
-                                        $242
-                                    </Table.TextCell>
-                                </Table.Row>
-
-                                <Table.Row intent="none">
-                                    <Table.TextCell>
-                                        Maria Bennett
-                                    </Table.TextCell>
-                                    <Table.TextCell>
-                                        6 minutes ago
-                                    </Table.TextCell>
+                                    <Table.TextCell>2 moths ago</Table.TextCell>
                                     <Table.TextCell isNumber>
                                         $242
                                     </Table.TextCell>
