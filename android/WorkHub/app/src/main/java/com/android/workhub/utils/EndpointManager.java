@@ -20,6 +20,11 @@ public class EndpointManager {
         return SERVER_URL + "/user/create";
     }
 
+    public static String getGetSelfUrl(){
+        return SERVER_URL + "/member" ;
+    }
 
-
+    public static String getLogoutUrl(){
+        return SERVER_URL + "/user/logout" ;
+    }
 }

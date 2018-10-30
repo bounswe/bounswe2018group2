@@ -25,6 +25,7 @@ class HttpRequester<T> {
 
     public T get(String token, Class<T> clazz) throws IOException {
         HttpURLConnection connection = prepareRequest("GET");
+
         checkResponseStatus(connection);
         byte[] responseData = IOUtils.toByteArray(connection.getInputStream());
         String responseMessage = new String(responseData, "UTF-8");
@@ -32,6 +33,17 @@ class HttpRequester<T> {
             return (T) responseData;
         }
         return gson.fromJson(responseMessage, clazz);
+    }
+
+    public T postWitToken(String token, Class<T> clazz) throws IOException {
+        HttpURLConnection connection = prepareRequest("POST");
+        connection.setRequestProperty("userToken",token);
+        checkResponseStatus(connection);
+        byte[] responseData = IOUtils.toByteArray(connection.getInputStream());
+        if (clazz.getSimpleName().contains("byte")) {
+            return (T) responseData;
+        }
+        return gson.fromJson(new String(responseData, "UTF-8"), clazz);
     }
 
     public T post(Object data, Class<T> clazz) throws IOException {
@@ -45,13 +57,13 @@ class HttpRequester<T> {
         return gson.fromJson(new String(responseData, "UTF-8"), clazz);
     }
 
-    public void put(String token, Object data) throws IOException {
+    public void put(Object data) throws IOException {
         HttpURLConnection connection = prepareRequest("PUT");
         writeOutputStream(connection.getOutputStream(), data);
         checkResponseStatus(connection);
     }
 
-    public void delete(String token) throws IOException {
+    public void delete() throws IOException {
         HttpURLConnection connection = prepareRequest("DELETE");
         checkResponseStatus(connection);
     }
@@ -62,7 +74,6 @@ class HttpRequester<T> {
         connection.setRequestMethod(method);
         connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
         connection.setRequestProperty("Accept","application/json");
-
         if ("POST".equals(method) || "GET".equals(method) || "DELETE".equals(method)){
             connection.setDoInput(true);
         }
