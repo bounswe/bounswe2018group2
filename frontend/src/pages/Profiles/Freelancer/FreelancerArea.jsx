@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import {
     Pane,
     Tablist,
@@ -12,6 +11,7 @@ import {
 } from "evergreen-ui";
 import imgfreelancer from "./images.jpg";
 import StarRatingComponent from "react-star-rating-component";
+import HeaderBar from "../../../components/HeaderBar";
 class FreelancerProfileArea extends React.Component {
     constructor() {
         super();
@@ -20,41 +20,7 @@ class FreelancerProfileArea extends React.Component {
     render() {
         return (
             <Pane background="tint1">
-                <Pane background="#DDEBF7" padding={16}>
-                    <Button
-                        iconBefore="home"
-                        height={30}
-                        marginRight={16}
-                        appearance="minimal"
-                        intent="none">
-                        <Link to="/">Home Page</Link>
-                    </Button>
-                    <Button
-                        iconBefore="envelope"
-                        height={30}
-                        marginRight={16}
-                        appearance="minimal"
-                        intent="none">
-                        Messages
-                    </Button>
-                    <Button
-                        iconBefore="mugshot"
-                        height={30}
-                        marginRight={16}
-                        appearance="minimal"
-                        intent="none">
-                        My Profile
-                    </Button>
-                    <Button
-                        iconBefore="log-out"
-                        onClick={window.logout}
-                        height={30}
-                        marginRight={16}
-                        appearance="minimal"
-                        intent="none">
-                        Log out
-                    </Button>
-                </Pane>
+                <HeaderBar/>
                 <Pane padding={16} background="tint1" display="flex">
                     <Pane>
                         <Pane

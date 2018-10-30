@@ -53,17 +53,6 @@ class ClientProfileArea extends React.Component {
                                 flexBasis={240}
                                 marginRight={24}>
                                 <SidebarTab
-                                    key="tab0"
-                                    id="tab0"
-                                    onSelect={() =>
-                                        this.setState({ selectedIndex: 0 })
-                                    }
-                                    isSelected={0 === this.state.selectedIndex}
-                                    aria-controls={`panel-$"tab1"`}>
-                                    Homepage
-                                </SidebarTab>
-
-                                <SidebarTab
                                     key="tab1"
                                     id="tab1"
                                     onSelect={() =>

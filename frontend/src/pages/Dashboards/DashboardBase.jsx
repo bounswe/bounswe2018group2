@@ -14,8 +14,12 @@ function DashboardBase(props) {
                 margin={5}
                 border="default"
                 elevation={1}>
-                <Pane flex="1" height="100%" padding={10}>
-                    <Heading textAlign="center">Last active members</Heading>
+                <Pane flex="1" height="100%" padding={10} display="flex" alignItems="center" flexDirection="column">
+                    <Heading size={600} textAlign="center">Last active members</Heading>
+                    <Paragraph size={400} width="100%" textAlign="center">
+                        <Link to="/profile/freelancer">Eleonara Deren Yildiz</Link><br/>
+                        <Text>~ The End ~</Text>
+                    </Paragraph>
                 </Pane>
                 <Pane flex="3" height="100%" padding={10}>
                     <SearchInput placeholder="Search projects" width="100%"/>
