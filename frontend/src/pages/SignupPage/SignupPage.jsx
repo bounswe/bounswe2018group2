@@ -97,17 +97,15 @@ class SignupPage extends React.Component {
                 'Content-Type': 'application/json'
               }
         }
-        ).then(response => response.json())
-        .catch(error => console.error('Error:', error))
-        .then(function(response){
-            if(response.ok){
+        ).then(response => {
+            if (response.ok) {
                 window.location = "/";
-            }else{
-                alert(response.msg);
+                return;
             }
 
-        });
-
+            response.json().then(body => alert(body.msg));
+        })
+        .catch(error => console.error('Error:', error));
     }
 
     handleUserTypeChange = (value) => this.setState({
