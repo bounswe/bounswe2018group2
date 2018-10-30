@@ -17,6 +17,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.workhub.R;
+import com.android.workhub.models.LoginModel;
+import com.android.workhub.models.LoginReturnModel;
 import com.android.workhub.models.SignUpModel;
 import com.android.workhub.models.SimpleMessageModel;
 import com.android.workhub.utils.ServerCall;
@@ -98,8 +100,27 @@ public class SignupActivity extends AppCompatActivity {
                 ServerCall.signUp(signUpModel, new WorkHubServiceListener<SimpleMessageModel>() {
                     @Override
                     public void onSuccess(SimpleMessageModel data) {
-                        progressDialog.dismiss();
-                        // todo need to servercall.login to get token :(
+
+                        ServerCall.login(new LoginModel(email,password1), new WorkHubServiceListener<LoginReturnModel>() {
+                            @Override
+                            public void onSuccess(LoginReturnModel data) {
+                                progressDialog.dismiss();
+                                editor = sharedPreferences.edit();
+                                editor.putString("token",data.getToken());
+                                editor.putString("email", emailView.getText().toString());
+                                editor.apply();
+                                Intent intent = new Intent(SignupActivity.this,MainActivity.class);
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+                                progressDialog.dismiss();
+                                // Log.e("login",e.getMessage());
+                                Toast.makeText(SignupActivity.this,"Error while redirecting"
+                                        , Toast.LENGTH_SHORT).show();
+                            }
+                        });
                         editor = sharedPreferences.edit();
                         editor.putString("email", emailView.getText().toString());
                         editor.apply();

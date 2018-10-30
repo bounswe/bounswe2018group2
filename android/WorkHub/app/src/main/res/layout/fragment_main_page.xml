@@ -4,12 +4,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.MainPage">
-
-    <ListView
-        android:id="@+id/jobList"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    </ListView>
+
+
+        <ListView
+            android:id="@+id/jobList"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            >
+
+        </ListView>
+        <TextView
+            android:id="@+id/guestText"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textColor="@android:color/holo_orange_dark"
+            />
+    </LinearLayout>
 
 </FrameLayout>

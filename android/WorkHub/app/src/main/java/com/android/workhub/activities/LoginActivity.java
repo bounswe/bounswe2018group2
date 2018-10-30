@@ -1,5 +1,6 @@
 package com.android.workhub.activities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -33,6 +35,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnKeyListen
     ProgressDialog progressDialog;
     private String email;
     private String password;
+    private Button gusetguestButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +45,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnKeyListen
         emailView =findViewById(R.id.emailView);
         passwordView=findViewById(R.id.passwordView);
         rememberMeSwitch=findViewById(R.id.rememberMeSwitch);
+        gusetguestButton = findViewById(R.id.guestButton);
         passwordView.setOnKeyListener(this);
         progressDialog = new ProgressDialog(this);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -62,6 +66,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnKeyListen
 
             }
         });
+
+        gusetguestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -76,6 +88,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnKeyListen
     }
 
     public  void login(String email,String password){
+        hideKeyboard(this);
         if(email.equals("")||password.equals("")){
             return;
         }
@@ -106,14 +119,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnKeyListen
 
             }
 
+
             @Override
             public void onFailure(Exception e) {
                 progressDialog.dismiss();
-               // Log.e("login",e.getMessage());
+                // Log.e("login",e.getMessage());
                 Toast.makeText(LoginActivity.this,"Wrong email or password, please try again"
                         , Toast.LENGTH_SHORT).show();
             }
         });
 
+
+    }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

@@ -25,7 +25,7 @@ class HttpRequester<T> {
 
     public T get(String token, Class<T> clazz) throws IOException {
         HttpURLConnection connection = prepareRequest("GET");
-
+        connection.setRequestProperty("userToken",token);
         checkResponseStatus(connection);
         byte[] responseData = IOUtils.toByteArray(connection.getInputStream());
         String responseMessage = new String(responseData, "UTF-8");
