@@ -83,11 +83,11 @@ class SignupPage extends React.Component {
         touched: { ...this.state.touched, [field]: true },
         });
     }
-    handleClick = (val) => {                
+    handleClick = (val) => {
         fetch(properties.APIURLs.signup, {
             method: "post",
             body: JSON.stringify({
-                email: this.state.email, 
+                email: this.state.email,
                 firstName: this.state.name,
                 lastName: this.state.lastName,
                 password : this.state.password,
@@ -101,7 +101,7 @@ class SignupPage extends React.Component {
         .catch(error => console.error('Error:', error))
         .then(function(response){
             if(response.ok){
-                alert("User created succesfully!!");
+                window.location = "/";
             }else{
                 alert(response.msg);
             }

@@ -11,6 +11,8 @@ import {
 } from "evergreen-ui";
 import imgclient from "./images.png";
 import StarRatingComponent from "react-star-rating-component";
+import HeaderBar from "../../../components/HeaderBar";
+
 class ClientProfileArea extends React.Component {
     constructor() {
         super();
@@ -19,41 +21,7 @@ class ClientProfileArea extends React.Component {
     render() {
         return (
             <Pane background="tint1">
-                <Pane background="#DDEBF7" padding={16}>
-                    <Button
-                        iconBefore="home"
-                        height={30}
-                        marginRight={16}
-                        appearance="minimal"
-                        intent="none">
-                        Home Page
-                    </Button>
-                    <Button
-                        iconBefore="envelope"
-                        height={30}
-                        marginRight={16}
-                        appearance="minimal"
-                        intent="none">
-                        Messages
-                    </Button>
-                    <Button
-                        iconBefore="mugshot"
-                        height={30}
-                        marginRight={16}
-                        appearance="minimal"
-                        intent="none">
-                        My Profile
-                    </Button>
-                    <Button
-                        iconBefore="log-out"
-                        onClick={window.logout}
-                        height={30}
-                        marginRight={16}
-                        appearance="minimal"
-                        intent="none">
-                        Log out
-                    </Button>
-                </Pane>
+                <HeaderBar/>
                 <Pane padding={16} background="tint1" display="flex">
                     <Pane>
                         <Pane

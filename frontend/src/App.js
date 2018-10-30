@@ -11,6 +11,7 @@ import LoginPage from "./pages/Login";
 import SignupPage from "./pages/SignupPage";
 import Page404 from "./pages/404";
 import { ClientProfilePage, FreelancerProfilePage } from "./pages/Profiles";
+import ProfileProxy from "./pages/Profiles";
 import { doGetMember, doLogout } from "./data/api";
 import DashboardProxy from "./pages/Dashboards";
 
@@ -89,6 +90,12 @@ class App extends React.Component {
                     />
                     <Route exact path="/login" component={LoginPage} />
                     <Route exact path="/register" component={SignupPage} />
+                    <PrivateRoute
+                        exact
+                        path="/profile"
+                        loggedIn={user}
+                        component={props => <ProfileProxy type={user.type} {...props}/>}
+                    />
                     <PrivateRoute
                         exact
                         path="/profile/client"
