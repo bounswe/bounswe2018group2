@@ -1,9 +1,10 @@
 import React from "react";
+import DashboardBase from "../DashboardBase";
 
 class Freelancer extends React.Component {
     render() {
         return (
-            <div>freelancer dashboard</div>
+            <DashboardBase/>
         );
     }
 }
