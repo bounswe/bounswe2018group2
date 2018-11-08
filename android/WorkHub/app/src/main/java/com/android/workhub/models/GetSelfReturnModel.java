@@ -6,12 +6,14 @@ public class GetSelfReturnModel {
     private String lastName;
     private String desc;
     private String rating;
+    private String type;
 
-    public GetSelfReturnModel(String firstName, String lastName, String desc, String rating) {
+    public GetSelfReturnModel(String firstName, String lastName, String desc, String rating,String type) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.desc = desc;
         this.rating = rating;
+        this.type = type;
     }
 
     public String getFirstName() {
@@ -44,5 +46,13 @@ public class GetSelfReturnModel {
 
     public void setRating(String rating) {
         this.rating = rating;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

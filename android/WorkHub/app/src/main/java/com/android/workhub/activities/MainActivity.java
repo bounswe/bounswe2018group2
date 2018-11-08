@@ -5,13 +5,16 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -22,13 +25,17 @@ import com.android.workhub.fragments.ProfilePage;
 import com.android.workhub.models.SimpleMessageModel;
 import com.android.workhub.utils.ServerCall;
 import com.android.workhub.utils.WorkHubServiceListener;
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 
 public class MainActivity extends AppCompatActivity {
-    BottomNavigationView bottomNavigationView;
+
     Menu settingsMenu;
     SharedPreferences sharedPreferences;
     private String email;
     private String token;
+    AHBottomNavigation ahBottomNavigation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,26 +50,44 @@ public class MainActivity extends AppCompatActivity {
                     .apply();
         }
         // Toast.makeText(this, email, Toast.LENGTH_SHORT).show();
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        ahBottomNavigation = findViewById(R.id.bottom_navigation);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        AHBottomNavigationItem item1 = new AHBottomNavigationItem("Main Page", R.drawable.ic_main);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem("Profile", R.drawable.ic_profile);
+
+        ahBottomNavigation.addItem(item1);
+        ahBottomNavigation.addItem(item2);
+
+        ahBottomNavigation.setDefaultBackgroundColor(Color.parseColor("#16f5e5"));
+        ahBottomNavigation.setAccentColor(Color.parseColor("#8d2cc3"));
+
+        ahBottomNavigation.setInactiveColor(Color.WHITE);
+        ahBottomNavigation.setForceTint(true);
+
+        ahBottomNavigation.setCurrentItem(0);
+        ahBottomNavigation.setNotificationBackgroundColor(Color.parseColor("#F63D2B"));
+
+        ahBottomNavigation.setNotification("1", 1);
+
+        ahBottomNavigation.setItemDisableColor(Color.parseColor("#3A000000"));
+
+        ahBottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                item.setChecked(true);
-                switch (item.getItemId()){
+            public boolean onTabSelected(int position, boolean wasSelected) {
 
-                    case R.id.menu_main:
+                switch (position){
+                    case 0:
                         goToOpeningScreen();
-
                         break;
-                    case R.id.menu_profile:
+                    case 1:
                         goToProfilePage();
 
                         break;
                 }
-                return false;
+                return true;
             }
         });
+
 
         goToOpeningScreen();
     }

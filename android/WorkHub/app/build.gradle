@@ -29,4 +29,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.google.code.gson:gson:2.2.4'
     implementation group: 'commons-io', name: 'commons-io', version: '2.4'
+    compile 'com.aurelhubert:ahbottomnavigation:2.1.0'
 }
