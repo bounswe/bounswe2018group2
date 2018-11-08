@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +40,7 @@ public class MainPage extends Fragment {
     private String email;
     private TextView guestView;
 
-
+    FloatingActionButton addJobButton;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -65,10 +67,14 @@ public class MainPage extends Fragment {
         bundle = getArguments();
         email = bundle.getString("email","");
 
+        addJobButton = mainView.findViewById(R.id.button_add_job);
+
         if(email == null || email.equals("")){
             guestView.setText("You are signed as a guest");
+            addJobButton.setVisibility(View.GONE);
         }else{
             guestView.setText("");
+            addJobButton.setVisibility(View.VISIBLE);
         }
         guestView.requestLayout();
 
@@ -77,6 +83,16 @@ public class MainPage extends Fragment {
         jobAdapter = new JobAdapter(getActivity().getApplicationContext(),jobList);
         list.setAdapter(jobAdapter);
 
+
+
+        addJobButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+
+        });
 
 
         return mainView;

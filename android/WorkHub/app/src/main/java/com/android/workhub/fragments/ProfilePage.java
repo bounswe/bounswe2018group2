@@ -28,10 +28,12 @@ public class ProfilePage extends Fragment {
     private String surname;
     private String desc;
     private String rate;
+    private String type;
     private TextView nameText;
     private TextView surnameText;
     private TextView descText;
     private TextView rateText;
+    private TextView typeText;
     ProgressDialog progressDialog;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,6 +49,8 @@ public class ProfilePage extends Fragment {
         surnameText = mainView.findViewById(R.id.surname_profile);
         descText = mainView.findViewById(R.id.description_profile);
         rateText = mainView.findViewById(R.id.rating_profile);
+        typeText = mainView.findViewById(R.id.type_profile);
+
 
 
 
@@ -58,12 +62,13 @@ public class ProfilePage extends Fragment {
                 surname = data.getLastName();
                 desc = data.getDesc();
                 rate = data.getRating();
+                type = data.getType();
 
                 nameText.setText(data.getFirstName());
                 surnameText.setText(data.getLastName());
                 descText.setText(data.getDesc());
                 rateText.setText(data.getRating());
-
+                typeText.setText(data.getType());
                 //refresh it
 
             }
