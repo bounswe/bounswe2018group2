@@ -41,7 +41,6 @@ class HeaderBar extends React.Component {
                     </Button>
                     <Button
                         iconBefore="log-out"
-                        disabled={true}
                         onClick={window.logout}
                         height={30}
                         marginRight={16}
