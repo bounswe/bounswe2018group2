@@ -1,13 +1,12 @@
 import React from "react";
 import { Pane, Badge, Strong, Heading, Paragraph, Icon, SearchInput, Text } from "evergreen-ui";
 import { cropText } from "../../utils";
-import { Link } from "react-router-dom";
 import HeaderBar from "../../components/HeaderBar";
 
-const exampleText = "We have a financial calculated number call FIX RATE.\
- Need someone to quickly write a 1 pager to describe it nicely.\
- This is our website: https://www.lon.exchange/ and we want a new (one) page to describe our product.\
- Example of page: https://www.cmegroup.com/education/bitcoin/cme-cf-cryptocurrency-reference-rate-methodology.html";
+const exampleText = `We have a financial calculated number call FIX RATE.
+ Need someone to quickly write a 1 pager to describe it nicely.
+ This is our website: https://www.lon.exchange/ and we want a new (one) page to describe our product.
+ Example of page: https://www.cmegroup.com/education/bitcoin/cme-cf-cryptocurrency-reference-rate-methodology.html`;
 
 const JobCard = props => {
     return (
