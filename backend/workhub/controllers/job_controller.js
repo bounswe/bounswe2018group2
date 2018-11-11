@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 
 const Job = db.Job;
+const Job_category = db.Job_category;
 const User = db.User;
 const Sessions = db.Sessions;
 const Profile = db.Profile;
@@ -18,11 +19,11 @@ const Profile = db.Profile;
 * @apiParam {String} description Mandatory
 * @apiParam {Datetime} [due_date] Optional
 * @apiParam {Integer} price Mandatory
-*
+* @apiParam {Integer[]} [categories] Optional
 */
 
 exports.create = function(req, res) {
-	const { client_id, header, description, due_date, price } = req.body;
+	const { client_id, header, description, due_date, price, categories } = req.body;
 	console.log(client_id)
 	User.findOne({
         where: { id: client_id }
@@ -42,6 +43,12 @@ exports.create = function(req, res) {
                 	duedate: due_date,
                 	price: price
             	}).then(job =>{
+            		for (i=0; i < categories.length; i++){
+            			Job_category.create({
+		  					job_id: job.id,
+		  					category_id: categories[i]
+		            	})
+            		}
             		res.status(200).send({
                 		msg: "Job created"
             		});
