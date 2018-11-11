@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     client_id: DataTypes.INTEGER,
     header: DataTypes.STRING,
     description: DataTypes.STRING,
-    duedate: DataTypes.DATE
+    duedate: DataTypes.DATE,
+    price: DataTypes.INTEGER
   }, {});
   Job.associate = function(models) {
     // associations can be defined here
