@@ -6,10 +6,11 @@ class HeaderBar extends React.Component {
     render() {
         return (
             <Pane
-                background="#DDEBF7"
+                background="#FFF"
                 padding={16}
                 display="flex"
-                justifyContent="space-between">
+                justifyContent="space-between"
+                elevation={1}>
                 <Pane>
                     <Button
                         iconBefore="home"
@@ -40,7 +41,6 @@ class HeaderBar extends React.Component {
                     </Button>
                     <Button
                         iconBefore="log-out"
-                        disabled={true}
                         onClick={window.logout}
                         height={30}
                         marginRight={16}

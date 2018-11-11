@@ -147,7 +147,7 @@ class LoginPage extends React.Component {
                     padding="24px"
                     width="440px">
                     <Heading className="textAlignCenter" size={700}>
-                        Log in to WorkHub
+                        Login to WorkHub
                     </Heading>
                     <form className="loginPageForm" onSubmit={this.handleClick}>
                         <TextInputField

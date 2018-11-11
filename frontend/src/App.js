@@ -31,7 +31,7 @@ class App extends React.Component {
         window.workhubToken = Cookies.get("workhubToken");
         window.logout = () => {
             Cookies.remove("workhubToken");
-
+            window.user = null;
             doLogout().then(() => {
                 this.setState({
                     user: null
