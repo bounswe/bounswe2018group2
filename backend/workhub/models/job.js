@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     price: DataTypes.INTEGER
   }, {});
   Job.associate = function(models) {
-    // associations can be defined here
+    Job.belongsToMany(models.Category, {through:'Job_category', foreignKey: 'job_id'});
   };
   return Job;
 };

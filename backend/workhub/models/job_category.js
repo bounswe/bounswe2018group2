@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     category_id: DataTypes.INTEGER
   }, {});
   Job_category.associate = function(models) {
-    // associations can be defined here
+
   };
   return Job_category;
 };

@@ -61,3 +61,16 @@ exports.create = function(req, res) {
         }
     })
 }
+
+exports.getAllJobs = function(req, res){
+    Job.findAll().then(jobs => {
+        list = [];
+        for (i = 0 ; i < jobs.length ; i++){
+            list.push(jobs[i].dataValues);
+        }
+        res.status(200).send({
+                msg: "Got ALL jobs. Every single one. Goddamn.",
+                jobs: list
+        });
+    });
+}
