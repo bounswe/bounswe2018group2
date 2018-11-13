@@ -12,8 +12,8 @@ const Profile = db.Profile;
 /**
 * @api {post} /job/create Create Job
 * @apiVersion 0.2.0
-* @apiName GetUser
-* @apiGroup User
+* @apiName CreateJob
+* @apiGroup Job
 * @apiParam {Integer} client_id Mandatory
 * @apiParam {String} header Mandatory
 * @apiParam {String} description Mandatory
@@ -62,6 +62,14 @@ exports.create = function(req, res) {
     })
 }
 
+/**
+* @api {get} /job/getalljobs Get All Jobs
+* @apiVersion 0.2.0
+* @apiName GetAllJobs
+* @apiGroup Job
+* @apiSuccess {String} msg Success message.
+* @apiSuccess {Object[]} jobs List of jobs found, as objects.
+*/
 exports.getAllJobs = function(req, res){
     Job.findAll().then(jobs => {
         list = [];
