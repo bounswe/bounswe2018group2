@@ -17,5 +17,6 @@ router.get("/member", auth, user.profileInfo);
 router.get("/member/:userId", auth, user.profileInfo);
 
 router.post("/job/create", job.create);
+router.get("/job/getalljobs", job.getAllJobs);
 
 module.exports = router;
