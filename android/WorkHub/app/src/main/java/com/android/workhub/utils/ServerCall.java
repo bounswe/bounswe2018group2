@@ -2,9 +2,11 @@ package com.android.workhub.utils;
 
 import com.android.workhub.models.GetAllJobsReturnModel;
 import com.android.workhub.models.GetSelfReturnModel;
+import com.android.workhub.models.JobModel;
 import com.android.workhub.models.LoginModel;
 import com.android.workhub.models.LoginReturnModel;
 import com.android.workhub.models.SimpleMessageModel;
+import com.android.workhub.utils.Tasks.CreateJobTask;
 import com.android.workhub.utils.Tasks.GetAllJobsTask;
 import com.android.workhub.utils.Tasks.GetSelfTask;
 import com.android.workhub.utils.Tasks.LoginTask;
@@ -43,5 +45,9 @@ public class ServerCall {
         GetAllJobsTask task = new GetAllJobsTask(listener);
         task.run();
 
+    }
+    public static void createJob(JobModel jobModel, final WorkHubServiceListener<SimpleMessageModel> listener){
+        CreateJobTask task =new CreateJobTask(listener);
+        task.run(jobModel);
     }
 }
