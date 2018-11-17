@@ -13,10 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.workhub.JobAdapter;
 import com.android.workhub.R;
+import com.android.workhub.models.GetAllJobsReturnModel;
 import com.android.workhub.models.JobModel;
+import com.android.workhub.utils.ServerCall;
+import com.android.workhub.utils.WorkHubServiceListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,27 +50,10 @@ public class MainPage extends Fragment {
                              Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.fragment_main_page, container, false);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        Date dueTo = new Date();
-
-        JobModel jobModel1 = new JobModel(1,"First Dummy Project","Description1\n\n",dueTo);
-        JobModel jobModel2 = new JobModel(2,"Second Dummy Project","Description2\n\n",dueTo);
-
-        JobModel jobModel3 = new JobModel(3,"Third Dummy Project","Description3\n\n",dueTo);
-
-
-        JobModel jobModel4 = new JobModel(4,"Forth Dummy Project","Description4\n\n",dueTo);
-
         guestView = mainView.findViewById(R.id.guestText);
-
-        jobList.add(jobModel1);
-        jobList.add(jobModel2);
-        jobList.add(jobModel3);
-        jobList.add(jobModel4);
-
         Bundle bundle = new Bundle();
         bundle = getArguments();
         email = bundle.getString("email","");
-
         addJobButton = mainView.findViewById(R.id.button_add_job);
 
         if(email == null || email.equals("")){
@@ -78,11 +65,43 @@ public class MainPage extends Fragment {
         }
         guestView.requestLayout();
 
+        ServerCall.getAllJobs(new WorkHubServiceListener<GetAllJobsReturnModel>() {
+            @Override
+            public void onSuccess(GetAllJobsReturnModel data) {
+                Toast.makeText(getActivity(), data.getMsg(), Toast.LENGTH_SHORT).show();
 
+                /*
+                for(JobModel job:jobs){
+                    JobModel jobModel = new JobModel();
+                    jobModel.setHeader(job.getHeader());
+                    jobModel.setDescription(job.getDescription());
+                    jobModel.setDueDate(job.getDueDate());
+                    jobModel.setCategories(job.getCategories());
+                    jobModel.setPrice(job.getPrice());
+                    jobList.add(jobModel);
+                }
+                */
+
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        JobModel jobModel = new JobModel();
+        jobModel.setPrice(3);
+        jobModel.setHeader("deneme");
+        jobModel.setDescription("asdasdas\n12312312iğüü,\nadsasd");
+        int[] asd = new int[1];
+        asd[0] = 123;
+        jobModel.setCategories(asd);
+        jobModel.setDueDate(new Date());
+        jobList.add(jobModel);
         list = mainView.findViewById(R.id.jobList);
         jobAdapter = new JobAdapter(getActivity().getApplicationContext(),jobList);
         list.setAdapter(jobAdapter);
-
 
 
         addJobButton.setOnClickListener(new View.OnClickListener() {

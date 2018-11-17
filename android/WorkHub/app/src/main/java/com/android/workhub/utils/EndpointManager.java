@@ -27,4 +27,6 @@ public class EndpointManager {
     public static String getLogoutUrl(){
         return SERVER_URL + "/user/logout" ;
     }
+
+    public static String getGetAllJobsUrl(){ return SERVER_URL + "/job/getalljobs" ; }
 }

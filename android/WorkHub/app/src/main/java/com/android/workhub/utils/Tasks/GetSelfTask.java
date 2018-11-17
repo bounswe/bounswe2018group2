@@ -12,7 +12,7 @@ public class GetSelfTask extends WorkHubRequester<GetSelfReturnModel> {
     }
 
     public void run(String token) {
-        get(token, GetSelfReturnModel.class);
+        getWithToken(token, GetSelfReturnModel.class);
     }
 
 }
