@@ -23,7 +23,18 @@ class HttpRequester<T> {
         this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create();
     }
 
-    public T get(String token, Class<T> clazz) throws IOException {
+    public T get(Class<T> clazz) throws IOException {
+        HttpURLConnection connection = prepareRequest("GET");
+        checkResponseStatus(connection);
+        byte[] responseData = IOUtils.toByteArray(connection.getInputStream());
+        String responseMessage = new String(responseData, "UTF-8");
+        if (clazz.getSimpleName().contains("byte")) {
+            return (T) responseData;
+        }
+        return gson.fromJson(responseMessage, clazz);
+    }
+
+    public T getWithToken(String token, Class<T> clazz) throws IOException {
         HttpURLConnection connection = prepareRequest("GET");
         connection.setRequestProperty("userToken",token);
         checkResponseStatus(connection);

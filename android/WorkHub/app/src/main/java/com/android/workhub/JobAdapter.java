@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.workhub.models.JobModel;
@@ -39,8 +38,8 @@ public class JobAdapter extends ArrayAdapter {
 
         JobModel currentNavigationItem = jobList.get(position);
 
-        TextView title = (TextView) listItem.findViewById(R.id.title);
-        title.setText(currentNavigationItem.getTitle());
+        TextView header = (TextView) listItem.findViewById(R.id.header);
+        header.setText(currentNavigationItem.getHeader());
 
         TextView description = (TextView) listItem.findViewById(R.id.description);
         description.setText(currentNavigationItem.getDescription());
@@ -48,8 +47,11 @@ public class JobAdapter extends ArrayAdapter {
         TextView dueDate = (TextView) listItem.findViewById(R.id.dueDate);
 
         String date = new SimpleDateFormat("dd/MM/yyyy",
-                Locale.getDefault()).format(currentNavigationItem.getDueTo());
+                Locale.getDefault()).format(currentNavigationItem.getDueDate());
         dueDate.setText(date);
+
+        TextView categories = listItem.findViewById(R.id.categories);
+        categories.setText(currentNavigationItem.getCategories()[0] + "");
 
         return listItem;
     }

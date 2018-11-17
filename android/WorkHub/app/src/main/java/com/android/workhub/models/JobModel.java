@@ -1,35 +1,44 @@
 package com.android.workhub.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class JobModel {
+public class JobModel{
 
-    private int id;
-    private String title;
+    private int clientId;
+    private String header;
     private String description;
-    private Date dueTo;
+    private Date dueDate;
+    private int price;
+    private int[] categories;
 
-    public JobModel(int id, String title, String description, Date dueTo) {
-        this.id = id;
-        this.title = title;
+    public JobModel() {
+
+    }
+
+    public JobModel(int clientId, String header, String description, Date dueDate, int price, int[] categories) {
+        this.clientId = clientId;
+        this.header = header;
         this.description = description;
-        this.dueTo = dueTo;
+        this.dueDate = dueDate;
+        this.price = price;
+        this.categories = categories;
     }
 
-    public int getId() {
-        return id;
+    public int getClientId() {
+        return clientId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
     }
 
-    public String getTitle() {
-        return title;
+    public String getHeader() {
+        return header;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setHeader(String header) {
+        this.header = header;
     }
 
     public String getDescription() {
@@ -40,11 +49,27 @@ public class JobModel {
         this.description = description;
     }
 
-    public Date getDueTo() {
-        return dueTo;
+    public Date getDueDate() {
+        return dueDate;
     }
 
-    public void setDueTo(Date dueTo) {
-        this.dueTo = dueTo;
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public int[] getCategories() {
+        return categories;
+    }
+
+    public void setCategories(int[] categories) {
+        this.categories = categories;
     }
 }
