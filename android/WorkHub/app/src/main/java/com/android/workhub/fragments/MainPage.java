@@ -1,6 +1,8 @@
 package com.android.workhub.fragments;
 
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -86,7 +88,7 @@ public class MainPage extends Fragment {
 
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Jobları alamadık", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -107,8 +109,11 @@ public class MainPage extends Fragment {
         addJobButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                Fragment fragment = (Fragment) new CreateJobPage();
+                transaction.replace(R.id.frame,fragment);
+                transaction.commit();
             }
 
         });
