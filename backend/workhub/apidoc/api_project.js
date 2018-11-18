@@ -1,14 +1,1 @@
-define({
-  "name": "workhub",
-  "version": "1.0.1",
-  "description": "",
-  "sampleUrl": false,
-  "defaultVersion": "0.0.0",
-  "apidoc": "0.3.0",
-  "generator": {
-    "name": "apidoc",
-    "time": "2018-11-13T08:52:42.468Z",
-    "url": "http://apidocjs.com",
-    "version": "0.17.7"
-  }
-});
+define({  "name": "workhub",  "version": "1.0.1",  "description": "",  "sampleUrl": false,  "defaultVersion": "0.0.0",  "apidoc": "0.3.0",  "generator": {    "name": "apidoc",    "time": "2018-11-18T12:50:23.845Z",    "url": "http://apidocjs.com",    "version": "0.17.6"  }});
