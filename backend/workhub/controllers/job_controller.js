@@ -26,44 +26,33 @@ const Profile = db.Profile;
 */
 
 exports.create = function(req, res) {
-	const { client_id, header, description, due_date, price, categories, duration, bidding_status } = req.body;
-	console.log(client_id)
-	User.findOne({
-        where: { id: client_id }
-    }).then(client => {
-    	if (client) {
-    		if(client.type != 'client'){
-    			res.status(500).send({
-                	msg: "User's type is not client."
-            	});
-    		} else {
-    			Job.create({
-                	// Job created
-                	client_id: client_id,
-                	header: header,
-                	description: description,
-                	duedate: due_date,
-                	price: price,
-                	duration: duration,
-                	bidding_status: bidding_status
-            	}).then(job =>{
-            		for (i=0; i < categories.length; i++){
-            			Job_category.create({
-		  					job_id: job.id,
-		  					category_id: categories[i]
-		            	})
-            		}
-            		res.status(200).send({
-                		msg: "Job created"
-            		});
-            	})
-    		}
-        } else {
-        	res.status(400).send({
-                msg: "User not found."
-            });
-        }
-    })
+	const { header, description, due_date, price, categories, duration, bidding_status } = req.body;
+		if(req.user.type !== 'client'){
+			res.status(400).send({
+				msg: "User's type is not client."
+			});
+		} else {
+			Job.create({
+				// Job created
+				client_id: req.user.id,
+				header: header,
+				description: description,
+				duedate: due_date,
+				price: price,
+				duration: duration,
+				bidding_status: bidding_status
+			}).then(job =>{
+				for (i=0; i < categories.length; i++){
+					Job_category.create({
+						job_id: job.id,
+						category_id: categories[i]
+					})
+				}
+				res.status(200).send({
+					msg: "Job created"
+				});
+			})
+		}
 }
 
 /**

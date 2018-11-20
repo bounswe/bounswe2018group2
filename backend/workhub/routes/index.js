@@ -16,7 +16,7 @@ router.post("/user/logout", auth, user.logout);
 router.get("/member", auth, user.profileInfo);
 router.get("/member/:userId", auth, user.profileInfo);
 
-router.post("/job/create", job.create);
+router.post("/job/create", auth, job.create);
 router.get("/job/getalljobs", job.getAllJobs);
 router.get("/job/details/:job_id", job.jobDetails)
 
