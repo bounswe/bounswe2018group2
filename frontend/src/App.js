@@ -1,9 +1,5 @@
 import React from "react";
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Pane, Spinner } from "evergreen-ui";
 import Cookies from "js-cookie";
 import PrivateRoute from "./utils/PrivateRoute";
@@ -14,6 +10,7 @@ import { ClientProfilePage, FreelancerProfilePage } from "./pages/Profiles";
 import ProfileProxy from "./pages/Profiles";
 import { doGetMember, doLogout } from "./data/api";
 import DashboardProxy from "./pages/Dashboards";
+import CreateJobPage from "./pages/CreateJob";
 
 import "./reset.css";
 import "./App.css";
@@ -45,23 +42,26 @@ class App extends React.Component {
             this.setState({
                 loading: true
             });
-            doGetMember().then(response => {
-                if (!response.ok) {
-                    throw new Error("User not logged in");
-                }
+            doGetMember()
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("User not logged in");
+                    }
 
-                return response.json();
-            }).then(body => {
-                window.user = body;
-                this.setState({
-                    user: body,
-                    loading: false
+                    return response.json();
+                })
+                .then(body => {
+                    window.user = body;
+                    this.setState({
+                        user: body,
+                        loading: false
+                    });
+                })
+                .catch(() => {
+                    this.setState({
+                        loading: false
+                    });
                 });
-            }).catch(() => {
-                this.setState({
-                    loading: false
-                });
-            });
         } else {
             this.setState({
                 loading: false
@@ -73,10 +73,14 @@ class App extends React.Component {
         const { user, loading } = this.state;
         if (loading) {
             return (
-                <Pane display="flex" alignItems="center" justifyContent="center" height={400}>
+                <Pane
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    height={400}>
                     <Spinner />
                 </Pane>
-            )
+            );
         }
 
         return (
@@ -86,7 +90,9 @@ class App extends React.Component {
                         exact
                         loggedIn={user}
                         path="/"
-                        component={props => <DashboardProxy type={user.type} {...props}/>}
+                        component={props => (
+                            <DashboardProxy type={user.type} {...props} />
+                        )}
                     />
                     <Route exact path="/login" component={LoginPage} />
                     <Route exact path="/register" component={SignupPage} />
@@ -94,13 +100,21 @@ class App extends React.Component {
                         exact
                         path="/profile"
                         loggedIn={user}
-                        component={props => <ProfileProxy type={user.type} {...props}/>}
+                        component={props => (
+                            <ProfileProxy type={user.type} {...props} />
+                        )}
                     />
                     <PrivateRoute
                         exact
                         path="/profile/client"
                         loggedIn={user}
                         component={ClientProfilePage}
+                    />
+                    <PrivateRoute
+                        exact
+                        path="/job/create"
+                        loggedIn={user}
+                        component={CreateJobPage}
                     />
                     <PrivateRoute
                         exact

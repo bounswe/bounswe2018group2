@@ -16,9 +16,11 @@ function doLogin(email, password) {
 }
 
 function doGetMember(id) {
-    const url = id ? `${properties.APIURLs.member}/${id}` : properties.APIURLs.member;
+    const url = id
+        ? `${properties.APIURLs.member}/${id}`
+        : properties.APIURLs.member;
     return fetch(url, {
-        headers: {...defaultHeaders, "userToken": window.workhubToken }
+        headers: { ...defaultHeaders, userToken: window.workhubToken }
     });
 }
 
@@ -27,13 +29,20 @@ function doLogout() {
         method: "POST",
         headers: {
             ...defaultHeaders,
-            "userToken": window.workhubToken
+            userToken: window.workhubToken
         }
     });
 }
 
-export {
-    doLogin,
-    doGetMember,
-    doLogout
+function doCreateJob(body) {
+    return fetch(properties.APIURLs.createJob, {
+        method: "POST",
+        headers: {
+            ...defaultHeaders,
+            userToken: window.workhubToken
+        },
+        body: JSON.stringify(body)
+    });
 }
+
+export { doLogin, doGetMember, doLogout, doCreateJob };

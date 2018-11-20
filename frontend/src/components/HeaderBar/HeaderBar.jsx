@@ -28,6 +28,14 @@ class HeaderBar extends React.Component {
                         intent="none">
                         <Link to="/profile">My Profile</Link>
                     </Button>
+                    <Button
+                        iconBefore="mugshot"
+                        height={30}
+                        marginRight={16}
+                        appearance="minimal"
+                        intent="none">
+                        <Link to="/job/create">Create Job</Link>
+                    </Button>
                 </Pane>
                 <Pane>
                     <Button
