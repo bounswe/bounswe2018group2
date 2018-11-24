@@ -10,6 +10,7 @@ import ProfileProxy from "./pages/Profiles";
 import { doGetMember, doLogout } from "./data/api";
 import DashboardProxy from "./pages/Dashboards";
 import CreateJobPage from "./pages/CreateJob";
+import JobDetailPage from "./pages/JobDetail";
 
 import "./reset.css";
 import "./App.css";
@@ -108,6 +109,11 @@ class App extends React.Component {
                         path="/job/create"
                         loggedIn={user}
                         component={CreateJobPage}
+                    />
+                    <PrivateRoute
+                        path="/job/:id"
+                        loggedIn={user}
+                        component={JobDetailPage}
                     />
                     <Route component={Page404} />
                 </Switch>
