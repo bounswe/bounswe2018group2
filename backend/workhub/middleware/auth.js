@@ -18,7 +18,7 @@ const getSession = async token => {
 * Requires "userToken" header to be a valid token.
 */
 module.exports = async (req, res, next) => {
-    const session = await getSession(req.headers.userToken);
+    const session = await getSession(req.headers['user-token']);
     if (!session) {
         return res.status(HttpStatus.FORBIDDEN).send({
             msg: "Not a valid token"
