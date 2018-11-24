@@ -6,8 +6,10 @@ import {
     TextInputField,
     Textarea,
     Checkbox,
-    Label
+    Label,
+    toaster
 } from "evergreen-ui";
+import { Redirect } from "react-router-dom";
 import DayPicker from "react-day-picker";
 import "react-day-picker/lib/style.css";
 import React from "react";
@@ -37,9 +39,10 @@ class CreateJob extends React.Component {
         this.state = {
             title: "",
             description: "",
-            price: 0,
-            duration: 0,
-            category: 0,
+            price: "",
+            duration: "",
+            submitLoading: false,
+            submitSuccess: false,
             datePickerShown: false,
             selectedCategory: null,
             hasDueDate: false,
@@ -60,7 +63,7 @@ class CreateJob extends React.Component {
             description,
             price,
             duration,
-            category,
+            selectedCategory,
             dueDate
         } = this.state;
 
@@ -70,16 +73,34 @@ class CreateJob extends React.Component {
             description,
             due_date: dueDate,
             price,
-            categories: [category],
+            categories: selectedCategory ? [selectedCategory.value] : [],
             duration
         };
 
+        this.setState({
+            submitLoading: true
+        });
+
         doCreateJob(reqBody)
             .then(resp => {
-                console.log("job must be created");
-                console.log("here is the response", resp);
+                this.setState({
+                    submitLoading: false
+                });
+
+                if (!resp.ok) {
+                    return resp.json().then(errBody => {
+                        throw errBody;
+                    });
+                }
             })
-            .catch(console.error);
+            .then(() => {
+                this.setState({
+                    submitSuccess: true
+                });
+            })
+            .catch(e => {
+                toaster.danger(e.message);
+            });
     };
 
     formatDueDate() {
@@ -88,6 +109,9 @@ class CreateJob extends React.Component {
     }
 
     render() {
+        if (this.state.submitSuccess) {
+            return <Redirect to="/"/>;
+        }
         return (
             <Pane
                 background="tint1"
@@ -134,7 +158,7 @@ class CreateJob extends React.Component {
                         <Pane display="flex" alignItems="center" marginTop={12}>
                             <TextInputField
                                 flex="1"
-                                name="Price"
+                                name="Price in ₺"
                                 type="number"
                                 required
                                 value={this.state.price}
@@ -143,7 +167,7 @@ class CreateJob extends React.Component {
                                 }
                                 label="Price"
                                 marginBottom={0}
-                                placeholder="Price in try"
+                                placeholder="Price in ₺"
                             />
                             <Pane
                                 display="flex"
@@ -184,14 +208,14 @@ class CreateJob extends React.Component {
                             width="50%"
                             marginTop={12}
                             flex="1"
-                            name="Duration"
+                            name="ExpectedDuration"
                             type="number"
                             value={this.state.duration}
                             onChange={e =>
                                 this.setState({ duration: e.target.value })
                             }
                             required
-                            label="Duration"
+                            label="Expected duration in days"
                             marginBottom={16}
                             placeholder="Duration in days"
                         />
@@ -224,6 +248,7 @@ class CreateJob extends React.Component {
                             )}
                             <Button
                                 appearance="primary"
+                                isLoading={this.state.submitLoading}
                                 onClick={this.handleCreateJob}>
                                 Create job
                             </Button>

@@ -51,7 +51,12 @@ exports.create = function(req, res) {
 				res.status(200).send({
 					msg: "Job created"
 				});
-			})
+			}).catch(e => {
+				res.status(400).send({
+					message: "Could not create new job",
+					additionalMessage: e.message
+				});
+			});
 		}
 }
 
