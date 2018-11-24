@@ -42,7 +42,7 @@ class CreateJob extends React.Component {
             price: "",
             duration: "",
             submitLoading: false,
-            submitSuccess: false,
+            creatdJobID: null,
             datePickerShown: false,
             selectedCategory: null,
             hasDueDate: false,
@@ -84,21 +84,17 @@ class CreateJob extends React.Component {
         doCreateJob(reqBody)
             .then(resp => {
                 this.setState({
-                    submitLoading: false
+                    submitLoading: false,
+                    createdJobID: resp.id
                 });
 
-                if (!resp.ok) {
-                    return resp.json().then(errBody => {
-                        throw errBody;
-                    });
-                }
-            })
-            .then(() => {
-                this.setState({
-                    submitSuccess: true
-                });
+                toaster.success("Job created successfully");
             })
             .catch(e => {
+                this.setState({
+                    submitLoading: false,
+                    createdJobID: null
+                });
                 toaster.danger(e.message);
             });
     };
@@ -109,9 +105,10 @@ class CreateJob extends React.Component {
     }
 
     render() {
-        if (this.state.submitSuccess) {
-            return <Redirect to="/"/>;
+        if (this.state.createdJobID) {
+            return <Redirect to={`/job/${this.state.createdJobID}`}/>;
         }
+
         return (
             <Pane
                 background="tint1"

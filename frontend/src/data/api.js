@@ -52,7 +52,7 @@ function doCreateJob(body) {
             "user-token": window.workhubToken
         },
         body: JSON.stringify(body)
-    });
+    }).then(handleResponse);
 }
 
 function doGetJobDetail(jobId) {

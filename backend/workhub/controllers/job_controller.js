@@ -49,12 +49,13 @@ exports.create = function(req, res) {
 					})
 				}
 				res.status(200).send({
-					msg: "Job created"
+					msg: "Job created",
+					id: job.id
 				});
 			}).catch(e => {
 				res.status(400).send({
-					message: "Could not create new job",
-					additionalMessage: e.message
+					msg: "Could not create new job",
+					additionalMsg: e.message
 				});
 			});
 		}
