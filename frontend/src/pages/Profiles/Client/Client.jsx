@@ -5,7 +5,7 @@ class ClientProfilePage extends React.Component {
     render() {
         return (
             <div className="clientProfilePage">
-                <ProfileArea />
+                <ProfileArea user={this.props.user}/>
             </div>
         );
     }

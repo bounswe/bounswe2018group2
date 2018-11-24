@@ -55,7 +55,7 @@ const JobCard = props => {
 function DashboardBase(props) {
     return (
         <Pane background="tint1" width="100%" height="100%">
-            <HeaderBar />
+            <HeaderBar userType={props.userType}/>
             <Pane
                 display="flex"
                 height="100%"

@@ -20,7 +20,7 @@ function doGetMember(id) {
         ? `${properties.APIURLs.member}/${id}`
         : properties.APIURLs.member;
     return fetch(url, {
-        headers: { ...defaultHeaders, userToken: window.workhubToken }
+        headers: { ...defaultHeaders, "user-token": window.workhubToken }
     });
 }
 
@@ -29,7 +29,7 @@ function doLogout() {
         method: "POST",
         headers: {
             ...defaultHeaders,
-            userToken: window.workhubToken
+            "user-token": window.workhubToken
         }
     });
 }
@@ -39,7 +39,7 @@ function doCreateJob(body) {
         method: "POST",
         headers: {
             ...defaultHeaders,
-            userToken: window.workhubToken
+            "user-token": window.workhubToken
         },
         body: JSON.stringify(body)
     });

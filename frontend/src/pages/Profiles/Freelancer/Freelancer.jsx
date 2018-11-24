@@ -5,7 +5,7 @@ class FreelancerProfilePage extends React.Component {
     render() {
         return (
             <div className="freelancerProfilePage">
-                <ProfileArea />
+                <ProfileArea user={this.props.user}/>
             </div>
         );
     }

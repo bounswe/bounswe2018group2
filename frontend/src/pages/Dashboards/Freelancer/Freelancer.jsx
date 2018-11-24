@@ -4,7 +4,7 @@ import DashboardBase from "../DashboardBase";
 class Freelancer extends React.Component {
     render() {
         return (
-            <DashboardBase/>
+            <DashboardBase userType={this.props.userType}/>
         );
     }
 }
