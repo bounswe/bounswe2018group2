@@ -4,7 +4,6 @@ import {
     Paragraph,
     Heading,
     Strong,
-    Text,
     Badge
 } from "evergreen-ui";
 
@@ -23,7 +22,7 @@ class JobDetailBody extends React.Component {
         return (
             <Pane overflowY="auto">
                 <Heading size={600}>{title}</Heading>
-                <Text size={400}>Created at November 24, 2018</Text>
+                <Paragraph marginTop="3px" size={300}>Last updated at <Strong size={300}>November 24, 2018</Strong></Paragraph>
                 <Paragraph marginTop="10px">{description}</Paragraph>
                 <Paragraph marginTop="15px">
                     Price: <Strong>24₺</Strong><br/>

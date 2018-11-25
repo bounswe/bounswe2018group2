@@ -6,6 +6,7 @@ import {
 } from "evergreen-ui";
 import JobDetailBody from "./JobDetailBody";
 import JobDetailUser from "./JobDetailUser";
+import JobBiddings from "./JobBiddings";
 
 class JobDetailPresentation extends React.Component {
     render() {
@@ -34,13 +35,29 @@ class JobDetailPresentation extends React.Component {
                     </Pane>
                     <Pane
                         flex="3"
-                        borderRadius={5}
-                        elevation={1}
-                        background="white"
-                        marginLeft="20px"
-                        padding="24px"
-                        width="100%">
-                        <JobDetailBody job={this.props.job}/>
+                        display="flex"
+                        flexDirection="column">
+                        <Pane
+                            flex="1"
+                            borderRadius={5}
+                            elevation={1}
+                            background="white"
+                            marginLeft="20px"
+                            padding="24px"
+                            width="100%">
+                            <JobDetailBody job={this.props.job}/>
+                        </Pane>
+                        <Pane
+                            flex="1"
+                            borderRadius={5}
+                            elevation={1}
+                            background="white"
+                            marginTop="20px"
+                            marginLeft="20px"
+                            padding="24px"
+                            width="100%">
+                            <JobBiddings/>
+                        </Pane>
                     </Pane>
                 </Pane>
             </Pane>
