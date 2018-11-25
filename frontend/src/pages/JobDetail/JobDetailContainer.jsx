@@ -2,6 +2,7 @@ import React from "react";
 import { toaster } from "evergreen-ui";
 import { Redirect } from "react-router-dom";
 import { doGetJobDetail } from "../../data/api";
+import JobDetailPresentation from "./JobDetailPresentation";
 
 class JobDetail extends React.Component {
     constructor(props) {
@@ -34,9 +35,7 @@ class JobDetail extends React.Component {
             return <Redirect to="/"/>;
         }
 
-        return (
-            <div>asdf</div>
-        );
+        return <JobDetailPresentation job={this.state.jobDetail}/>
     }
 }
 
