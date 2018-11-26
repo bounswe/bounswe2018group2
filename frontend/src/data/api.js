@@ -4,6 +4,16 @@ const defaultHeaders = {
     "Content-Type": "application/json"
 };
 
+function handleResponse(resp) {
+    return resp.json().then(body => {
+        if (resp.ok) {
+            return body;
+        }
+
+        throw new Error(body.msg);
+    });
+}
+
 function doLogin(email, password) {
     return fetch(properties.APIURLs.login, {
         method: "POST",
@@ -20,7 +30,7 @@ function doGetMember(id) {
         ? `${properties.APIURLs.member}/${id}`
         : properties.APIURLs.member;
     return fetch(url, {
-        headers: { ...defaultHeaders, userToken: window.workhubToken }
+        headers: { ...defaultHeaders, "user-token": window.workhubToken }
     });
 }
 
@@ -29,7 +39,7 @@ function doLogout() {
         method: "POST",
         headers: {
             ...defaultHeaders,
-            userToken: window.workhubToken
+            "user-token": window.workhubToken
         }
     });
 }
@@ -39,10 +49,19 @@ function doCreateJob(body) {
         method: "POST",
         headers: {
             ...defaultHeaders,
-            userToken: window.workhubToken
+            "user-token": window.workhubToken
         },
         body: JSON.stringify(body)
-    });
+    }).then(handleResponse);
 }
 
-export { doLogin, doGetMember, doLogout, doCreateJob };
+function doGetJobDetail(jobId) {
+    return fetch(`${properties.APIURLs.jobDetail}/${jobId}`, {
+        headers: {
+            ...defaultHeaders,
+            "user-token": window.workhubToken
+        }
+    }).then(handleResponse);
+}
+
+export { doLogin, doGetMember, doLogout, doCreateJob, doGetJobDetail };

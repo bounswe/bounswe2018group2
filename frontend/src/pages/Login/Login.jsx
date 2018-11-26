@@ -196,7 +196,7 @@ class LoginPage extends React.Component {
                     </form>
                     <Pane marginTop="15px" display="flex" justifyContent="flex-end">
                         <Link to="/register">
-                            <Text size={100} style={{ fontSize: "12px" }}>Not a user? Register</Text>
+                            <Text size={300} style={{ fontSize: "12px" }}>Not a user? Register</Text>
                         </Link>
                     </Pane>
                 </Pane>

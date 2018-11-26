@@ -21,7 +21,7 @@ class ClientProfileArea extends React.Component {
     render() {
         return (
             <Pane background="tint1">
-                <HeaderBar />
+                <HeaderBar userType={this.props.user.type}/>
                 <Pane padding={16} background="tint1" display="flex">
                     <Pane>
                         <Pane

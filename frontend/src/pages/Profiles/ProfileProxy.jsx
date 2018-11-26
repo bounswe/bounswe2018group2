@@ -3,7 +3,7 @@ import Client from "./Client";
 import Freelancer from "./Freelancer";
 
 export default function ProfileProxy(props) {
-    if (props.type === "client") {
+    if (props.user.type === "client") {
         return <Client {...props}/>;
     }
 

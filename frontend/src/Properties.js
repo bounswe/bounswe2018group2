@@ -5,7 +5,8 @@ const properties = {
         logout: `${baseURL}/user/logout`,
         signup: `${baseURL}/user/create`,
         member: `${baseURL}/member`,
-        createJob: `${baseURL}/job/create`
+        createJob: `${baseURL}/job/create`,
+        jobDetail: `${baseURL}/job/details`
     }
 };
 

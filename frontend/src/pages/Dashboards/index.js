@@ -3,11 +3,12 @@ import Client from "./Client";
 import Freelancer from "./Freelancer";
 
 export default function DashboardProxy(props) {
-    if (props.type === "client") {
-        return <Client {...props}/>;
+    const { type, ...rest } = props;
+    if (type === "client") {
+        return <Client userType={type} {...rest}/>;
     }
 
-    return <Freelancer {...props}/>
+    return <Freelancer userType={type} {...rest}/>
 }
 
 export {

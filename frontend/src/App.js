@@ -6,11 +6,11 @@ import PrivateRoute from "./utils/PrivateRoute";
 import LoginPage from "./pages/Login";
 import SignupPage from "./pages/SignupPage";
 import Page404 from "./pages/404";
-import { ClientProfilePage, FreelancerProfilePage } from "./pages/Profiles";
 import ProfileProxy from "./pages/Profiles";
 import { doGetMember, doLogout } from "./data/api";
 import DashboardProxy from "./pages/Dashboards";
 import CreateJobPage from "./pages/CreateJob";
+import JobDetailPage from "./pages/JobDetail";
 
 import "./reset.css";
 import "./App.css";
@@ -101,14 +101,8 @@ class App extends React.Component {
                         path="/profile"
                         loggedIn={user}
                         component={props => (
-                            <ProfileProxy type={user.type} {...props} />
+                            <ProfileProxy user={user} {...props} />
                         )}
-                    />
-                    <PrivateRoute
-                        exact
-                        path="/profile/client"
-                        loggedIn={user}
-                        component={ClientProfilePage}
                     />
                     <PrivateRoute
                         exact
@@ -117,10 +111,9 @@ class App extends React.Component {
                         component={CreateJobPage}
                     />
                     <PrivateRoute
-                        exact
-                        path="/profile/freelancer"
+                        path="/job/:id"
                         loggedIn={user}
-                        component={FreelancerProfilePage}
+                        component={JobDetailPage}
                     />
                     <Route component={Page404} />
                 </Switch>

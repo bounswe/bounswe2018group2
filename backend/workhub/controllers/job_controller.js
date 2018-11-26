@@ -49,9 +49,15 @@ exports.create = function(req, res) {
 					})
 				}
 				res.status(200).send({
-					msg: "Job created"
+					msg: "Job created",
+					id: job.id
 				});
-			})
+			}).catch(e => {
+				res.status(400).send({
+					msg: "Could not create new job",
+					additionalMsg: e.message
+				});
+			});
 		}
 }
 
@@ -65,13 +71,9 @@ exports.create = function(req, res) {
 */
 exports.getAllJobs = function(req, res){
     Job.findAll().then(jobs => {
-        list = [];
-        for (i = 0 ; i < jobs.length ; i++){
-            list.push(jobs[i].dataValues);
-        }
         res.status(200).send({
                 msg: "Got ALL jobs. Every single one. Goddamn.",
-                jobs: list
+                jobs
         });
     });
 }
@@ -96,7 +98,8 @@ exports.jobDetails = function(req, res){
     	if (!job){
     		res.status(400).send({
     			msg: "Invalid job_id."
-    		});
+			});
+			return;
     	}
     	job_detail = job.toJSON();
     	res.status(200).send({
