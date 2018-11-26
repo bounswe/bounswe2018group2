@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.workhub.R;
+import com.android.workhub.activities.MainActivity;
 import com.android.workhub.models.JobModel;
 import com.android.workhub.models.SimpleMessageModel;
 import com.android.workhub.utils.ServerCall;
@@ -33,7 +36,12 @@ public class CreateJobPage extends Fragment {
     EditText description;
     EditText price;
     EditText date;
+    EditText duration;
+    EditText bidding;
     Button createJobButton;
+    SharedPreferences sharedPreferences;
+    String token;
+    SimpleDateFormat simpleDateFormat;
     public CreateJobPage(){
 
     }
@@ -44,8 +52,13 @@ public class CreateJobPage extends Fragment {
         description = mainView.findViewById(R.id.description);
         price = mainView.findViewById(R.id.price);
         date=mainView.findViewById(R.id.date);
+        duration = mainView.findViewById(R.id.duration);
         createJobButton = mainView.findViewById(R.id.createJobButton);
         myCalendar = Calendar.getInstance();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        token = sharedPreferences.getString("token","");
+        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'");
+
         final DatePickerDialog.OnDateSetListener dateTime = new DatePickerDialog.OnDateSetListener() {
 
             @Override
@@ -79,14 +92,19 @@ public class CreateJobPage extends Fragment {
                 }
 
                 JobModel jobModel =new JobModel();
-                jobModel.setClientId(1);
                 jobModel.setHeader(header.getText().toString());
                 jobModel.setDescription(description.getText().toString());
                 jobModel.setPrice(Integer.parseInt(price.getText().toString()));
+                jobModel.setDuration(Integer.parseInt(duration.getText().toString()));
                 jobModel.setDueDate(myCalendar.getTime());
-                ServerCall.createJob(jobModel, new WorkHubServiceListener<SimpleMessageModel>() {
+
+                final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+                ServerCall.createJob(token,jobModel, new WorkHubServiceListener<SimpleMessageModel>() {
                     @Override
                     public void onSuccess(SimpleMessageModel data) {
+                        progressDialog.dismiss();
                         Toast.makeText(getActivity(), data.getMsg(), Toast.LENGTH_SHORT).show();
                         FragmentManager manager = getFragmentManager();
                         FragmentTransaction transaction = manager.beginTransaction();
@@ -97,7 +115,8 @@ public class CreateJobPage extends Fragment {
 
                     @Override
                     public void onFailure(Exception e) {
-                        Toast.makeText(getActivity(), "asdasd", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                        Toast.makeText(getActivity().getApplicationContext(), "Creating job failed", Toast.LENGTH_SHORT).show();
 
                     }
                 });

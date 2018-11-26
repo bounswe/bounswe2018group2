@@ -45,13 +45,16 @@ public class JobAdapter extends ArrayAdapter {
         description.setText(currentNavigationItem.getDescription());
 
         TextView dueDate = (TextView) listItem.findViewById(R.id.dueDate);
+        if(currentNavigationItem.getDueDate()!=null){
+            String date = new SimpleDateFormat("dd/MM/yyyy",
+                    Locale.getDefault()).format(currentNavigationItem.getDueDate());
+            dueDate.setText(date);
+        }
+        if(currentNavigationItem.getCategories()!=null){
+            TextView categories = listItem.findViewById(R.id.categories);
+            categories.setText(currentNavigationItem.getCategories()[0] + "");
+        }
 
-        String date = new SimpleDateFormat("dd/MM/yyyy",
-                Locale.getDefault()).format(currentNavigationItem.getDueDate());
-        dueDate.setText(date);
-
-        TextView categories = listItem.findViewById(R.id.categories);
-        categories.setText(currentNavigationItem.getCategories()[0] + "");
 
         return listItem;
     }
