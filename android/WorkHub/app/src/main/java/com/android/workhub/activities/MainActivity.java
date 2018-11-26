@@ -186,4 +186,10 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    @Override
+    public void onBackPressed() {
+        goToOpeningScreen();
+        ahBottomNavigation.setCurrentItem(0);
+    }
+
 }
