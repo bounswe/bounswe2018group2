@@ -37,7 +37,7 @@ exports.create = function(req, res) {
                 .then(user => {
                     Profile.create({
                         user_id: user.id,
-                        description: "I'm currently, descriptionless",
+                        description: "I'm currently descriptionless. Get creative!",
                         rating: 0.0
                     }).then(() => {
                         res.send({

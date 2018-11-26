@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     finish_date: DataTypes.DATE
   }, {});
   Freelancer_job.associate = function(models) {
-    // associations can be defined here
+    Freelancer_job.belongsTo(models.User, {foreignKey: "user_id", as: "Freelancer", targetKey: "id"});
+    Freelancer_job.belongsTo(models.Job, {foreignKey: "job_id", as: "Job", targetKey: "id"});
   };
   return Freelancer_job;
 };
