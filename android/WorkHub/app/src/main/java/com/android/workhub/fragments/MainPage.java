@@ -75,13 +75,9 @@ public class MainPage extends Fragment {
 
 
                 for(JobModel job:data.getJobs()){
-                    JobModel jobModel = new JobModel();
-                    jobModel.setHeader(job.getHeader());
-                    jobModel.setDescription(job.getDescription());
-                    jobModel.setDueDate(job.getDueDate());
-                    jobModel.setCategories(job.getCategories());
-                    jobModel.setPrice(job.getPrice());
-                    jobList.add(jobModel);
+
+
+                    jobList.add(job);
                     jobAdapter.notifyDataSetChanged();
                 }
 
@@ -99,6 +95,21 @@ public class MainPage extends Fragment {
         list = mainView.findViewById(R.id.jobList);
         jobAdapter = new JobAdapter(getActivity().getApplicationContext(),jobList);
         list.setAdapter(jobAdapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                Bundle bundle = new Bundle();
+                bundle.putInt("job_id", jobList.get(i).getId());
+
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                Fragment fragment = (Fragment) new JobDetailPage();
+                fragment.setArguments(bundle);
+                transaction.replace(R.id.frame,fragment);
+                transaction.commit();
+            }
+        });
 
 
 
