@@ -1,36 +1,38 @@
 package com.android.workhub.models;
 
-import java.io.Serializable;
 import java.util.Date;
 
 public class JobModel{
 
+    private int id;
     private int clientId;
     private String header;
     private String description;
-    private Date dueDate;
+    private Date duedate;
     private int price;
     private int[] categories;
+    private int duration;
+    private String bidding;
+    private String createdAt;
+    private String updatedAt;
 
     public JobModel() {
 
     }
 
-    public JobModel(int clientId, String header, String description, Date dueDate, int price, int[] categories) {
+
+    public JobModel(int id, int clientId, String header, String description, Date dueDate, int price, int[] categories, int duration, String bidding, String createdAt, String updatedAt) {
+        this.id = id;
         this.clientId = clientId;
         this.header = header;
         this.description = description;
-        this.dueDate = dueDate;
+        this.duedate = dueDate;
         this.price = price;
         this.categories = categories;
-    }
-
-    public int getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
+        this.duration = duration;
+        this.bidding = bidding;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public String getHeader() {
@@ -50,11 +52,11 @@ public class JobModel{
     }
 
     public Date getDueDate() {
-        return dueDate;
+        return duedate;
     }
 
     public void setDueDate(Date dueDate) {
-        this.dueDate = dueDate;
+        this.duedate = dueDate;
     }
 
     public int getPrice() {
@@ -71,5 +73,53 @@ public class JobModel{
 
     public void setCategories(int[] categories) {
         this.categories = categories;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public String getBidding() {
+        return bidding;
+    }
+
+    public void setBidding(String bidding) {
+        this.bidding = bidding;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

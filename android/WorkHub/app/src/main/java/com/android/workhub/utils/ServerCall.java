@@ -46,8 +46,8 @@ public class ServerCall {
         task.run();
 
     }
-    public static void createJob(JobModel jobModel, final WorkHubServiceListener<SimpleMessageModel> listener){
+    public static void createJob(String token,JobModel jobModel, final WorkHubServiceListener<SimpleMessageModel> listener){
         CreateJobTask task =new CreateJobTask(listener);
-        task.run(jobModel);
+        task.run(token,jobModel);
     }
 }

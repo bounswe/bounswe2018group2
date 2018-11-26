@@ -36,7 +36,7 @@ class HttpRequester<T> {
 
     public T getWithToken(String token, Class<T> clazz) throws IOException {
         HttpURLConnection connection = prepareRequest("GET");
-        connection.setRequestProperty("userToken",token);
+        connection.setRequestProperty("user-token",token);
         checkResponseStatus(connection);
         byte[] responseData = IOUtils.toByteArray(connection.getInputStream());
         String responseMessage = new String(responseData, "UTF-8");
@@ -46,9 +46,9 @@ class HttpRequester<T> {
         return gson.fromJson(responseMessage, clazz);
     }
 
-    public T postWitToken(String token, Class<T> clazz) throws IOException {
+    public T postToken(String token, Class<T> clazz) throws IOException {
         HttpURLConnection connection = prepareRequest("POST");
-        connection.setRequestProperty("userToken",token);
+        connection.setRequestProperty("user-token",token);
         checkResponseStatus(connection);
         byte[] responseData = IOUtils.toByteArray(connection.getInputStream());
         if (clazz.getSimpleName().contains("byte")) {
@@ -67,6 +67,18 @@ class HttpRequester<T> {
         }
         return gson.fromJson(new String(responseData, "UTF-8"), clazz);
     }
+    public T postWithToken(String token,Object data, Class<T> clazz) throws IOException {
+        HttpURLConnection connection = prepareRequest("POST");
+        connection.setRequestProperty("user-token",token);
+        writeOutputStream(connection.getOutputStream(), data);
+        checkResponseStatus(connection);
+        byte[] responseData = IOUtils.toByteArray(connection.getInputStream());
+        if (clazz.getSimpleName().contains("byte")) {
+            return (T) responseData;
+        }
+        return gson.fromJson(new String(responseData, "UTF-8"), clazz);
+    }
+
 
     public void put(Object data) throws IOException {
         HttpURLConnection connection = prepareRequest("PUT");

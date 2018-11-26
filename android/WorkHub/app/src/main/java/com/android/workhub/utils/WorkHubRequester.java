@@ -73,13 +73,32 @@ public class WorkHubRequester<T> {
         };
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
-    public void postWithToken(final String token, final Class<T> clazz) {
+    public void postToken(final String token, final Class<T> clazz) {
         AsyncTask<Void, Void, ObjectAndException<T>> task = new AsyncTask<Void, Void, ObjectAndException<T>>(){
 
             @Override
             protected ObjectAndException<T> doInBackground(Void... voids) {
                 try {
-                    return new ObjectAndException<T>(requester.postWitToken(token, clazz));
+                    return new ObjectAndException<T>(requester.postToken(token, clazz));
+                } catch (Exception e) {
+                    return new ObjectAndException<T>(e);
+                }
+            }
+
+            @Override
+            protected void onPostExecute(ObjectAndException<T> e) {
+                ourPostExecute(e);
+            }
+        };
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+    public void postWithToken(final String token,final Object data, final Class<T> clazz) {
+        AsyncTask<Void, Void, ObjectAndException<T>> task = new AsyncTask<Void, Void, ObjectAndException<T>>(){
+
+            @Override
+            protected ObjectAndException<T> doInBackground(Void... voids) {
+                try {
+                    return new ObjectAndException<T>(requester.postWithToken(token,data, clazz));
                 } catch (Exception e) {
                     return new ObjectAndException<T>(e);
                 }

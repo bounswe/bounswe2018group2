@@ -13,6 +13,7 @@ import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,10 +71,10 @@ public class MainPage extends Fragment {
         ServerCall.getAllJobs(new WorkHubServiceListener<GetAllJobsReturnModel>() {
             @Override
             public void onSuccess(GetAllJobsReturnModel data) {
-                Toast.makeText(getActivity(), data.getMsg(), Toast.LENGTH_SHORT).show();
+  //              Toast.makeText(getActivity().getApplicationContext(), data.getMsg(), Toast.LENGTH_SHORT).show();
 
-                /*
-                for(JobModel job:jobs){
+
+                for(JobModel job:data.getJobs()){
                     JobModel jobModel = new JobModel();
                     jobModel.setHeader(job.getHeader());
                     jobModel.setDescription(job.getDescription());
@@ -81,29 +82,24 @@ public class MainPage extends Fragment {
                     jobModel.setCategories(job.getCategories());
                     jobModel.setPrice(job.getPrice());
                     jobList.add(jobModel);
+                    jobAdapter.notifyDataSetChanged();
                 }
-                */
+
 
             }
 
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(getActivity(), "Jobları alamadık", Toast.LENGTH_SHORT).show();
+//               Toast.makeText(getActivity().getApplicationContext(), "Jobları alamadık", Toast.LENGTH_SHORT).show();
             }
         });
 
-        JobModel jobModel = new JobModel();
-        jobModel.setPrice(3);
-        jobModel.setHeader("deneme");
-        jobModel.setDescription("asdasdas\n12312312iğüü,\nadsasd");
-        int[] asd = new int[1];
-        asd[0] = 123;
-        jobModel.setCategories(asd);
-        jobModel.setDueDate(new Date());
-        jobList.add(jobModel);
+
+
         list = mainView.findViewById(R.id.jobList);
         jobAdapter = new JobAdapter(getActivity().getApplicationContext(),jobList);
         list.setAdapter(jobAdapter);
+
 
 
         addJobButton.setOnClickListener(new View.OnClickListener() {

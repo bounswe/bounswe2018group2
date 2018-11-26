@@ -1,6 +1,5 @@
 package com.android.workhub.utils.Tasks;
 
-import com.android.workhub.models.GetAllJobsReturnModel;
 import com.android.workhub.models.JobModel;
 import com.android.workhub.models.SimpleMessageModel;
 import com.android.workhub.utils.EndpointManager;
@@ -12,7 +11,7 @@ public class CreateJobTask extends WorkHubRequester<SimpleMessageModel> {
     public CreateJobTask(WorkHubServiceListener<SimpleMessageModel> listener) {
         super(EndpointManager.getCreateJobUrl(),listener);
     }
-    public void run(JobModel jobModel) {
-        post(jobModel,SimpleMessageModel.class);
+    public void run(String token, JobModel jobModel) {
+        postWithToken(token,jobModel,SimpleMessageModel.class);
     }
 }

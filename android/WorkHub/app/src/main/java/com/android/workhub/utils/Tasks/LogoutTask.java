@@ -11,6 +11,6 @@ public class LogoutTask extends WorkHubRequester<SimpleMessageModel>{
     }
 
     public void run(String token) {
-        postWithToken(token, SimpleMessageModel.class);
+        postToken(token, SimpleMessageModel.class);
     }
 }
