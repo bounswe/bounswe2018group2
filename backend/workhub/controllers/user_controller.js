@@ -136,6 +136,7 @@ exports.profileInfo = function(req, res) {
     getProfilePromise.then(profile => {
         if (profile) {
             res.status(200).send({
+                id: req.user.id,
                 firstName: req.user.firstName,
                 lastName: req.user.lastName,
                 email: req.user.email,
