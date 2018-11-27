@@ -30,4 +30,5 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.2.4'
     implementation group: 'commons-io', name: 'commons-io', version: '2.4'
     implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
+    implementation 'com.github.scribejava:scribejava-core:4.0.0'
 }
