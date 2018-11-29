@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@color/colorPrimaryDark"/>
+        android:src="@drawable/ic_profile"/>
 
     <TextView
         android:id="@+id/editText"
@@ -28,6 +28,7 @@
         android:gravity="center"
         android:inputType="textPersonName"
         android:text="Name:"
+        android:textColor="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image_profile" />
 
@@ -40,6 +41,7 @@
         android:ems="10"
         android:gravity="center"
         android:text="Surname:"
+        android:textColor="@android:color/white"
         app:layout_constraintStart_toEndOf="@+id/name_profile"
         app:layout_constraintTop_toBottomOf="@+id/image_profile" />
 
@@ -50,6 +52,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:textColor="@android:color/white"
         android:gravity="center"
         android:text="Description:"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,6 +67,7 @@
         android:ems="10"
         android:gravity="center"
         android:text="Rating:"
+        android:textColor="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText" />
 
@@ -74,6 +78,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
+        android:textColor="@android:color/white"
         app:layout_constraintStart_toEndOf="@+id/editText"
         app:layout_constraintTop_toBottomOf="@+id/image_profile" />
 
@@ -104,6 +109,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
+        android:textColor="@android:color/white"
         app:layout_constraintStart_toEndOf="@+id/editText4"
         app:layout_constraintTop_toBottomOf="@+id/name_profile" />
 
@@ -115,6 +121,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="Type"
+        android:textColor="@android:color/white"
         app:layout_constraintStart_toEndOf="@+id/rating_profile"
         app:layout_constraintTop_toBottomOf="@+id/editText2" />
 
@@ -125,6 +132,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
+        android:textColor="@android:color/white"
         app:layout_constraintStart_toEndOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/surname_profile" />
 

@@ -30,5 +30,7 @@ public class EndpointManager {
 
     public static String getGetAllJobsUrl(){ return SERVER_URL + "/job/getalljobs" ; }
     public static String getCreateJobUrl(){return SERVER_URL +"/job/create";}
-    public static String getJobDetails(){return SERVER_URL+"/job/details/";}}
+    public static String getJobDetails(){return SERVER_URL+"/job/details/";}
+    public static String getNotificationUrl(){return SERVER_URL+"/message/sendnotification";}
+}
 

@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnKeyListen
     Button signUpButton;
     EditText emailView;
     EditText passwordView;
-    Switch rememberMeSwitch;
+
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     ProgressDialog progressDialog;
@@ -44,7 +44,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnKeyListen
         signUpButton=findViewById(R.id.signupButton);
         emailView =findViewById(R.id.emailView);
         passwordView=findViewById(R.id.passwordView);
-        rememberMeSwitch=findViewById(R.id.rememberMeSwitch);
         gusetguestButton = findViewById(R.id.guestButton);
         passwordView.setOnKeyListener(this);
         progressDialog = new ProgressDialog(this);
@@ -107,11 +106,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnKeyListen
                 editor = sharedPreferences.edit();
                 editor.putString("token",data.getToken());
 
-                if(rememberMeSwitch.isChecked()){
-                    editor.putBoolean("rememberMe",true);
-                }else{
-                    editor.putBoolean("rememberMe",false);
-                }
+
+                editor.putBoolean("rememberMe",true);
+
                 editor.putString("email", emailView.getText().toString());
                 editor.apply();
                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity"
-    app:theme="@style/AppTheme">
+    app:theme="@style/AppTheme"
+    android:background="@color/jobColor">
 
     <FrameLayout
         android:id="@+id/frame"
