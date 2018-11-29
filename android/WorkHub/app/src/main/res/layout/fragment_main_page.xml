@@ -15,6 +15,8 @@
             android:id="@+id/jobList"
             android:layout_width="match_parent"
             android:layout_height="400dp"
+            android:dividerHeight="5dp"
+            android:divider="@color/colorPrimary"
             >
 
         </ListView>

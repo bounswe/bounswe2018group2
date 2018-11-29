@@ -1,17 +1,26 @@
 package com.android.workhub.fragments;
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.workhub.R;
 import com.android.workhub.models.JobDetailModel;
 import com.android.workhub.models.JobDetailReturnModel;
+import com.android.workhub.models.SendNotificationModel;
+import com.android.workhub.models.SimpleMessageModel;
 import com.android.workhub.utils.ServerCall;
+import com.android.workhub.utils.Tasks.SendNotificationTask;
 import com.android.workhub.utils.WorkHubServiceListener;
 
 public class JobDetailPage extends Fragment {
@@ -21,12 +30,23 @@ public class JobDetailPage extends Fragment {
     TextView description;
     TextView price;
     TextView due_date;
-    TextView bidding_status;
+    ImageView bidding_status;
     TextView duration;
+    Button notifyButton;
+    Switch customButton;
+    EditText customeMessage;
+    TextView messageLabel;
+    private String token;
+    private String message_type;
+    private String descriptionNotification;
 
+    private SharedPreferences sharedPreferences;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.fragment_jobdetail_page, container, false);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        token = sharedPreferences.getString("token","");
+
 
         job_id=getArguments().getInt("job_id");
         description=mainView.findViewById(R.id.description);
@@ -35,19 +55,49 @@ public class JobDetailPage extends Fragment {
         bidding_status=mainView.findViewById(R.id.bidding_status);
         duration=mainView.findViewById(R.id.duration);
         header=mainView.findViewById(R.id.header);
+        customButton=mainView.findViewById(R.id.customButton);
+        notifyButton=mainView.findViewById(R.id.notifyButton);
+        customeMessage=mainView.findViewById(R.id.customMessage);
+        messageLabel =mainView.findViewById(R.id.customMessageLabel);
+        if(sharedPreferences.getString("email","").equals("")){
+            customButton.setVisibility(View.GONE);
+            notifyButton.setVisibility(View.GONE);
+            customeMessage.setVisibility(View.GONE);
+            messageLabel.setVisibility(View.GONE);
+        }
 
+        customButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(customButton.isChecked()){
+                    customeMessage.setVisibility(View.VISIBLE);
+                }
+                else{
+                    customeMessage.setVisibility(View.GONE);
+                }
+
+            }
+        });
 
 
 
         ServerCall.getJobDetail(job_id, new WorkHubServiceListener<JobDetailReturnModel>() {
             @Override
             public void onSuccess(JobDetailReturnModel data) {
-                System.out.println("asdas");
                 header.setText(data.getJob().getHeader());
                 description.setText(data.getJob().getDescription());
-                price.setText(data.getJob().getPrice()+"");
+                price.setText("$"+data.getJob().getPrice()+"");
                 due_date.setText(data.getJob().getDuedate().toString());
-                bidding_status.setText(data.getJob().getBidding_status());
+
+                if(data.getJob().getBidding_status()==null | data.getJob().getBidding_status().equals("")){
+                    bidding_status.setImageResource(R.drawable.ic_profile);
+                }
+                else{
+
+                    bidding_status.setImageResource(R.drawable.ic_profile);
+                }
+
+
                 duration.setText(data.getJob().getDuration()+"");
             }
 
@@ -56,6 +106,37 @@ public class JobDetailPage extends Fragment {
 
             }
         });
+        notifyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SendNotificationModel model = new SendNotificationModel();
+                model.setJob_id(job_id);
+                if(customButton.isChecked()){
+                    model.setMessage_type("custom");
+                    model.setDescription(customeMessage.getText().toString());
+                }
+                else {
+                    model.setMessage_type("status");
+                }
+
+                ServerCall.sendNotification(token, model, new WorkHubServiceListener<SimpleMessageModel>() {
+                    @Override
+                    public void onSuccess(SimpleMessageModel data) {
+                        customButton.setVisibility(View.GONE);
+                        notifyButton.setVisibility(View.GONE);
+                        customeMessage.setVisibility(View.GONE);
+                        messageLabel.setVisibility(View.GONE);
+                        Toast.makeText(getActivity().getApplicationContext(), "Successfully", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Toast.makeText(getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
         return mainView;
     }
 }
