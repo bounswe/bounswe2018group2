@@ -12,13 +12,15 @@ router.get("/", function(req, res, next) {
 
 router.post("/user/create", user.create);
 router.post("/user/login", user.login);
-
 router.post("/user/logout", auth, user.logout);
+router.post("/user/updateprofile", auth, user.updateProfile);
+
 router.get("/member", auth, user.profileInfo);
 router.get("/member/:userId", auth, user.profileInfo);
 
 router.post("/job/create", auth, job.create);
 router.get("/job/getalljobs", job.getAllJobs);
+router.get("/job/getfreelancers", user.getAllFreelancers);
 router.get("/job/details/:job_id", job.jobDetails)
 
 router.post("/message/sendnotification", auth, notif.create);
