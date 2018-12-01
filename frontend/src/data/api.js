@@ -90,5 +90,6 @@ export {
     doLogout,
     doCreateJob,
     doGetJobDetail,
-    doGetAllJobs
+    doGetAllJobs,
+    doCreateBid
 };
