@@ -7,7 +7,8 @@ const properties = {
         member: `${baseURL}/member`,
         allJobs: `${baseURL}/job/getalljobs`,
         createJob: `${baseURL}/job/create`,
-        jobDetail: `${baseURL}/job/details`
+        jobDetail: `${baseURL}/job/details`,
+        createBid: `${baseURL}/job/createbid"`
     }
 };
 
