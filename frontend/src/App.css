@@ -4,6 +4,14 @@ body {
     font-family: "SF UI Text", system-ui, sans-serif;
 }
 
+a {
+    color: inherit;
+}
+
+a:hover {
+    color: inherit;
+}
+
 #root {
     height: 100%;
 }
