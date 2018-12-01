@@ -54,11 +54,17 @@ class JobDetailPresentation extends React.Component {
                             marginLeft="20px"
                             padding="24px"
                             width="100%">
-                            <JobBiddings
-                                bids={this.props.bids}
-                                canAcceptBid={this.props.canAcceptBid}
-                                onAcceptBidClick={this.props.onAcceptBidClick}
-                            />
+                            {this.props.job && (
+                                <JobBiddings
+                                    jobId={this.props.job.id}
+                                    bidsLoading={this.props.bidsLoading}
+                                    bids={this.props.bids}
+                                    canAcceptBid={this.props.canAcceptBid}
+                                    onAcceptBidClick={
+                                        this.props.onAcceptBidClick
+                                    }
+                                />
+                            )}
                         </Pane>
                     </Pane>
                 </Pane>

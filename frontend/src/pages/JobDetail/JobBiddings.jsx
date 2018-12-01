@@ -1,5 +1,12 @@
 import React from "react";
-import { Pane, Heading, Button } from "evergreen-ui";
+import {
+    Pane,
+    Heading,
+    Button,
+    Paragraph,
+    Spinner,
+    toaster
+} from "evergreen-ui";
 import BidCreateDialog from "./BidCreateDialog";
 import JobBiddingCard from "./JobBiddingCard";
 import { doCreateBid } from "../../data/api";
@@ -8,32 +15,45 @@ class JobBiddings extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isShown: false
+            isShown: false,
+            addedBids: []
         };
     }
 
     handleAddBidClick = params => {
-        this.setState({
-            isShown: false
-        });
+        const { jobId } = this.props;
 
-        let body = {
-            description: params.bidDescription,
-            price: params.bidPrice
-        };
-
-        doCreateBid(body).then(response => {
-            response.json().then(body => {
-                if (response.ok) {
-                    console.log(response);
+        this.setState(state => ({
+            isShown: false,
+            addedBids: [
+                ...state.addedBids,
+                {
+                    id: "added",
+                    freelancer_id: window.user.id,
+                    description: params.bidDescription,
+                    amount: params.bidPrice,
+                    Freelancer: {
+                        firstName: window.user.firstName,
+                        lastName: window.user.lastName
+                    }
                 }
+            ]
+        }));
 
-                this.setState({
-                    error: body.msg,
-                    loading: false
+        doCreateBid(jobId, params.bidDescription, params.bidPrice).catch(
+            err => {
+                toaster.danger(err.message);
+
+                this.setState(state => {
+                    const oldBids = state.addedBids.splice();
+                    oldBids.pop();
+
+                    return {
+                        addedBids: oldBids
+                    };
                 });
-            });
-        });
+            }
+        );
     };
 
     handleCloseClick = () => {
@@ -43,7 +63,13 @@ class JobBiddings extends React.Component {
     };
 
     render() {
-        const { bids, canAcceptBid, onAcceptBidClick } = this.props;
+        const {
+            bids,
+            bidsLoading,
+            canAcceptBid,
+            onAcceptBidClick
+        } = this.props;
+        const processedBids = bids.concat(this.state.addedBids);
         return (
             <>
                 <Pane
@@ -53,31 +79,46 @@ class JobBiddings extends React.Component {
                     display="flex">
                     <Pane display="flex" alignItems="center">
                         <Heading size={600}>Biddings</Heading>
-                        <Button
-                            marginLeft="10px"
-                            height={24}
-                            onClick={() => this.setState({ isShown: true })}
-                            appearance="primary"
-                            intent="success">
-                            Create Bid
-                        </Button>
+                        {!canAcceptBid && (
+                            <Button
+                                marginLeft="10px"
+                                height={24}
+                                onClick={() => this.setState({ isShown: true })}
+                                appearance="primary"
+                                intent="success">
+                                Create Bid
+                            </Button>
+                        )}
                     </Pane>
                     <Pane marginTop="20px">
-                        {bids.map((bid, index) => {
-                            const marginTop = index !== 0 ? 15 : null;
-                            return (
-                                <JobBiddingCard
-                                    canAccept={canAcceptBid}
-                                    onAcceptClick={onAcceptBidClick}
-                                    marginTop={marginTop}
-                                    userId={bid.userId}
-                                    key={bid.id}
-                                    name={bid.name}
-                                    description={bid.description}
-                                    amount={bid.amount}
-                                />
-                            );
-                        })}
+                        {!!processedBids.length &&
+                            processedBids
+                                .sort((bid1, bid2) => bid2.amount - bid1.amount)
+                                .map((bid, index) => {
+                                    const marginTop = index !== 0 ? 15 : null;
+                                    return (
+                                        <JobBiddingCard
+                                            canAccept={canAcceptBid}
+                                            onAcceptClick={onAcceptBidClick}
+                                            marginTop={marginTop}
+                                            userId={bid.freelancer_id}
+                                            key={bid.id}
+                                            name={`${
+                                                bid.Freelancer.firstName
+                                            } ${bid.Freelancer.lastName}`}
+                                            description={bid.description}
+                                            amount={bid.amount}
+                                        />
+                                    );
+                                })}
+                        {!processedBids.length &&
+                            !bidsLoading && (
+                                <Paragraph>
+                                    How hard is this job? No one made a bid
+                                    yet... 😅
+                                </Paragraph>
+                            )}
+                        {bidsLoading && <Spinner />}
                     </Pane>
                 </Pane>
                 {this.state.isShown && (

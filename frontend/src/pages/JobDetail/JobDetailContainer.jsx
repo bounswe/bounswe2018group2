@@ -1,43 +1,18 @@
 import React from "react";
 import { toaster } from "evergreen-ui";
 import { Redirect } from "react-router-dom";
-import { doGetJobDetail } from "../../data/api";
+import { doGetJobDetail, doGetJobBids } from "../../data/api";
 import JobDetailPresentation from "./JobDetailPresentation";
-
-const bids = [
-    {
-        id: 1,
-        userId: 1,
-        name: "Ergun Erdogmus",
-        description: "I can do this job very well",
-        amount: 20
-    },
-    {
-        id: 2,
-        userId: 1,
-        name: "Ergun Erdogmus",
-        description: "I can do this job very well",
-        amount: 20
-    },
-    {
-        id: 3,
-        userId: 1,
-        name: "Ergun Erdogmus",
-        description:
-            "I can do this job very well. I can do this job very well. I can do this job very well. I can do this job very well",
-        amount: 20
-    }
-];
-
-const canAcceptBid = false;
 
 class JobDetail extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            canAcceptBid: false,
             jobDetail: null,
-            loading: false,
+            bids: [],
+            bidsLoading: true,
             hasError: false
         };
 
@@ -48,14 +23,32 @@ class JobDetail extends React.Component {
         const {
             params: { id }
         } = this.props.computedMatch;
+
         doGetJobDetail(id)
             .then(body => {
                 this.setState({
-                    jobDetail: body.job
+                    jobDetail: body.job,
+                    canAcceptBid: body.job.Client.id === window.user.id
                 });
             })
             .catch(err => {
                 this.setState({
+                    hasError: true
+                });
+
+                toaster.danger(err.message);
+            });
+
+        doGetJobBids(id)
+            .then(body => {
+                this.setState({
+                    bidsLoading: false,
+                    bids: body.bids
+                });
+            })
+            .catch(err => {
+                this.setState({
+                    bidsLoading: false,
                     hasError: true
                 });
 
@@ -75,9 +68,10 @@ class JobDetail extends React.Component {
         return (
             <JobDetailPresentation
                 job={this.state.jobDetail}
-                canAcceptBid={canAcceptBid}
+                canAcceptBid={this.state.canAcceptBid}
                 onAcceptBidClick={this.handleAcceptBidClick}
-                bids={bids}
+                bidsLoading={this.state.bidsLoading}
+                bids={this.state.bids}
             />
         );
     }
