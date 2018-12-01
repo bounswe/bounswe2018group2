@@ -1,7 +1,7 @@
 import React from "react";
 import imgclient from "./images.jpg";
 import StarRatingComponent from "react-star-rating-component";
-import { Pane, Text, Heading } from "evergreen-ui";
+import { Pane, Text } from "evergreen-ui";
 import { Link } from "react-router-dom";
 import "./style.css";
 
