@@ -29,7 +29,7 @@ const bids = [
     }
 ];
 
-const canAcceptBid = true;
+const canAcceptBid = false;
 
 class JobDetail extends React.Component {
     constructor(props) {

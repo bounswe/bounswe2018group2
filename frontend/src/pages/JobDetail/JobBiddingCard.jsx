@@ -34,15 +34,15 @@ export default class JobBiddingCard extends React.Component {
                     <Heading size={500}>
                         <Link to={`/profile/${userId}`}>{name}</Link>
                     </Heading>
-                    <Paragraph marginLeft="10px">•</Paragraph>
-                    <Heading size={500} marginLeft="10px">
+                    <Paragraph marginLeft="5px">•</Paragraph>
+                    <Heading size={500} marginLeft="5px">
                         {amount}₺
                     </Heading>
                     {canAccept && (
                         <>
-                            <Paragraph marginLeft="10px">•</Paragraph>
+                            <Paragraph marginLeft="5px">•</Paragraph>
                             <Button
-                                marginLeft="10px"
+                                marginLeft="5px"
                                 iconBefore="tick"
                                 intent="success"
                                 onClick={this.handleAcceptClick}>
