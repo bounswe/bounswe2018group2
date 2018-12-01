@@ -100,7 +100,7 @@ exports.getAllJobs = function(req, res) {
  * @apiSuccess {Object[]} Founded job as JSON object
  */
 exports.jobDetails = function(req, res) {
-    var job_id = req.params.job_id;
+    var job_id = req.params.jobId;
     Job.findOne({
         where: { id: job_id },
         include: [{ model: User, as: "Client", required: true }]
@@ -149,7 +149,7 @@ exports.create_bid = function(req, res) {
                 });
                 return;
             }
-          
+
             if (description) {
                 var bidding_array = {
                     job_id: job_id,
@@ -390,7 +390,7 @@ exports.reject_bid = async function(req, res) {
 };
 
 exports.getAllBids = async function(req, res) {
-    const { job_id } = req.body;
+    const job_id = req.params.jobId;
     const job = await Job.findOne({
         where: { id: job_id }
     });
@@ -400,7 +400,7 @@ exports.getAllBids = async function(req, res) {
         });
         return;
     }
-    
+
     Job_biddings.findAll({
         where: {job_id: job_id},
         include: [{ model: User, as: "Freelancer", required: true }]
