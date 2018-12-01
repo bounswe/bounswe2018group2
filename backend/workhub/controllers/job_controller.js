@@ -273,3 +273,70 @@ exports.cancel_bid = async function(req, res) {
             });
         });
 };
+
+exports.getAllBids = async function(req, res) {
+    const { job_id } = req.body;
+    const job = await Job.findOne({
+        where: { id: job_id }
+    });
+    if (!job) {
+        res.status(400).send({
+            msg: "Invalid job_id."
+        });
+        return;
+    }
+    
+    Job_biddings.findAll({
+        where: {job_id: job_id},
+        include: [{ model: User, as: "Freelancer", required: true }]
+    }).then(bids => {
+        res.status(200).send({
+            msg: "Got all bids and their creators for given job.",
+            bids
+        });
+    });
+};
+
+exports.deleteJob = async function(req,res){
+    const user_id = req.user.id;
+    const { job_id } = req.body;
+    const job = await Job.findOne({
+        where: { id: job_id }
+    });
+
+    if (!job) {
+        res.status(400).send({
+            msg: "Invalid job_id."
+        });
+        return;
+    }
+
+    const client = await User.findOne({
+        where: { id: user_id }
+    });
+
+    if (client.id != job.client_id) {
+        res.status(400).send({
+            msg: "You do not have permission to delete this job."
+        });
+        return;
+    }
+
+    job.destroy()
+        .then(
+            res.status(200).send({
+                msg: "Job is successfully deleted",
+                id: job.id
+            })
+        )
+        .catch(e => {
+            res.status(400).send({
+                msg: "Could not delete the job",
+                additionalMsg: e.message
+            });
+        });
+
+
+};
+
+
