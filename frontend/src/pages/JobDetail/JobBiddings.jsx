@@ -21,7 +21,8 @@ const bids = [
         id: 3,
         userId: 1,
         name: "Ergun Erdogmus",
-        description: "I can do this job very well",
+        description:
+            "I can do this job very well. I can do this job very well. I can do this job very well. I can do this job very well",
         amount: 20
     }
 ];
@@ -36,6 +37,10 @@ class JobBiddings extends React.Component {
                         const marginTop = index !== 0 ? 15 : null;
                         return (
                             <JobBiddingCard
+                                canAccept={true}
+                                onAcceptClick={() =>
+                                    console.log("clicked accept")
+                                }
                                 marginTop={marginTop}
                                 userId={bid.userId}
                                 key={bid.id}
