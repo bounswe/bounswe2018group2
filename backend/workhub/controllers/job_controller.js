@@ -80,7 +80,9 @@ exports.create = function(req, res) {
  * @apiSuccess {Object[]} jobs List of jobs found, as objects.
  */
 exports.getAllJobs = function(req, res) {
-    Job.findAll().then(jobs => {
+    Job.findAll({
+        include: [{ model: User, as: "Client", required: true }]
+    }).then(jobs => {
         res.status(200).send({
             msg: "Got ALL jobs. Every single one. Goddamn.",
             jobs
