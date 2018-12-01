@@ -124,7 +124,8 @@ exports.jobDetails = function(req, res) {
  * @apiName CreateJobBidding
  * @apiGroup Job
  * @apiParam {Integer} job_id Mandatory
- * @apiParam {Integer} amount Mandatory amount of money that freelancer bid on the job
+ * @apiParam {Integer} amount Mandatory amount of money that freelancer bid on the jobs
+ * @apiParam {String} description Optional description from freelancer
  * @apiSuccess {String} msg Success message.
  */
 exports.create_bid = function(req, res) {
@@ -148,14 +149,24 @@ exports.create_bid = function(req, res) {
                 });
                 return;
             }
-            Job_biddings.create({
-                // Job bidding created
-                job_id: job_id,
-                freelancer_id: req.user.id,
-                amount: amount,
-                description: description,
-                status: "waiting"
-            })
+          
+            if (description) {
+                var bidding_array = {
+                    job_id: job_id,
+                    freelancer_id: req.user.id,
+                    amount: amount,
+                    status: "waiting",
+                    description: description
+                };
+            } else {
+                var bidding_array = {
+                    job_id: job_id,
+                    freelancer_id: req.user.id,
+                    amount: amount,
+                    status: "waiting"
+                };
+            }
+            Job_biddings.create(bidding_array)
                 .then(bid => {
                     res.status(200).send({
                         msg: "Bid is successfully created",
@@ -178,10 +189,11 @@ exports.create_bid = function(req, res) {
  * @apiGroup Job
  * @apiParam {Integer} bid_id Mandatory
  * @apiParam {Integer} new_amount Mandatory amount of money that freelancer bid on the job
+ * @apiParam {String} new_description Optional new description of the bid
  * @apiSuccess {String} msg Success message.
  */
 exports.update_bid = async function(req, res) {
-    const { bid_id, new_amount, description} = req.body;
+    const { bid_id, new_amount, new_description } = req.body;
     const hasBidding = await Job_biddings.findOne({
         where: { id: bid_id }
     });
@@ -215,7 +227,7 @@ exports.update_bid = async function(req, res) {
     hasBidding
         .updateAttributes({
             amount: new_amount,
-            description: description
+            description: new_description
         })
         .then(bid => {
             res.status(200).send({
@@ -274,6 +286,109 @@ exports.cancel_bid = async function(req, res) {
         });
 };
 
+/**
+ * @api {post} /job/acceptbid Accept Job Bidding
+ * @apiName AcceptJobBidding
+ * @apiGroup Job
+ * @apiParam {Integer} bid_id Mandatory
+ * @apiSuccess {String} msg Success message.
+ */
+exports.accept_bid = async function(req, res) {
+    const { bid_id } = req.body;
+
+    const bid = await Job_biddings.findOne({
+        where: { id: bid_id }
+    });
+    if (!bid) {
+        res.status(400).send({
+            msg: "Invalid bid_id."
+        });
+        return;
+    }
+
+    const job = await Job.findOne({
+        where: { id: bid.job_id }
+    });
+
+    if (job.client_id !== req.user.id) {
+        res.status(400).send({
+            msg: "The job is not from the logged in user."
+        });
+        return;
+    }
+
+    job.updateAttributes({
+        bidding_status: "closed"
+    }).catch(e => {
+        res.status(400).send({
+            msg: "Could not update the job",
+            additionalMsg: e.message
+        });
+        return;
+    });
+    bid.updateAttributes({
+        status: "accepted"
+    })
+        .then(bid => {
+            res.status(200).send({
+                msg: "Bid is successfully accepted",
+                id: bid.id
+            });
+        })
+        .catch(e => {
+            res.status(400).send({
+                msg: "Could not accept the bid",
+                additionalMsg: e.message
+            });
+        });
+};
+
+/**
+ * @api {post} /job/rejectbid Reject Job Bidding
+ * @apiName RejectJobBidding
+ * @apiGroup Job
+ * @apiParam {Integer} bid_id Mandatory
+ * @apiSuccess {String} msg Success message.
+ */
+exports.reject_bid = async function(req, res) {
+    const { bid_id } = req.body;
+
+    const bid = await Job_biddings.findOne({
+        where: { id: bid_id }
+    });
+    if (!bid) {
+        res.status(400).send({
+            msg: "Invalid bid_id."
+        });
+        return;
+    }
+    const job = await Job.findOne({
+        where: { id: bid.job_id }
+    });
+
+    if (job.client_id !== req.user.id) {
+        res.status(400).send({
+            msg: "The job is not from the logged in user."
+        });
+        return;
+    }
+      bid.updateAttributes({
+        status: "rejected"
+      })
+        .then(bid => {
+            res.status(200).send({
+                msg: "Bid is successfully rejected",
+                id: bid.id
+            });
+        })
+        .catch(e => {
+            res.status(400).send({
+                msg: "Could not reject the bid",
+                additionalMsg: e.message
+            });
+        });
+};
+
 exports.getAllBids = async function(req, res) {
     const { job_id } = req.body;
     const job = await Job.findOne({
@@ -307,9 +422,11 @@ exports.deleteJob = async function(req,res){
     if (!job) {
         res.status(400).send({
             msg: "Invalid job_id."
+
         });
         return;
     }
+
 
     const client = await User.findOne({
         where: { id: user_id }
@@ -321,7 +438,6 @@ exports.deleteJob = async function(req,res){
         });
         return;
     }
-
     job.destroy()
         .then(
             res.status(200).send({
@@ -338,5 +454,3 @@ exports.deleteJob = async function(req,res){
 
 
 };
-
-
