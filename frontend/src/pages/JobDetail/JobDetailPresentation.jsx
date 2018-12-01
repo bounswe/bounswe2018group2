@@ -7,7 +7,6 @@ import JobBiddings from "./JobBiddings";
 
 class JobDetailPresentation extends React.Component {
     render() {
-        console.log("this.props.job", this.props.job);
         return (
             <Pane
                 background="tint1"
@@ -55,7 +54,11 @@ class JobDetailPresentation extends React.Component {
                             marginLeft="20px"
                             padding="24px"
                             width="100%">
-                            <JobBiddings />
+                            <JobBiddings
+                                bids={this.props.bids}
+                                canAcceptBid={this.props.canAcceptBid}
+                                onAcceptBidClick={this.props.onAcceptBidClick}
+                            />
                         </Pane>
                     </Pane>
                 </Pane>
