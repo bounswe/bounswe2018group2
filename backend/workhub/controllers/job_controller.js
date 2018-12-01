@@ -82,7 +82,7 @@ exports.create = function(req, res) {
 exports.getAllJobs = function(req, res) {
     Job.findAll({
         include: [{ model: User, as: "Client", required: true }],
-        order: [['updatedAt', DESC'],]
+        order: '"updatedAt" DESC'
     }).then(jobs => {
         res.status(200).send({
             msg: "Got ALL jobs. Every single one. Goddamn.",
