@@ -55,6 +55,17 @@ function doCreateJob(body) {
     }).then(handleResponse);
 }
 
+function doCreateBid(req) {
+    return fetch(properties.APIURLs.createBid, {
+        method: "POST",
+        headers: {
+            ...defaultHeaders,
+            "user-token": window.workhubToken
+        },
+        body: JSON.stringify(req)
+    }).then(handleResponse);
+}
+
 function doGetJobDetail(jobId) {
     return fetch(`${properties.APIURLs.jobDetail}/${jobId}`, {
         headers: {
@@ -79,5 +90,6 @@ export {
     doLogout,
     doCreateJob,
     doGetJobDetail,
-    doGetAllJobs
+    doGetAllJobs,
+    doCreateBid
 };
