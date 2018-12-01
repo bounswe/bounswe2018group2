@@ -64,4 +64,20 @@ function doGetJobDetail(jobId) {
     }).then(handleResponse);
 }
 
-export { doLogin, doGetMember, doLogout, doCreateJob, doGetJobDetail };
+function doGetAllJobs() {
+    return fetch(properties.APIURLs.allJobs, {
+        headers: {
+            ...defaultHeaders,
+            "user-token": window.workhubToken
+        }
+    }).then(handleResponse);
+}
+
+export {
+    doLogin,
+    doGetMember,
+    doLogout,
+    doCreateJob,
+    doGetJobDetail,
+    doGetAllJobs
+};

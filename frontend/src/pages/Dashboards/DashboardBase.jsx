@@ -2,6 +2,7 @@ import React from "react";
 import {
     Pane,
     Badge,
+    Spinner,
     Strong,
     Heading,
     Paragraph,
@@ -11,6 +12,7 @@ import {
 } from "evergreen-ui";
 import { cropText } from "../../utils";
 import { Link } from "react-router-dom";
+import { doGetAllJobs } from "../../data/api";
 import HeaderBar from "../../components/HeaderBar";
 
 const options = { year: "numeric", month: "long", day: "numeric" };
@@ -25,8 +27,7 @@ const JobCard = props => {
         bidNumber,
         /* categories, */
         price,
-        clientName,
-        clientRating
+        clientName
     } = props;
 
     return (
@@ -58,9 +59,7 @@ const JobCard = props => {
                             <Text marginLeft={5}>
                                 <Strong href="#" color="default">
                                     {clientName}
-                                </Strong>{" "}
-                                <Badge color="green">{clientRating}</Badge> (100
-                                ratings)
+                                </Strong>
                             </Text>
                         </Pane>
                     </Pane>
@@ -92,81 +91,110 @@ const JobCard = props => {
     );
 };
 
-function DashboardBase(props) {
-    return (
-        <Pane background="tint1" width="100%" height="100%">
-            <HeaderBar userType={props.userType} />
-            <Pane
-                display="flex"
-                height="100%"
-                background="tint1"
-                paddingY={30}
-                margin={5}>
+class DashboardBase extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            jobs: [],
+            errMessage: "",
+            jobsLoading: true
+        };
+    }
+
+    componentDidMount() {
+        doGetAllJobs()
+            .then(jobsResult => {
+                this.setState({
+                    jobs: jobsResult.jobs,
+                    jobsLoading: false
+                });
+            })
+            .catch(err => {
+                this.setState({
+                    jobsError: err.message,
+                    jobsLoading: false
+                });
+            });
+    }
+
+    render() {
+        console.log("this.props.jobs", this.state.jobs);
+        return (
+            <Pane background="tint1" width="100%" height="100%">
+                <HeaderBar userType={this.props.userType} />
                 <Pane
-                    flex="1"
-                    background="white"
-                    marginLeft={40}
-                    paddingTop={30}
-                    padding={20}
-                    border="default">
-                    <Heading size={400}>Filter</Heading>
-                </Pane>
-                <Pane
-                    flex="3"
-                    background="white"
-                    border="default"
+                    display="flex"
                     height="100%"
-                    padding={30}
-                    marginLeft={20}
-                    marginRight={40}>
-                    <SearchInput
-                        placeholder="Search projects"
-                        marginTop={10}
-                        height={40}
-                        width="100%"
-                    />
-                    <Heading marginTop={30} size={800}>
-                        Suggested Jobs
-                    </Heading>
-                    <Paragraph marginTop={4} size={400}>
-                        Curated with your old projects and preferences in mind.
-                    </Paragraph>
-                    <Pane marginTop={16}>
-                        <JobCard
-                            jobId="1"
-                            title="deneme"
-                            description="description"
-                            createdDate={new Date()}
-                            bidNumber={5}
-                            price={20}
-                            clientName="Ergun E."
-                            clientRating={3.0}
+                    background="tint1"
+                    paddingY={30}
+                    margin={5}>
+                    <Pane
+                        flex="1"
+                        background="white"
+                        marginLeft={40}
+                        paddingTop={30}
+                        padding={20}
+                        border="default">
+                        <Heading size={400}>Filter</Heading>
+                    </Pane>
+                    <Pane
+                        flex="3"
+                        background="white"
+                        border="default"
+                        height="100%"
+                        padding={30}
+                        marginLeft={20}
+                        marginRight={40}>
+                        <SearchInput
+                            placeholder="Search projects"
+                            marginTop={10}
+                            height={40}
+                            width="100%"
                         />
-                        <JobCard
-                            jobId="2"
-                            title="cok iyi"
-                            description="baya iyi description"
-                            createdDate={new Date()}
-                            bidNumber={5}
-                            price={20}
-                            clientName="Ergun E."
-                            clientRating={3.0}
-                        />
-                        <JobCard
-                            jobId="3"
-                            title="deneme"
-                            description="description"
-                            createdDate={new Date()}
-                            bidNumber={5}
-                            price={20}
-                            clientName="Ergun E."
-                            clientRating={3.0}
-                        />
+                        <Heading marginTop={30} size={800}>
+                            Suggested Jobs
+                        </Heading>
+                        <Paragraph marginTop={4} size={400}>
+                            Curated with your old projects and preferences in
+                            mind.
+                        </Paragraph>
+                        <Pane marginTop={16}>
+                            {!this.state.jobsLoading &&
+                                this.state.jobs
+                                    .filter(job => !!job.header)
+                                    .map(job => {
+                                        return (
+                                            <JobCard
+                                                key={job.id}
+                                                jobId={job.id}
+                                                title={job.header}
+                                                description={job.decription}
+                                                createdDate={
+                                                    new Date(job.createdAt)
+                                                }
+                                                bidNumber={5}
+                                                price={job.price}
+                                                clientName={`${
+                                                    job.Client.firstName
+                                                } ${job.Client.lastName.substring(
+                                                    0,
+                                                    1
+                                                )}.`}
+                                            />
+                                        );
+                                    })}
+                            {this.state.jobsLoading && (
+                                <Pane display="flex" justifyContent="center">
+                                    <Spinner />
+                                </Pane>
+                            )}
+                        </Pane>
                     </Pane>
                 </Pane>
             </Pane>
-        </Pane>
-    );
+        );
+    }
 }
 
 export default DashboardBase;
