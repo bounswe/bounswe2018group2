@@ -31,12 +31,13 @@ class JobDetailPresentation extends React.Component {
                         elevation={1}
                         background="white"
                         padding="24px"
-                        width="100%">
+                        width="100%"
+                        height="280px">
                         <JobDetailUser
                             user={this.props.job && this.props.job.Client}
                         />
                     </Pane>
-                    <Pane flex="3" display="flex" flexDirection="column">
+                    <Pane flex="5" display="flex" flexDirection="column">
                         <Pane
                             borderRadius={5}
                             elevation={1}
