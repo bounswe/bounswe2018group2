@@ -128,7 +128,7 @@ exports.jobDetails = function(req, res) {
  * @apiSuccess {String} msg Success message.
  */
 exports.create_bid = function(req, res) {
-    const { job_id, amount } = req.body;
+    const { job_id, amount, description } = req.body;
     if (req.user.type !== "freelancer") {
         res.status(400).send({
             msg: "User's type is not freelancer."
@@ -153,6 +153,7 @@ exports.create_bid = function(req, res) {
                 job_id: job_id,
                 freelancer_id: req.user.id,
                 amount: amount,
+                description: description,
                 status: "waiting"
             })
                 .then(bid => {
@@ -180,7 +181,7 @@ exports.create_bid = function(req, res) {
  * @apiSuccess {String} msg Success message.
  */
 exports.update_bid = async function(req, res) {
-    const { bid_id, new_amount } = req.body;
+    const { bid_id, new_amount, description} = req.body;
     const hasBidding = await Job_biddings.findOne({
         where: { id: bid_id }
     });
@@ -213,7 +214,8 @@ exports.update_bid = async function(req, res) {
     }
     hasBidding
         .updateAttributes({
-            amount: new_amount
+            amount: new_amount,
+            description: description
         })
         .then(bid => {
             res.status(200).send({
