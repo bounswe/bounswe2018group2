@@ -102,6 +102,7 @@ class JobBiddings extends React.Component {
                                             onAcceptClick={onAcceptBidClick}
                                             marginTop={marginTop}
                                             userId={bid.freelancer_id}
+                                            bidId={bid.id}
                                             key={bid.id}
                                             name={`${
                                                 bid.Freelancer.firstName

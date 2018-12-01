@@ -97,6 +97,19 @@ function doGetJobBids(jobId) {
     }).then(handleResponse);
 }
 
+function doAcceptBid(bidId) {
+    return fetch(properties.APIURLs.acceptBid, {
+        method: "POST",
+        headers: {
+            ...defaultHeaders,
+            "user-token": window.workhubToken
+        },
+        body: JSON.stringify({
+            bid_id: bidId
+        })
+    }).then(handleResponse);
+}
+
 export {
     doLogin,
     doGetMember,
@@ -105,5 +118,6 @@ export {
     doGetJobDetail,
     doGetAllJobs,
     doCreateBid,
-    doGetJobBids
+    doGetJobBids,
+    doAcceptBid
 };

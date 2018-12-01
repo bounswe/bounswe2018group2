@@ -1,4 +1,4 @@
-const baseURL = "http://localhost:3000";
+const baseURL = "http://34.210.153.98:3000";
 const properties = {
     APIURLs: {
         login: `${baseURL}/user/login`,
@@ -9,7 +9,8 @@ const properties = {
         createJob: `${baseURL}/job/create`,
         jobDetail: `${baseURL}/job/details`,
         jobBids: `${baseURL}/job/getallbids`,
-        createBid: `${baseURL}/job/createbid`
+        createBid: `${baseURL}/job/createbid`,
+        acceptBid: `${baseURL}/job/acceptbid`
     }
 };
 
