@@ -25,6 +25,8 @@ router.get("/job/details/:job_id", job.jobDetails);
 router.post("/job/createbid", auth, job.create_bid);
 router.post("/job/updatebid", auth, job.update_bid);
 router.post("/job/cancelbid", auth, job.cancel_bid);
+router.post("/job/acceptbid", auth, job.accept_bid);
+router.post("/job/rejectbid", auth, job.reject_bid);
 
 router.post("/message/sendnotification", auth, notif.create);
 
