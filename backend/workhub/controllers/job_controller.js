@@ -272,7 +272,7 @@ exports.cancel_bid = async function(req, res) {
         });
 };
 
-exports.getAllBids = function(req, res) {
+exports.getAllBids = async function(req, res) {
     const { job_id } = req.body;
     const job = await Job.findOne({
         where: { id: job_id }
@@ -283,23 +283,14 @@ exports.getAllBids = function(req, res) {
         });
         return;
     }
-    const client = await User.findOne({
-        where: { id: user_id }
-    });
-
-    if (client.id != job.client_id) {
-        res.status(400).send({
-            msg: "You do not have permission to access this job."
-        });
-        return;
-    }
     
-    Job.findAll({
-        include: [{ model: User, as: "Client", required: true }]
-    }).then(jobs => {
+    Job_biddings.findAll({
+        where: {job_id: job_id},
+        include: [{ model: User, as: "Freelancer", required: true }]
+    }).then(bids => {
         res.status(200).send({
-            msg: "Got ALL jobs. Every single one. Goddamn.",
-            jobs
+            msg: "Got all bids and their creators for given job.",
+            bids
         });
     });
 };
