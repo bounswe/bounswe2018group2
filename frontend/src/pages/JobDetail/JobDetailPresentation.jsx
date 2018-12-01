@@ -1,16 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-    Pane,
-    Icon
-} from "evergreen-ui";
+import { Pane, Icon } from "evergreen-ui";
 import JobDetailBody from "./JobDetailBody";
 import JobDetailUser from "./JobDetailUser";
 import JobBiddings from "./JobBiddings";
 
 class JobDetailPresentation extends React.Component {
     render() {
-        console.log("this.props.job", this.props.job);
         return (
             <Pane
                 background="tint1"
@@ -19,11 +15,16 @@ class JobDetailPresentation extends React.Component {
                 paddingY="30px">
                 <Link to="/">
                     <Pane display="flex" alignItems="center">
-                        <Icon icon="chevron-left" size={20}/>
+                        <Icon icon="chevron-left" size={20} />
                         Go to dashboard
                     </Pane>
                 </Link>
-                <Pane display="flex" justifyContent="center" height="100%" marginTop="10px" paddingBottom="40px">
+                <Pane
+                    display="flex"
+                    justifyContent="center"
+                    height="100%"
+                    marginTop="10px"
+                    paddingBottom="40px">
                     <Pane
                         flex="1"
                         borderRadius={5}
@@ -31,24 +32,21 @@ class JobDetailPresentation extends React.Component {
                         background="white"
                         padding="24px"
                         width="100%">
-                        <JobDetailUser user={this.props.job && this.props.job.Client}/>
+                        <JobDetailUser
+                            user={this.props.job && this.props.job.Client}
+                        />
                     </Pane>
-                    <Pane
-                        flex="3"
-                        display="flex"
-                        flexDirection="column">
+                    <Pane flex="3" display="flex" flexDirection="column">
                         <Pane
-                            flex="1"
                             borderRadius={5}
                             elevation={1}
                             background="white"
                             marginLeft="20px"
                             padding="24px"
                             width="100%">
-                            <JobDetailBody job={this.props.job}/>
+                            <JobDetailBody job={this.props.job} />
                         </Pane>
                         <Pane
-                            flex="1"
                             borderRadius={5}
                             elevation={1}
                             background="white"
@@ -56,7 +54,11 @@ class JobDetailPresentation extends React.Component {
                             marginLeft="20px"
                             padding="24px"
                             width="100%">
-                            <JobBiddings/>
+                            <JobBiddings
+                                bids={this.props.bids}
+                                canAcceptBid={this.props.canAcceptBid}
+                                onAcceptBidClick={this.props.onAcceptBidClick}
+                            />
                         </Pane>
                     </Pane>
                 </Pane>

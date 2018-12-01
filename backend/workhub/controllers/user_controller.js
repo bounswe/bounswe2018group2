@@ -121,7 +121,7 @@ exports.logout = function(req, res) {
             msg: "Cannot destroy session"
         });
     });
-}
+};
 
 exports.profileInfo = function(req, res) {
     var user_id = req.params.userId;
@@ -151,4 +151,63 @@ exports.profileInfo = function(req, res) {
             });
         }
     });
+};
+
+exports.updateProfile = async function(req,res){
+
+    const {firstName, lastName, description, type} = req.body;
+    var user_id = req.user.id;
+
+    let getProfilePromise = await Profile.findOne({
+        where: { user_id: user_id }
+    });
+
+    if (!getProfilePromise){
+        res.status(400).send({
+            msg: "User not found. That's... really not right."
+        }); 
+    } else{
+        let result_profile = await getProfilePromise.updateAttributes({
+            description: description,
+            type: type
+        })
+
+        let result_user = await req.user.updateAttributes({
+            firstName: firstName,
+            lastName: lastName
+        })
+
+        if (result_user && result_profile){
+            res.status(200).send({
+                msg: "Profile updated successfully."
+            });
+        }else{
+            res.status(400).send({
+                msg: "Something could not be updated. Have fun figuring out what it was!"
+            });
+        }
+
+    }
+
+}
+
+exports.getAllFreelancers = async function(req,res){
+
+    var freelancers = await User.findAll({
+        where: {type: 'freelancer'}
+    });
+
+    console.log(freelancers);
+
+    if (freelancers){
+        res.status(200).send({
+            msg: "Got all freelancers.",
+            freelancers
+        });
+    }else{
+        res.status(400).send({
+             msg: "User not found."
+        }); 
+    }
+
 };

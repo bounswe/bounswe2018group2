@@ -55,6 +55,17 @@ function doCreateJob(body) {
     }).then(handleResponse);
 }
 
+function doCreateBid(req) {
+    return fetch(properties.APIURLs.createBid, {
+        method: "POST",
+        headers: {
+            ...defaultHeaders,
+            "user-token": window.workhubToken
+        },
+        body: JSON.stringify(req)
+    }).then(handleResponse);
+}
+
 function doGetJobDetail(jobId) {
     return fetch(`${properties.APIURLs.jobDetail}/${jobId}`, {
         headers: {
@@ -64,4 +75,21 @@ function doGetJobDetail(jobId) {
     }).then(handleResponse);
 }
 
-export { doLogin, doGetMember, doLogout, doCreateJob, doGetJobDetail };
+function doGetAllJobs() {
+    return fetch(properties.APIURLs.allJobs, {
+        headers: {
+            ...defaultHeaders,
+            "user-token": window.workhubToken
+        }
+    }).then(handleResponse);
+}
+
+export {
+    doLogin,
+    doGetMember,
+    doLogout,
+    doCreateJob,
+    doGetJobDetail,
+    doGetAllJobs,
+    doCreateBid
+};

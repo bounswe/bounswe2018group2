@@ -5,8 +5,10 @@ const properties = {
         logout: `${baseURL}/user/logout`,
         signup: `${baseURL}/user/create`,
         member: `${baseURL}/member`,
+        allJobs: `${baseURL}/job/getalljobs`,
         createJob: `${baseURL}/job/create`,
-        jobDetail: `${baseURL}/job/details`
+        jobDetail: `${baseURL}/job/details`,
+        createBid: `${baseURL}/job/createbid"`
     }
 };
 

@@ -80,7 +80,9 @@ exports.create = function(req, res) {
  * @apiSuccess {Object[]} jobs List of jobs found, as objects.
  */
 exports.getAllJobs = function(req, res) {
-    Job.findAll().then(jobs => {
+    Job.findAll({
+        include: [{ model: User, as: "Client", required: true }]
+    }).then(jobs => {
         res.status(200).send({
             msg: "Got ALL jobs. Every single one. Goddamn.",
             jobs
@@ -147,6 +149,7 @@ exports.create_bid = function(req, res) {
                 });
                 return;
             }
+          
             if (description) {
                 var bidding_array = {
                     job_id: job_id,
@@ -359,7 +362,6 @@ exports.reject_bid = async function(req, res) {
         });
         return;
     }
-
     const job = await Job.findOne({
         where: { id: bid.job_id }
     });
@@ -370,10 +372,9 @@ exports.reject_bid = async function(req, res) {
         });
         return;
     }
-
-    bid.updateAttributes({
+      bid.updateAttributes({
         status: "rejected"
-    })
+      })
         .then(bid => {
             res.status(200).send({
                 msg: "Bid is successfully rejected",
@@ -386,4 +387,70 @@ exports.reject_bid = async function(req, res) {
                 additionalMsg: e.message
             });
         });
+};
+
+exports.getAllBids = async function(req, res) {
+    const { job_id } = req.body;
+    const job = await Job.findOne({
+        where: { id: job_id }
+    });
+    if (!job) {
+        res.status(400).send({
+            msg: "Invalid job_id."
+        });
+        return;
+    }
+    
+    Job_biddings.findAll({
+        where: {job_id: job_id},
+        include: [{ model: User, as: "Freelancer", required: true }]
+    }).then(bids => {
+        res.status(200).send({
+            msg: "Got all bids and their creators for given job.",
+            bids
+        });
+    });
+};
+
+exports.deleteJob = async function(req,res){
+    const user_id = req.user.id;
+    const { job_id } = req.body;
+    const job = await Job.findOne({
+        where: { id: job_id }
+    });
+
+    if (!job) {
+        res.status(400).send({
+            msg: "Invalid job_id."
+
+        });
+        return;
+    }
+
+
+    const client = await User.findOne({
+        where: { id: user_id }
+    });
+
+    if (client.id != job.client_id) {
+        res.status(400).send({
+            msg: "You do not have permission to delete this job."
+        });
+        return;
+    }
+    job.destroy()
+        .then(
+            res.status(200).send({
+                msg: "Job is successfully deleted",
+                id: job.id
+            })
+        )
+        .catch(e => {
+            res.status(400).send({
+                msg: "Could not delete the job",
+                additionalMsg: e.message
+            });
+        });
+
+
 };
