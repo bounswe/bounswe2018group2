@@ -272,6 +272,37 @@ exports.cancel_bid = async function(req, res) {
         });
 };
 
+exports.getAllBids = function(req, res) {
+    const { job_id } = req.body;
+    const job = await Job.findOne({
+        where: { id: job_id }
+    });
+    if (!job) {
+        res.status(400).send({
+            msg: "Invalid job_id."
+        });
+        return;
+    }
+    const client = await User.findOne({
+        where: { id: user_id }
+    });
+
+    if (client.id != job.client_id) {
+        res.status(400).send({
+            msg: "You do not have permission to access this job."
+        });
+        return;
+    }
+    
+    Job.findAll({
+        include: [{ model: User, as: "Client", required: true }]
+    }).then(jobs => {
+        res.status(200).send({
+            msg: "Got ALL jobs. Every single one. Goddamn.",
+            jobs
+        });
+    });
+};
 
 exports.deleteJob = async function(req,res){
     const user_id = req.user.id;
@@ -314,3 +345,5 @@ exports.deleteJob = async function(req,res){
 
 
 };
+
+
