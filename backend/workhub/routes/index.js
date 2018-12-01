@@ -24,7 +24,8 @@ router.post("/job/create", auth, job.create);
 router.get("/job/getalljobs", job.getAllJobs);
 
 router.get("/job/getfreelancers", user.getAllFreelancers);
-router.get("/job/details/:job_id", job.jobDetails)
+router.get("/job/details/:job_id", job.jobDetails);
+router.post("/job/delete", auth, job.deleteJob);
 router.post("/job/createbid", auth, job.create_bid);
 router.post("/job/updatebid", auth, job.update_bid);
 router.post("/job/cancelbid", auth, job.cancel_bid);
