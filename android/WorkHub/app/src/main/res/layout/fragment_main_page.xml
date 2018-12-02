@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:src="@drawable/ic_profile"
+            android:src="@drawable/ic_add"
             android:layout_margin="16dp" />
         <TextView
             android:id="@+id/guestText"

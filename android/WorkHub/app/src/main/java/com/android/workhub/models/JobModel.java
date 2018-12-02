@@ -1,18 +1,16 @@
 package com.android.workhub.models;
 
-import java.util.Date;
-
 public class JobModel{
 
     private int id;
     private int clientId;
     private String header;
     private String description;
-    private Date duedate;
+    private String duedate;
     private int price;
     private int[] categories;
     private int duration;
-    private String bidding;
+    private String bidding_status;
     private String createdAt;
     private String updatedAt;
 
@@ -21,7 +19,7 @@ public class JobModel{
     }
 
 
-    public JobModel(int id, int clientId, String header, String description, Date dueDate, int price, int[] categories, int duration, String bidding, String createdAt, String updatedAt) {
+    public JobModel(int id, int clientId, String header, String description, String dueDate, int price, int[] categories, int duration, String bidding_status, String createdAt, String updatedAt) {
         this.id = id;
         this.clientId = clientId;
         this.header = header;
@@ -30,7 +28,7 @@ public class JobModel{
         this.price = price;
         this.categories = categories;
         this.duration = duration;
-        this.bidding = bidding;
+        this.bidding_status = bidding_status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -51,11 +49,11 @@ public class JobModel{
         this.description = description;
     }
 
-    public Date getDueDate() {
+    public String getDueDate() {
         return duedate;
     }
 
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(String dueDate) {
         this.duedate = dueDate;
     }
 
@@ -83,12 +81,12 @@ public class JobModel{
         this.duration = duration;
     }
 
-    public String getBidding() {
-        return bidding;
+    public String getBidding_status() {
+        return bidding_status;
     }
 
-    public void setBidding(String bidding) {
-        this.bidding = bidding;
+    public void setBidding_status(String bidding_status) {
+        this.bidding_status = bidding_status;
     }
 
     public int getId() {

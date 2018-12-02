@@ -54,9 +54,7 @@ public class MainPage extends Fragment {
         mainView = inflater.inflate(R.layout.fragment_main_page, container, false);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         guestView = mainView.findViewById(R.id.guestText);
-        Bundle bundle = new Bundle();
-        bundle = getArguments();
-        email = bundle.getString("email","");
+        email = sharedPreferences.getString("email","");
         addJobButton = mainView.findViewById(R.id.button_add_job);
 
         if(email == null || email.equals("")){

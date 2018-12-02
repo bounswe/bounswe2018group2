@@ -1,18 +1,19 @@
 package com.android.workhub.models;
 
-public class GetSelfReturnModel {
+public class UpdateProfileModel {
 
     private String firstName;
     private String lastName;
     private String description;
-    private String rating;
     private String type;
 
-    public GetSelfReturnModel(String firstName, String lastName, String description, String rating, String type) {
+    public UpdateProfileModel() {
+    }
+
+    public UpdateProfileModel(String firstName, String lastName, String description, String type) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.description = description;
-        this.rating = rating;
         this.type = type;
     }
 
@@ -38,14 +39,6 @@ public class GetSelfReturnModel {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getRating() {
-        return rating;
-    }
-
-    public void setRating(String rating) {
-        this.rating = rating;
     }
 
     public String getType() {

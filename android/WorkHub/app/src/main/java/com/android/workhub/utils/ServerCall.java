@@ -9,6 +9,7 @@ import com.android.workhub.models.LoginModel;
 import com.android.workhub.models.LoginReturnModel;
 import com.android.workhub.models.SendNotificationModel;
 import com.android.workhub.models.SimpleMessageModel;
+import com.android.workhub.models.UpdateProfileModel;
 import com.android.workhub.utils.Tasks.CreateJobTask;
 import com.android.workhub.utils.Tasks.GetAllJobsTask;
 import com.android.workhub.utils.Tasks.GetSelfTask;
@@ -17,6 +18,7 @@ import com.android.workhub.utils.Tasks.LoginTask;
 import com.android.workhub.utils.Tasks.LogoutTask;
 import com.android.workhub.utils.Tasks.SendNotificationTask;
 import com.android.workhub.utils.Tasks.SignUpTask;
+import com.android.workhub.utils.Tasks.UpdateProfileTask;
 
 public class ServerCall {
     public static void login(final Object model, final WorkHubServiceListener<LoginReturnModel> listener) {
@@ -61,6 +63,10 @@ public class ServerCall {
     }
     public static void sendNotification(String token, SendNotificationModel model,final WorkHubServiceListener<SimpleMessageModel> listener){
         SendNotificationTask task = new SendNotificationTask(model,listener);
+        task.run(token,model);
+    }
+    public static void updateProfile(String token, UpdateProfileModel model, final WorkHubServiceListener<SimpleMessageModel> listener){
+        UpdateProfileTask task = new UpdateProfileTask(listener);
         task.run(token,model);
     }
 }

@@ -2,8 +2,10 @@ package com.android.workhub.fragments;
 
 import android.app.Fragment;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,11 @@ import com.android.workhub.utils.ServerCall;
 import com.android.workhub.utils.Tasks.SendNotificationTask;
 import com.android.workhub.utils.WorkHubServiceListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class JobDetailPage extends Fragment {
     View mainView;
     private int job_id;
@@ -30,7 +37,7 @@ public class JobDetailPage extends Fragment {
     TextView description;
     TextView price;
     TextView due_date;
-    ImageView bidding_status;
+    TextView bidding_status;
     TextView duration;
     Button notifyButton;
     Switch customButton;
@@ -87,23 +94,33 @@ public class JobDetailPage extends Fragment {
                 header.setText(data.getJob().getHeader());
                 description.setText(data.getJob().getDescription());
                 price.setText("$"+data.getJob().getPrice()+"");
-                due_date.setText(data.getJob().getDuedate().toString());
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'");
+                Date date = new Date();
+                try {
+                    date = format.parse(data.getJob().getDuedate());
+                } catch (ParseException e) {
+                    Log.e("JobDetail", "onFailure: " + e.toString() );
+                }
+                String dateString = new SimpleDateFormat("dd/MM/yyyy",
+                        Locale.getDefault()).format(date);
+                due_date.setText(dateString);
 
-                if(data.getJob().getBidding_status()==null | data.getJob().getBidding_status().equals("")){
-                    bidding_status.setImageResource(R.drawable.ic_profile);
+                if(data.getJob().getBidding_status().equals("open")){
+                    bidding_status.setText("open");
+                    bidding_status.setTextColor(Color.GREEN);
                 }
                 else{
-
-                    bidding_status.setImageResource(R.drawable.ic_profile);
+                    bidding_status.setText("closed");
+                    bidding_status.setTextColor(Color.RED);
                 }
 
 
-                duration.setText(data.getJob().getDuration()+"");
+                duration.setText(data.getJob().getDuration()+" days");
             }
 
             @Override
             public void onFailure(Exception e) {
-
+                Log.e("JobDetail", "onFailure: " + e.toString() );
             }
         });
         notifyButton.setOnClickListener(new View.OnClickListener() {
