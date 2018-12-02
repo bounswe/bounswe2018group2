@@ -18,7 +18,7 @@ const Notifs = db.Notifications;
  * @apiParam {Integer} client_id Mandatory
  * @apiParam {String} header Mandatory
  * @apiParam {String} description Mandatory
- * @apiParam {Datetime} [due_date] Optional
+ * @apiParam {Datetime} [duedate] Optional
  * @apiParam {Integer} price Mandatory
  * @apiParam {Integer[]} [categories] Optional
  * @apiParam {Integer} duration Mandatory duration of the job in days
@@ -30,7 +30,7 @@ exports.create = function(req, res) {
     const {
         header,
         description,
-        due_date,
+        duedate,
         price,
         categories,
         duration,
@@ -46,7 +46,7 @@ exports.create = function(req, res) {
             client_id: req.user.id,
             header: header,
             description: description,
-            duedate: due_date,
+            duedate: duedate,
             price: price,
             duration: duration,
             bidding_status: bidding_status
