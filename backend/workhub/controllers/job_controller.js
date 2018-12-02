@@ -8,6 +8,7 @@ const User = db.User;
 const Sessions = db.Sessions;
 const Profile = db.Profile;
 const Job_biddings = db.Job_biddings;
+const Notifs = db.Notifications;
 
 /**
  * @api {post} /job/create Create Job
@@ -129,58 +130,62 @@ exports.jobDetails = function(req, res) {
  * @apiParam {String} description Optional description from freelancer
  * @apiSuccess {String} msg Success message.
  */
-exports.create_bid = function(req, res) {
+exports.create_bid = async function(req, res) {
     const { job_id, amount, description } = req.body;
     if (req.user.type !== "freelancer") {
         res.status(400).send({
             msg: "User's type is not freelancer."
         });
     } else {
-        Job.findOne({
+        const job = await Job.findOne({
             where: { id: job_id }
-        }).then(job => {
-            if (!job) {
-                res.status(400).send({
-                    msg: "Invalid job_id."
-                });
-                return;
-            } else if (job.bidding_status !== "open") {
-                res.status(400).send({
-                    msg: "job is not open for bidding"
-                });
-                return;
-            }
+        })
+        if (!job) {
+            res.status(400).send({
+                msg: "Invalid job_id."
+            });
+            return;
+        } else if (job.bidding_status !== "open") {
+            res.status(400).send({
+                msg: "job is not open for bidding"
+            });
+            return;
+        }
 
-            if (description) {
-                var bidding_array = {
-                    job_id: job_id,
-                    freelancer_id: req.user.id,
-                    amount: amount,
-                    status: "waiting",
-                    description: description
-                };
-            } else {
-                var bidding_array = {
-                    job_id: job_id,
-                    freelancer_id: req.user.id,
-                    amount: amount,
-                    status: "waiting"
-                };
-            }
-            Job_biddings.create(bidding_array)
-                .then(bid => {
-                    res.status(200).send({
-                        msg: "Bid is successfully created",
-                        id: bid.id
-                    });
-                })
-                .catch(e => {
-                    res.status(400).send({
-                        msg: "Could not create new bid",
-                        additionalMsg: e.message
-                    });
-                });
-        });
+        if (description) {
+            var bidding_array = {
+                job_id: job_id,
+                freelancer_id: req.user.id,
+                amount: amount,
+                status: "waiting",
+                description: description
+            };
+        } else {
+            var bidding_array = {
+                job_id: job_id,
+                freelancer_id: req.user.id,
+                amount: amount,
+                status: "waiting"
+            };
+        }
+        try{
+            const bid = await Job_biddings.create(bidding_array);
+            const fName = `${req.user.firstName} ${req.user.lastName}`;
+            const jName = job.header;
+            const notifresult = await createNotification(fName, jName, job_id, req.user.id, job.client_id, "bid_get");
+
+            res.status(200).send({
+                msg: "Bid is successfully created",
+                id: bid.id
+            });
+        }catch (e){
+            res.status(400).send({
+                msg: "Could not create new bid",
+                additionalMsg: e.message
+            });
+        }
+
+
     }
 };
 
@@ -327,21 +332,23 @@ exports.accept_bid = async function(req, res) {
         });
         return;
     });
-    bid.updateAttributes({
-        status: "accepted"
-    })
-        .then(bid => {
-            res.status(200).send({
-                msg: "Bid is successfully accepted",
-                id: bid.id
-            });
-        })
-        .catch(e => {
-            res.status(400).send({
-                msg: "Could not accept the bid",
-                additionalMsg: e.message
-            });
+
+    try{
+        const bidres = await bid.updateAttributes({status: "accepted"});
+        const fName = `${req.user.firstName} ${req.user.lastName}`;
+        const jName = job.header;
+        const notifresult = await createNotification(fName, jName, bid.job_id, req.user.id, bid.freelancer_id, "bid_accept");
+
+        res.status(200).send({
+            msg: "Bid is successfully accepted",
+            id: bid.id
         });
+    }catch(e){
+        res.status(400).send({
+            msg: "Could not accept the bid",
+            additionalMsg: e.message
+        });
+    }
 };
 
 /**
@@ -373,22 +380,49 @@ exports.reject_bid = async function(req, res) {
         });
         return;
     }
-      bid.updateAttributes({
-        status: "rejected"
-      })
-        .then(bid => {
-            res.status(200).send({
-                msg: "Bid is successfully rejected",
-                id: bid.id
-            });
-        })
-        .catch(e => {
-            res.status(400).send({
-                msg: "Could not reject the bid",
-                additionalMsg: e.message
-            });
+    try{
+        const bidres = await bid.updateAttributes({status: "rejected"});
+        const fName = `${req.user.firstName} ${req.user.lastName}`;
+        const jName = job.header;
+        const notifresult = await createNotification(fName, jName, bid.job_id, req.user.id, bid.freelancer_id, "bid_reject");
+
+        res.status(200).send({
+            msg: "Bid is successfully rejected",
+            id: bid.id
         });
+    }catch(e){
+        res.status(400).send({
+            msg: "Could not reject the bid",
+            additionalMsg: e.message
+        });
+    }
 };
+
+async function createNotification(uName, jName,job_id, send_id, rec_id, type){
+    //uName represents the freelancer in bid_get, and the client in the other two. Keep that in mind.
+
+    var description = "";
+    if (type === "bid_get"){
+        description = `New bid received for ${jName} by ${uName}!`;
+    }else if(type == "bid_accept"){
+        description = `${uName} has accepted your bid on ${jName}!`;
+    }else if(type === "bid_reject"){
+        description = `${uName} has rejected your bid on ${jName}.`;
+    }else{
+        description = "This message should not appear. Feel free to send the admins a warning if it does!"
+    }
+    
+    const res = await Notifs.create({
+        sender_id: send_id,
+        receiver_id: rec_id,
+        job_id: job_id,
+        description: description,
+        message_type: type,
+        isRead: false
+    })
+
+    return res;
+}
 
 exports.getAllBids = async function(req, res) {
     const job_id = req.params.jobId;
