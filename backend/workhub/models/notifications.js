@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     receiver_id: DataTypes.INTEGER,
     job_id: DataTypes.INTEGER,
     description: DataTypes.STRING,
-    message_type: DataTypes.ENUM('status','custom'),
+    message_type: DataTypes.ENUM('status', 'bid_get', 'bid_accept', 'bid_reject', 'custom'),
     isRead: DataTypes.BOOLEAN
   }, {});
   Notifications.associate = function(models) {
