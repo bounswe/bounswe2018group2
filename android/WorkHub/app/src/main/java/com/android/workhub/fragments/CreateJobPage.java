@@ -96,7 +96,8 @@ public class CreateJobPage extends Fragment {
                 jobModel.setDescription(description.getText().toString());
                 jobModel.setPrice(Integer.parseInt(price.getText().toString()));
                 jobModel.setDuration(Integer.parseInt(duration.getText().toString()));
-                jobModel.setDueDate(myCalendar.getTime());
+                jobModel.setDueDate(myCalendar.getTime().toString());
+                jobModel.setCategories(new int[0]);
 
                 final ProgressDialog progressDialog = new ProgressDialog(getActivity());
                 progressDialog.setCancelable(false);

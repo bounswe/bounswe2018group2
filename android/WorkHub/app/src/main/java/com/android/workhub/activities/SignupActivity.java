@@ -1,13 +1,11 @@
 package com.android.workhub.activities;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -23,7 +21,6 @@ import com.android.workhub.models.SignUpModel;
 import com.android.workhub.models.SimpleMessageModel;
 import com.android.workhub.utils.ServerCall;
 import com.android.workhub.utils.WorkHubServiceListener;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 

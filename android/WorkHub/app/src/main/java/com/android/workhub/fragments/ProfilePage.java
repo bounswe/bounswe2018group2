@@ -6,16 +6,18 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +53,7 @@ public class ProfilePage extends Fragment {
     ProgressDialog progressDialog;
     private Bundle bundle;
     private ImageView image;
+    private SharedPreferences sharedPreferences;
     public static final int GET_FROM_GALLERY = 3;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,7 +63,8 @@ public class ProfilePage extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.show();
         mainView = inflater.inflate(R.layout.fragment_profile_page, container, false);
-        token = getArguments().getString("token");
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        token = sharedPreferences.getString("token","");
         image = mainView.findViewById(R.id.image_profile);
         nameText = mainView.findViewById(R.id.name_profile);
         surnameText = mainView.findViewById(R.id.surname_profile);
@@ -95,18 +99,19 @@ public class ProfilePage extends Fragment {
 
                 name = data.getFirstName();
                 surname = data.getLastName();
-                desc = data.getDesc();
+                desc = data.getDescription();
                 rate = data.getRating();
                 type = data.getType();
                 bundle=new Bundle();
                 bundle.putString("name",name);
                 bundle.putString("surname",surname);
                 bundle.putString("desc",desc);
+                bundle.putString("type",type);
                 progressDialog.dismiss();
 
                 nameText.setText(data.getFirstName());
                 surnameText.setText(data.getLastName());
-                descText.setText(data.getDesc());
+                descText.setText(data.getDescription());
                 rateText.setText(data.getRating());
                 typeText.setText(data.getType());
                 //refresh it
@@ -135,9 +140,8 @@ public class ProfilePage extends Fragment {
             try {
 
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
-                Matrix matrix = new Matrix();
-                matrix.postRotate(-90);
-                image.setImageBitmap(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true));
+                bitmap = rotateImageIfRequired(bitmap,selectedImage);
+                image.setImageBitmap(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight()));
             } catch (FileNotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -147,5 +151,31 @@ public class ProfilePage extends Fragment {
             }
         }
     }
+
+    private static Bitmap rotateImageIfRequired(Bitmap img, Uri selectedImage) throws IOException {
+
+        ExifInterface ei = new ExifInterface(selectedImage.getPath());
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return rotateImage(img, 90);
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return rotateImage(img, 180);
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return rotateImage(img, 270);
+            default:
+                return img;
+        }
+    }
+
+    private static Bitmap rotateImage(Bitmap img, int degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
+        img.recycle();
+        return rotatedImg;
+    }
+
 }
 

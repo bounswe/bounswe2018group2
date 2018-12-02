@@ -7,7 +7,7 @@ public class JobDetailModel {
     private int client_id;
     private String header;
     private String description;
-    private Date duedate;
+    private String duedate;
     private int price;
     private int duration;
     private String bidding_status;
@@ -19,7 +19,7 @@ public class JobDetailModel {
 
     }
 
-    public JobDetailModel(int id, int client_id, String header, String description, Date duedate, int price, int duration, String bidding_status, String createdAt, String updatedAt, UserModel client) {
+    public JobDetailModel(int id, int client_id, String header, String description, String duedate, int price, int duration, String bidding_status, String createdAt, String updatedAt, UserModel client) {
         this.id = id;
         this.client_id = client_id;
         this.header = header;
@@ -65,11 +65,11 @@ public class JobDetailModel {
         this.description = description;
     }
 
-    public Date getDuedate() {
+    public String getDuedate() {
         return duedate;
     }
 
-    public void setDuedate(Date duedate) {
+    public void setDuedate(String duedate) {
         this.duedate = duedate;
     }
 
