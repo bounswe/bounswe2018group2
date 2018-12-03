@@ -94,7 +94,7 @@ public class JobDetailPage extends Fragment {
                 header.setText(data.getJob().getHeader());
                 description.setText(data.getJob().getDescription());
                 price.setText("$"+data.getJob().getPrice()+"");
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'");
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
                 Date date = new Date();
                 try {
                     date = format.parse(data.getJob().getDuedate());

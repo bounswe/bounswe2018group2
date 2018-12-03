@@ -49,17 +49,22 @@ public class JobAdapter extends ArrayAdapter {
         description.setText(currentNavigationItem.getDescription());
 
         TextView dueDate = (TextView) listItem.findViewById(R.id.dueDate);
+        boolean isError = false;
         if(currentNavigationItem.getDueDate()!=null){
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             Date date = new Date();
             try {
                 date = format.parse(currentNavigationItem.getDueDate());
             } catch (ParseException e) {
                 Log.e("JobDetail", "onFailure: " + e.toString() );
+                isError = true;
             }
-            String dateString = new SimpleDateFormat("dd/MM/yyyy",
-                    Locale.getDefault()).format(date);
-            dueDate.setText(dateString);
+            if(!isError){
+                String dateString = new SimpleDateFormat("dd/MM/yyyy",
+                        Locale.getDefault()).format(date);
+                dueDate.setText(dateString);
+            }
+
         }
 
         TextView price = (TextView) listItem.findViewById(R.id.price);
