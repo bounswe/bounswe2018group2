@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.workhub.R;
+import com.android.workhub.models.JobBidModel;
 import com.android.workhub.models.JobDetailModel;
 import com.android.workhub.models.JobDetailReturnModel;
 import com.android.workhub.models.SendNotificationModel;
@@ -43,9 +44,16 @@ public class JobDetailPage extends Fragment {
     Switch customButton;
     EditText customeMessage;
     TextView messageLabel;
+    EditText jobBidDescription;
+    EditText bidAmount;
+    Button biddingButton;
+
+
     private String token;
     private String message_type;
     private String descriptionNotification;
+
+
 
     private SharedPreferences sharedPreferences;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,6 +74,9 @@ public class JobDetailPage extends Fragment {
         notifyButton=mainView.findViewById(R.id.notifyButton);
         customeMessage=mainView.findViewById(R.id.customMessage);
         messageLabel =mainView.findViewById(R.id.customMessageLabel);
+        jobBidDescription = mainView.findViewById(R.id.jobBidDescription);
+        bidAmount = mainView.findViewById(R.id.bidAmount);
+        biddingButton = mainView.findViewById(R.id.jobBidButton);
         if(sharedPreferences.getString("email","").equals("")){
             customButton.setVisibility(View.GONE);
             notifyButton.setVisibility(View.GONE);
@@ -149,6 +160,28 @@ public class JobDetailPage extends Fragment {
                     @Override
                     public void onFailure(Exception e) {
                         Toast.makeText(getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+        biddingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                JobBidModel model = new JobBidModel();
+                model.setAmount(Integer.parseInt(bidAmount.getText().toString()));
+                model.setDescription(jobBidDescription.getText().toString());
+                model.setJob_id(job_id);
+                ServerCall.createJobBid(token, model, new WorkHubServiceListener<SimpleMessageModel>() {
+                    @Override
+                    public void onSuccess(SimpleMessageModel data) {
+                        Toast.makeText(getActivity().getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Toast.makeText(getActivity().getApplicationContext(), "Failed", Toast.LENGTH_SHORT).show();
+
                     }
                 });
             }

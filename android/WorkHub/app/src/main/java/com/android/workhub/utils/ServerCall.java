@@ -2,6 +2,7 @@ package com.android.workhub.utils;
 
 import com.android.workhub.models.GetAllJobsReturnModel;
 import com.android.workhub.models.GetSelfReturnModel;
+import com.android.workhub.models.JobBidModel;
 import com.android.workhub.models.JobDetailModel;
 import com.android.workhub.models.JobDetailReturnModel;
 import com.android.workhub.models.JobModel;
@@ -9,7 +10,9 @@ import com.android.workhub.models.LoginModel;
 import com.android.workhub.models.LoginReturnModel;
 import com.android.workhub.models.SendNotificationModel;
 import com.android.workhub.models.SimpleMessageModel;
+import com.android.workhub.models.UpdateJobBidModel;
 import com.android.workhub.models.UpdateProfileModel;
+import com.android.workhub.utils.Tasks.CreateJobBidTask;
 import com.android.workhub.utils.Tasks.CreateJobTask;
 import com.android.workhub.utils.Tasks.GetAllJobsTask;
 import com.android.workhub.utils.Tasks.GetSelfTask;
@@ -18,6 +21,7 @@ import com.android.workhub.utils.Tasks.LoginTask;
 import com.android.workhub.utils.Tasks.LogoutTask;
 import com.android.workhub.utils.Tasks.SendNotificationTask;
 import com.android.workhub.utils.Tasks.SignUpTask;
+import com.android.workhub.utils.Tasks.UpdateJobBidTask;
 import com.android.workhub.utils.Tasks.UpdateProfileTask;
 
 public class ServerCall {
@@ -67,6 +71,14 @@ public class ServerCall {
     }
     public static void updateProfile(String token, UpdateProfileModel model, final WorkHubServiceListener<SimpleMessageModel> listener){
         UpdateProfileTask task = new UpdateProfileTask(listener);
+        task.run(token,model);
+    }
+    public static void createJobBid(String token, JobBidModel model,final WorkHubServiceListener<SimpleMessageModel> listener){
+        CreateJobBidTask task =new CreateJobBidTask(listener);
+        task.run(token,model);
+    }
+    public static void updateJobBid(String token, UpdateJobBidModel model , final WorkHubServiceListener<SimpleMessageModel> listener){
+        UpdateJobBidTask task = new UpdateJobBidTask(listener);
         task.run(token,model);
     }
 }

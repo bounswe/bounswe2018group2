@@ -34,5 +34,9 @@ public class EndpointManager {
     public static String getNotificationUrl(){return SERVER_URL+"/message/sendnotification";}
 
     public static String getUpdateProfileUrl(){return SERVER_URL + "/user/updateprofile";}
+
+    public static String getCreateJobBidUrl() {return SERVER_URL +"/job/createbid";}
+
+    public static String getUpdateJobBidTaskUrl() {return SERVER_URL+"/job/updatebid"; }
 }
 
