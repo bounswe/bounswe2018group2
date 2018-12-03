@@ -7,21 +7,21 @@ public class UserModel {
     private String email;
     private String password;
     private String type;
-    private int profile_image_id;
+
     private String createdAt;
     private String updatedAt;
 
     public UserModel() {
     }
 
-    public UserModel(int id, String firstName, String lastName, String email, String password, String type, int profile_image_id, String createdAt, String updatedAt) {
+    public UserModel(int id, String firstName, String lastName, String email, String password, String type, String createdAt, String updatedAt) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.type = type;
-        this.profile_image_id = profile_image_id;
+
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -74,13 +74,6 @@ public class UserModel {
         this.type = type;
     }
 
-    public int getProfile_image_id() {
-        return profile_image_id;
-    }
-
-    public void setProfile_image_id(int profile_image_id) {
-        this.profile_image_id = profile_image_id;
-    }
 
     public String getCreatedAt() {
         return createdAt;

@@ -23,6 +23,7 @@ import com.android.workhub.fragments.JobsPage;
 import com.android.workhub.fragments.MainPage;
 import com.android.workhub.R;
 import com.android.workhub.fragments.ProfilePage;
+import com.android.workhub.models.GetSelfReturnModel;
 import com.android.workhub.models.SimpleMessageModel;
 import com.android.workhub.utils.ServerCall;
 import com.android.workhub.utils.WorkHubServiceListener;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     private String email;
     private String token;
+    private String type;
     AHBottomNavigation ahBottomNavigation;
 
     @Override
@@ -44,11 +46,20 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         email = sharedPreferences.getString("email","");
         token = sharedPreferences.getString("token","");
-        if(!sharedPreferences.getBoolean("rememberMe",false)){
-            sharedPreferences.edit()
-                    .remove("email")
-                    .remove("token")
-                    .apply();
+
+        if(!token.equals("")){
+            ServerCall.getSelf(token, new WorkHubServiceListener<GetSelfReturnModel>() {
+                @Override
+                public void onSuccess(GetSelfReturnModel data) {
+                    type=data.getType();
+                    sharedPreferences.edit().putString("type",type).apply();
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    Toast.makeText(MainActivity.this, "Check Your Connection", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
         // Toast.makeText(this, email, Toast.LENGTH_SHORT).show();
         ahBottomNavigation = findViewById(R.id.bottom_navigation);

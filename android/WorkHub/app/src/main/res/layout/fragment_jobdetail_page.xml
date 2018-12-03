@@ -201,6 +201,16 @@
                 app:layout_constraintStart_toEndOf="@+id/bidAmount"
                 app:layout_constraintTop_toBottomOf="@+id/jobBidDescription" />
 
+            <Button
+                android:id="@+id/seeAllBidsButton"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="See all bids"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/jobBidButton" />
+
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v4.widget.NestedScrollView>
