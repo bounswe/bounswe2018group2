@@ -57,7 +57,7 @@ public class CreateJobPage extends Fragment {
         myCalendar = Calendar.getInstance();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         token = sharedPreferences.getString("token","");
-        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'");
+        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
         final DatePickerDialog.OnDateSetListener dateTime = new DatePickerDialog.OnDateSetListener() {
 
@@ -127,7 +127,7 @@ public class CreateJobPage extends Fragment {
         return mainView;
     }
     private void updateLabel() {
-        String myFormat = "MM/dd/yy"; //In which you need put here
+        String myFormat = "dd/MM/yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         date.setText(sdf.format(myCalendar.getTime()));

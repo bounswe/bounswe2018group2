@@ -26,7 +26,7 @@ class HttpRequester<T> {
 
     public HttpRequester(String url) {
         this.url = url;
-        this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create();
+        this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
     }
 
     public T get(Class<T> clazz) throws IOException, ServerErrorException {
