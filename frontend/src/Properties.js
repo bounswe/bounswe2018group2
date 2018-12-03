@@ -8,7 +8,9 @@ const properties = {
         allJobs: `${baseURL}/job/getalljobs`,
         createJob: `${baseURL}/job/create`,
         jobDetail: `${baseURL}/job/details`,
-        createBid: `${baseURL}/job/createbid"`
+        jobBids: `${baseURL}/job/getallbids`,
+        createBid: `${baseURL}/job/createbid`,
+        acceptBid: `${baseURL}/job/acceptbid`
     }
 };
 
