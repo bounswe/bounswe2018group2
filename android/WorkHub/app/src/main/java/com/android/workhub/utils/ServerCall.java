@@ -1,5 +1,6 @@
 package com.android.workhub.utils;
 
+import com.android.workhub.models.GetAllBidsReturnModel;
 import com.android.workhub.models.GetAllJobsReturnModel;
 import com.android.workhub.models.GetSelfReturnModel;
 import com.android.workhub.models.JobBidModel;
@@ -14,6 +15,7 @@ import com.android.workhub.models.UpdateJobBidModel;
 import com.android.workhub.models.UpdateProfileModel;
 import com.android.workhub.utils.Tasks.CreateJobBidTask;
 import com.android.workhub.utils.Tasks.CreateJobTask;
+import com.android.workhub.utils.Tasks.GetAllBidsTask;
 import com.android.workhub.utils.Tasks.GetAllJobsTask;
 import com.android.workhub.utils.Tasks.GetSelfTask;
 import com.android.workhub.utils.Tasks.JobDetailTask;
@@ -80,5 +82,9 @@ public class ServerCall {
     public static void updateJobBid(String token, UpdateJobBidModel model , final WorkHubServiceListener<SimpleMessageModel> listener){
         UpdateJobBidTask task = new UpdateJobBidTask(listener);
         task.run(token,model);
+    }
+    public static void getAllBids(String token, int job_id, final WorkHubServiceListener<GetAllBidsReturnModel> listener){
+        GetAllBidsTask task = new GetAllBidsTask(job_id,listener);
+        task.run(token);
     }
 }

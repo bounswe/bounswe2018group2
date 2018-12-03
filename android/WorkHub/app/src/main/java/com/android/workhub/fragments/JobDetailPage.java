@@ -1,6 +1,8 @@
 package com.android.workhub.fragments;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -40,16 +42,24 @@ public class JobDetailPage extends Fragment {
     TextView due_date;
     TextView bidding_status;
     TextView duration;
+    //Notify
     Button notifyButton;
     Switch customButton;
     EditText customeMessage;
     TextView messageLabel;
+    //Bidding
     EditText jobBidDescription;
     EditText bidAmount;
     Button biddingButton;
+    TextView jobBidDescriptionLabel;
+    TextView amountLabel;
+
+    //see bids
+    Button seeAllBidsButton;
 
 
     private String token;
+    private String type;
     private String message_type;
     private String descriptionNotification;
 
@@ -61,6 +71,7 @@ public class JobDetailPage extends Fragment {
         mainView = inflater.inflate(R.layout.fragment_jobdetail_page, container, false);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         token = sharedPreferences.getString("token","");
+        type=sharedPreferences.getString("type","");
 
 
         job_id=getArguments().getInt("job_id");
@@ -77,12 +88,10 @@ public class JobDetailPage extends Fragment {
         jobBidDescription = mainView.findViewById(R.id.jobBidDescription);
         bidAmount = mainView.findViewById(R.id.bidAmount);
         biddingButton = mainView.findViewById(R.id.jobBidButton);
-        if(sharedPreferences.getString("email","").equals("")){
-            customButton.setVisibility(View.GONE);
-            notifyButton.setVisibility(View.GONE);
-            customeMessage.setVisibility(View.GONE);
-            messageLabel.setVisibility(View.GONE);
-        }
+        seeAllBidsButton = mainView.findViewById(R.id.seeAllBidsButton);
+        amountLabel =mainView.findViewById(R.id.textView11);
+        jobBidDescriptionLabel=mainView.findViewById(R.id.textView9);
+
 
         customButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +102,20 @@ public class JobDetailPage extends Fragment {
                 else{
                     customeMessage.setVisibility(View.GONE);
                 }
+
+            }
+        });
+        seeAllBidsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                Fragment fragment = (Fragment) new AllBidsPage();
+                Bundle bundle = new Bundle();
+                bundle.putInt("job_id",job_id);
+                fragment.setArguments(bundle);
+                transaction.replace(R.id.frame,fragment);
+                transaction.commit();
 
             }
         });
@@ -186,6 +209,57 @@ public class JobDetailPage extends Fragment {
                 });
             }
         });
+
+        //for guest user
+        if(sharedPreferences.getString("token","").equals("")){
+            customButton.setVisibility(View.GONE);
+            notifyButton.setVisibility(View.GONE);
+            customeMessage.setVisibility(View.GONE);
+            messageLabel.setVisibility(View.GONE);
+            notifyButton.setVisibility(View.GONE);
+            customButton.setVisibility(View.GONE);
+            customeMessage.setVisibility(View.GONE);
+            messageLabel.setVisibility(View.GONE);
+
+            jobBidDescription.setVisibility(View.GONE);
+            bidAmount.setVisibility(View.GONE);
+            biddingButton.setVisibility(View.GONE);
+            jobBidDescriptionLabel.setVisibility(View.GONE);
+            amountLabel.setVisibility(View.GONE);
+
+        }
+        else{
+            if(type.equals("client")){
+                jobBidDescription.setVisibility(View.GONE);
+                bidAmount.setVisibility(View.GONE);
+                biddingButton.setVisibility(View.GONE);
+                jobBidDescriptionLabel.setVisibility(View.GONE);
+                amountLabel.setVisibility(View.GONE);
+            }
+            //for freelance
+            else {
+                seeAllBidsButton.setVisibility(View.INVISIBLE);
+            }
+
+
+
+        }
+
+
+/*
+        //Notify
+        Button notifyButton;
+        Switch customButton;
+        EditText customeMessage;
+        TextView messageLabel;
+        //Bidding
+        EditText jobBidDescription;
+        EditText bidAmount;
+        Button biddingButton;
+        TextView jobBidDescriptionLabel;
+        TextView amountLabel;
+        */
+
 
         return mainView;
     }
