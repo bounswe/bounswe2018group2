@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.android.workhub.fragments.JobsPage;
 import com.android.workhub.fragments.MainPage;
 import com.android.workhub.R;
 import com.android.workhub.fragments.ProfilePage;
@@ -54,10 +55,11 @@ public class MainActivity extends AppCompatActivity {
 
         AHBottomNavigationItem item1 = new AHBottomNavigationItem("Main Page", R.drawable.ic_main);
         AHBottomNavigationItem item2 = new AHBottomNavigationItem("Profile", R.drawable.ic_profile);
+        AHBottomNavigationItem item3 = new AHBottomNavigationItem("Jobs",R.drawable.job);
 
         ahBottomNavigation.addItem(item1);
         ahBottomNavigation.addItem(item2);
-
+        ahBottomNavigation.addItem(item3);
         ahBottomNavigation.setDefaultBackgroundColor(Color.parseColor("#16f5e5"));
         ahBottomNavigation.setAccentColor(Color.parseColor("#8d2cc3"));
 
@@ -82,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
                     case 1:
                         goToProfilePage();
 
+                        break;
+                    case 2:
+                        goToJobsPage();
                         break;
                 }
                 return true;
@@ -182,6 +187,15 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString("email",email);
         fragment.setArguments(bundle);
+        transaction.replace(R.id.frame,fragment);
+        transaction.commit();
+    }
+
+    private void goToJobsPage(){
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        Fragment fragment = (Fragment) new JobsPage(); //burayı değiştir
+
         transaction.replace(R.id.frame,fragment);
         transaction.commit();
     }

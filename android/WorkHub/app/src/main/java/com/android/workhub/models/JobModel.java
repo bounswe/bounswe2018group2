@@ -3,7 +3,7 @@ package com.android.workhub.models;
 public class JobModel{
 
     private int id;
-    private int clientId;
+    private int client_id;
     private String header;
     private String description;
     private String duedate;
@@ -21,7 +21,7 @@ public class JobModel{
 
     public JobModel(int id, int clientId, String header, String description, String dueDate, int price, int[] categories, int duration, String bidding_status, String createdAt, String updatedAt) {
         this.id = id;
-        this.clientId = clientId;
+        this.client_id = clientId;
         this.header = header;
         this.description = description;
         this.duedate = dueDate;
@@ -98,11 +98,11 @@ public class JobModel{
     }
 
     public int getClientId() {
-        return clientId;
+        return client_id;
     }
 
     public void setClientId(int clientId) {
-        this.clientId = clientId;
+        this.client_id = clientId;
     }
 
     public String getCreatedAt() {
