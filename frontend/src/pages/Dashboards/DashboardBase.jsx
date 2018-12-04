@@ -70,10 +70,10 @@ const JobCard = props => {
                                 Article Writing
                             </Badge>{" "}
                             <Badge isSolid color="yellow">
-                                Finansal Araştırma
+                                Web development
                             </Badge>{" "}
                             <Badge isSolid color="orange">
-                                Grafik Tasarımı
+                                Javascript
                             </Badge>{" "}
                             <Badge isSolid color="purple">
                                 HTML
@@ -168,7 +168,7 @@ class DashboardBase extends React.Component {
                                                 key={job.id}
                                                 jobId={job.id}
                                                 title={job.header}
-                                                description={job.decription}
+                                                description={job.description}
                                                 createdDate={
                                                     new Date(job.createdAt)
                                                 }
