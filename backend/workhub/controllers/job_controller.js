@@ -9,6 +9,7 @@ const Sessions = db.Sessions;
 const Profile = db.Profile;
 const Job_biddings = db.Job_biddings;
 const Notifs = db.Notifications;
+const Freelancer_job = db.Freelancer_job;
 
 /**
  * @api {post} /job/create Create Job
@@ -332,6 +333,19 @@ exports.accept_bid = async function(req, res) {
         });
         return;
     });
+
+    //TO DO : ADD START AND END DATES
+    try{
+        const free_job = await Freelancer_job.create({
+            user_id: bid.freelancer_id,
+            job_id: bid.job_id
+        });
+    }catch(e){
+        res.status(400).send({
+            msg: "Could not create a freelancer/job association",
+            additionalMsg: e.message
+        });
+    }
 
     try{
         const bidres = await bid.updateAttributes({status: "accepted"});
