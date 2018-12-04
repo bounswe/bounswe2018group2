@@ -62,6 +62,10 @@ public class JobDetailPage extends Fragment {
     private String type;
     private String message_type;
     private String descriptionNotification;
+    private boolean isMine;
+    private boolean isBiddingOpen;
+
+    TextView clientName;
 
 
 
@@ -72,8 +76,10 @@ public class JobDetailPage extends Fragment {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         token = sharedPreferences.getString("token","");
         type=sharedPreferences.getString("type","");
+        isMine = getArguments().getBoolean("isMine");
 
 
+        clientName=mainView.findViewById(R.id.clientName);
         job_id=getArguments().getInt("job_id");
         description=mainView.findViewById(R.id.description);
         price=mainView.findViewById(R.id.price);
@@ -91,6 +97,11 @@ public class JobDetailPage extends Fragment {
         seeAllBidsButton = mainView.findViewById(R.id.seeAllBidsButton);
         amountLabel =mainView.findViewById(R.id.textView11);
         jobBidDescriptionLabel=mainView.findViewById(R.id.textView9);
+
+
+        if(!isMine){
+            seeAllBidsButton.setVisibility(View.GONE);
+        }
 
 
         customButton.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +137,7 @@ public class JobDetailPage extends Fragment {
             @Override
             public void onSuccess(JobDetailReturnModel data) {
                 header.setText(data.getJob().getHeader());
+                clientName.setText(data.getJob().getClient().getFirstName()+" "+data.getJob().getClient().getLastName());
                 description.setText(data.getJob().getDescription());
                 price.setText("$"+data.getJob().getPrice()+"");
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -142,10 +154,12 @@ public class JobDetailPage extends Fragment {
                 if(data.getJob().getBidding_status().equals("open")){
                     bidding_status.setText("open");
                     bidding_status.setTextColor(Color.GREEN);
+                    isBiddingOpen = true;
                 }
                 else{
                     bidding_status.setText("closed");
                     bidding_status.setTextColor(Color.RED);
+                    isBiddingOpen = false;
                 }
 
 
@@ -239,6 +253,13 @@ public class JobDetailPage extends Fragment {
             //for freelance
             else {
                 seeAllBidsButton.setVisibility(View.INVISIBLE);
+                if(!isBiddingOpen){
+                    jobBidDescription.setVisibility(View.GONE);
+                    bidAmount.setVisibility(View.GONE);
+                    biddingButton.setVisibility(View.GONE);
+                    jobBidDescriptionLabel.setVisibility(View.GONE);
+                    amountLabel.setVisibility(View.GONE);
+                }
             }
 
 

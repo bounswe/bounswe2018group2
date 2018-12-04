@@ -46,8 +46,11 @@ public class AllBidsPage extends Fragment {
             @Override
             public void onSuccess(GetAllBidsReturnModel data) {
                 for(BidModel bid:data.getBids()){
-                    bidList.add(bid);
-                    bidAdapter.notifyDataSetChanged();
+                    if(bid.getStatus().equals("waiting")){
+                        bidList.add(bid);
+                        bidAdapter.notifyDataSetChanged();
+                    }
+
                 }
             }
 
