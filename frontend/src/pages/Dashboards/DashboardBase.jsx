@@ -152,11 +152,11 @@ class DashboardBase extends React.Component {
                             width="100%"
                         />
                         <Heading marginTop={30} size={800}>
-                            Suggested Jobs
+                            {this.props.userType === "client" ? `All Jobs` : `Suggested Jobs`}
                         </Heading>
                         <Paragraph marginTop={4} size={400}>
-                            Curated with your old projects and preferences in
-                            mind.
+                            {this.props.userType !== "client" && `Curated with your old projects and preferences in
+                            mind.`}
                         </Paragraph>
                         <Pane marginTop={16}>
                             {!this.state.jobsLoading &&

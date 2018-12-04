@@ -1,5 +1,5 @@
 import React from "react";
-import { Pane, Paragraph, Heading, Strong, Badge, Spinner } from "evergreen-ui";
+import { Pane, Paragraph, Heading, Strong, Spinner } from "evergreen-ui";
 
 const options = { year: "numeric", month: "long", day: "numeric" };
 const dateFormatter = new Intl.DateTimeFormat("en-EN", options);
@@ -38,7 +38,7 @@ class JobDetailBody extends React.Component {
                     )}
                 </Paragraph>
                 <Paragraph marginTop="5px">
-                    <Badge isSolid color="green">
+                    {/* <Badge isSolid color="green">
                         Article Writing
                     </Badge>{" "}
                     <Badge isSolid color="yellow">
@@ -49,7 +49,7 @@ class JobDetailBody extends React.Component {
                     </Badge>{" "}
                     <Badge isSolid color="purple">
                         HTML
-                    </Badge>
+                    </Badge> */}
                 </Paragraph>
             </Pane>
         );
