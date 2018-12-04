@@ -24,7 +24,7 @@ const JobCard = props => {
         title,
         description,
         createdDate,
-        bidNumber,
+        // bidNumber,
         /* categories, */
         price,
         clientName
@@ -50,8 +50,8 @@ const JobCard = props => {
                         <Pane display="flex" alignItems="center">
                             <Icon icon="time" color="default" />{" "}
                             <Text marginLeft={5}>
-                                Opened at {dateFormatter.format(createdDate)} –{" "}
-                                {bidNumber} bid
+                                Opened at {dateFormatter.format(createdDate)}
+                                {/* {bidNumber} bid */}
                             </Text>
                         </Pane>
                         <Pane display="flex" alignItems="center">
