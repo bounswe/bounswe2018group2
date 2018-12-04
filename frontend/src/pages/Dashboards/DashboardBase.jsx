@@ -125,6 +125,7 @@ class DashboardBase extends React.Component {
                 <Pane
                     display="flex"
                     height="auto"
+                    minHeight="100%"
                     background="tint1"
                     paddingY={30}
                     margin={5}>
