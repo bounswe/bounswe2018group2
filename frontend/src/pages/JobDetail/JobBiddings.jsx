@@ -116,7 +116,7 @@ class JobBiddings extends React.Component {
                             !bidsLoading && (
                                 <Paragraph>
                                     How hard is this job? No one made a bid
-                                    yet... 😅
+                                    yet... <span role="img" aria-label="sweat smile">😅</span>
                                 </Paragraph>
                             )}
                         {bidsLoading && <Spinner />}
