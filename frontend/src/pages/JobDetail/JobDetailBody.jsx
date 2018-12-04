@@ -14,7 +14,7 @@ class JobDetailBody extends React.Component {
                 </Pane>
             );
         }
-
+        const dueTime = typeof job.duedate === "string" ? new Date(job.duedate) : job.duedate;
         return (
             <Pane overflowY="auto">
                 <Heading size={600}>{job.header}</Heading>
@@ -33,7 +33,7 @@ class JobDetailBody extends React.Component {
                     {job.duedate && (
                         <>
                             Due date:{" "}
-                            <Strong>{dateFormatter.format(job.duedate)}</Strong>
+                            <Strong>{dateFormatter.format(dueTime)}</Strong>
                         </>
                     )}
                 </Paragraph>
