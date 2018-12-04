@@ -83,6 +83,7 @@ public class JobsPage extends Fragment {
 
                 Bundle bundle = new Bundle();
                 bundle.putInt("job_id", jobList.get(i).getId());
+                bundle.putBoolean("isMine",true);
 
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();

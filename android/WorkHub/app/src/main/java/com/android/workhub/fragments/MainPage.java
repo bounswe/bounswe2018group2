@@ -46,6 +46,8 @@ public class MainPage extends Fragment {
     SharedPreferences sharedPreferences;
     private String email;
     private TextView guestView;
+    private int id;
+    private String type;
 
     FloatingActionButton addJobButton;
     @Override
@@ -56,7 +58,8 @@ public class MainPage extends Fragment {
         guestView = mainView.findViewById(R.id.guestText);
         email = sharedPreferences.getString("email","");
         addJobButton = mainView.findViewById(R.id.button_add_job);
-
+        id = sharedPreferences.getInt("id",0);
+        type = sharedPreferences.getString("type","");
         if(email == null || email.equals("")){
             guestView.setText("You are signed as a guest");
             addJobButton.setVisibility(View.GONE);
@@ -99,7 +102,9 @@ public class MainPage extends Fragment {
 
                 Bundle bundle = new Bundle();
                 bundle.putInt("job_id", jobList.get(i).getId());
-
+                if(jobList.get(i).getClientId()==id &&type.equals("client") ){
+                    bundle.putBoolean("isMine",true);
+                }
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
                 Fragment fragment = (Fragment) new JobDetailPage();
