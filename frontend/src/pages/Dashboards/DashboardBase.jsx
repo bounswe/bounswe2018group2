@@ -124,7 +124,7 @@ class DashboardBase extends React.Component {
                 <HeaderBar userType={this.props.userType} />
                 <Pane
                     display="flex"
-                    height="100%"
+                    height="auto"
                     background="tint1"
                     paddingY={30}
                     margin={5}>
