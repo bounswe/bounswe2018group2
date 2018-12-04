@@ -1,12 +1,19 @@
 import React from "react";
-import imgclient from "./images.jpg";
-import StarRatingComponent from "react-star-rating-component";
-import { Pane, Text } from "evergreen-ui";
+import imgclient from "./default-user.png";
+import { Pane, Text, Spinner } from "evergreen-ui";
 import { Link } from "react-router-dom";
 import "./style.css";
 
 class JobDetailUser extends React.Component {
     render() {
+        if (!this.props.user) {
+            return (
+                <Pane display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+                    <Spinner/>
+                </Pane>
+            )
+        }
+
         return (
             <Pane display="flex" justifyContent="center" flexDirection="column">
                 <img
@@ -14,18 +21,9 @@ class JobDetailUser extends React.Component {
                     alt="Profile"
                     height={180}
                     width={160}
-                    class="border"
                 />
-                <Pane>
-                    <StarRatingComponent
-                        name="Rating"
-                        editing={false}
-                        starCount={5}
-                        value={4}
-                    />
-                </Pane>
-                <Text fontWeight="bold" src="/profile">
-                    <Link to={"/profile/1"}>Elenore Deren Yıldız</Link>
+                <Text fontWeight="bold" src="/profile" marginTop="5px">
+                    <Link to={"/profile/1"}>{this.props.user.firstName + " " + this.props.user.lastName}</Link>
                 </Text>
             </Pane>
         );
