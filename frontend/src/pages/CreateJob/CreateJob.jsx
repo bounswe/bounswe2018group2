@@ -19,15 +19,15 @@ const dateFormatter = new Intl.DateTimeFormat("en-US");
 
 const categories = [
     {
-        name: "Apple",
+        name: "Product Design",
         value: 0
     },
     {
-        name: "Orange",
+        name: "Website development",
         value: 1
     },
     {
-        name: "Camiryo",
+        name: "Android development",
         value: 2
     }
 ];

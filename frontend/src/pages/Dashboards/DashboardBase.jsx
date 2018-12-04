@@ -119,7 +119,6 @@ class DashboardBase extends React.Component {
     }
 
     render() {
-        console.log("this.props.jobs", this.state.jobs);
         return (
             <Pane background="tint1" width="100%" height="100%">
                 <HeaderBar userType={this.props.userType} />
