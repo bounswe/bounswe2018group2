@@ -61,6 +61,7 @@ class JobDetailPresentation extends React.Component {
                                     bidsLoading={this.props.bidsLoading}
                                     bids={this.props.bids}
                                     canAcceptBid={this.props.canAcceptBid}
+                                    canCreateBid={this.props.canCreateBid}
                                     onAcceptBidClick={
                                         this.props.onAcceptBidClick
                                     }

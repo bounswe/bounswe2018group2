@@ -10,6 +10,7 @@ class JobDetail extends React.Component {
 
         this.state = {
             canAcceptBid: false,
+            canCreateBid: false,
             jobDetail: null,
             bids: [],
             bidsLoading: true,
@@ -31,7 +32,8 @@ class JobDetail extends React.Component {
             .then(body => {
                 this.setState({
                     jobDetail: body.job,
-                    canAcceptBid: body.job.Client.id === window.user.id
+                    canAcceptBid: body.job.Client.id === window.user.id,
+                    canCreateBid: window.user.type === "freelancer"
                 });
             })
             .catch(err => {
@@ -106,6 +108,7 @@ class JobDetail extends React.Component {
                 <JobDetailPresentation
                     job={this.state.jobDetail}
                     canAcceptBid={this.state.canAcceptBid}
+                    canCreateBid={this.state.canCreateBid}
                     onAcceptBidClick={this.handleAcceptBidClick}
                     bidsLoading={this.state.bidsLoading}
                     bids={this.state.bids}

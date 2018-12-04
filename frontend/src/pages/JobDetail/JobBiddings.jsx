@@ -67,6 +67,7 @@ class JobBiddings extends React.Component {
             bids,
             bidsLoading,
             canAcceptBid,
+            canCreateBid,
             onAcceptBidClick
         } = this.props;
         const processedBids = bids.concat(this.state.addedBids);
@@ -79,7 +80,7 @@ class JobBiddings extends React.Component {
                     display="flex">
                     <Pane display="flex" alignItems="center">
                         <Heading size={600}>Biddings</Heading>
-                        {!canAcceptBid && (
+                        {!canAcceptBid && canCreateBid && (
                             <Button
                                 marginLeft="10px"
                                 height={24}
