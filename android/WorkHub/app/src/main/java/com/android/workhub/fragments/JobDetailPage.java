@@ -65,6 +65,8 @@ public class JobDetailPage extends Fragment {
     private boolean isMine;
     private boolean isBiddingOpen;
 
+    TextView clientName;
+
 
 
     private SharedPreferences sharedPreferences;
@@ -77,7 +79,7 @@ public class JobDetailPage extends Fragment {
         isMine = getArguments().getBoolean("isMine");
 
 
-
+        clientName=mainView.findViewById(R.id.clientName);
         job_id=getArguments().getInt("job_id");
         description=mainView.findViewById(R.id.description);
         price=mainView.findViewById(R.id.price);
@@ -135,6 +137,7 @@ public class JobDetailPage extends Fragment {
             @Override
             public void onSuccess(JobDetailReturnModel data) {
                 header.setText(data.getJob().getHeader());
+                clientName.setText(data.getJob().getClient().getFirstName()+" "+data.getJob().getClient().getLastName());
                 description.setText(data.getJob().getDescription());
                 price.setText("$"+data.getJob().getPrice()+"");
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
