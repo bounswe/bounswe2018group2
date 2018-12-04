@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private String token;
     private String type;
     AHBottomNavigation ahBottomNavigation;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(GetSelfReturnModel data) {
                     type=data.getType();
-                    sharedPreferences.edit().putString("type",type).apply();
+                    id = data.getId();
+                    sharedPreferences.edit().putString("type",type).putInt("id",id).apply();
                 }
 
                 @Override
@@ -80,7 +82,8 @@ public class MainActivity extends AppCompatActivity {
         ahBottomNavigation.setCurrentItem(0);
         ahBottomNavigation.setNotificationBackgroundColor(Color.parseColor("#F63D2B"));
 
-        ahBottomNavigation.setNotification("1", 1);
+        //ahBottomNavigation.setNotification("1", 1);
+        //todo
 
         ahBottomNavigation.setItemDisableColor(Color.parseColor("#3A000000"));
 

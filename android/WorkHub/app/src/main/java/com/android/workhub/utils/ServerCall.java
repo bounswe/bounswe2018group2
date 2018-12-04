@@ -9,10 +9,12 @@ import com.android.workhub.models.JobDetailReturnModel;
 import com.android.workhub.models.JobModel;
 import com.android.workhub.models.LoginModel;
 import com.android.workhub.models.LoginReturnModel;
+import com.android.workhub.models.PostBidModel;
 import com.android.workhub.models.SendNotificationModel;
 import com.android.workhub.models.SimpleMessageModel;
 import com.android.workhub.models.UpdateJobBidModel;
 import com.android.workhub.models.UpdateProfileModel;
+import com.android.workhub.utils.Tasks.AcceptBidTask;
 import com.android.workhub.utils.Tasks.CreateJobBidTask;
 import com.android.workhub.utils.Tasks.CreateJobTask;
 import com.android.workhub.utils.Tasks.GetAllBidsTask;
@@ -21,6 +23,7 @@ import com.android.workhub.utils.Tasks.GetSelfTask;
 import com.android.workhub.utils.Tasks.JobDetailTask;
 import com.android.workhub.utils.Tasks.LoginTask;
 import com.android.workhub.utils.Tasks.LogoutTask;
+import com.android.workhub.utils.Tasks.RejectBidTask;
 import com.android.workhub.utils.Tasks.SendNotificationTask;
 import com.android.workhub.utils.Tasks.SignUpTask;
 import com.android.workhub.utils.Tasks.UpdateJobBidTask;
@@ -86,5 +89,13 @@ public class ServerCall {
     public static void getAllBids(String token, int job_id, final WorkHubServiceListener<GetAllBidsReturnModel> listener){
         GetAllBidsTask task = new GetAllBidsTask(job_id,listener);
         task.run(token);
+    }
+    public static void acceptBid(String token, PostBidModel model, final WorkHubServiceListener<SimpleMessageModel> listener){
+        AcceptBidTask task = new AcceptBidTask(listener);
+        task.run(token,model);
+    }
+    public static void rejectBid(String token, PostBidModel model, final WorkHubServiceListener<SimpleMessageModel> listener){
+        RejectBidTask task = new RejectBidTask(listener);
+        task.run(token,model);
     }
 }
