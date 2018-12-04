@@ -15,15 +15,15 @@ class JobDetailUser extends React.Component {
         }
 
         return (
-            <Pane display="flex" justifyContent="center" flexDirection="column">
+            <Pane display="flex" justifyContent="center" flexDirection="column" alignItems="center">
                 <img
                     src={imgclient}
                     alt="Profile"
                     height={180}
                     width={160}
                 />
-                <Text fontWeight="bold" src="/profile" marginTop="5px">
-                    <Link to={"/profile/1"}>{this.props.user.firstName + " " + this.props.user.lastName}</Link>
+                <Text fontWeight="bold" size={600} src="/profile" marginTop="5px">
+                    <Link to={"/profile/" + this.props.user.id}>{this.props.user.firstName + " " + this.props.user.lastName}</Link>
                 </Text>
             </Pane>
         );
