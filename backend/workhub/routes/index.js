@@ -3,6 +3,7 @@ const router = express.Router();
 const user = require("../controllers/user_controller.js");
 const job = require("../controllers/job_controller.js");
 const notif = require("../controllers/notification_controller.js");
+const media = require("../controllers/media_controller");
 const { auth } = require("../middleware");
 const path = require("path");
 /* GET home page. */
@@ -35,5 +36,6 @@ router.post("/job/rejectbid", auth, job.reject_bid);
 router.get("/job/getallbids/:jobId", auth, job.getAllBids);
 
 router.post("/message/sendnotification", auth, notif.create);
+router.post("/media/upload", media.uploadFile);
 
 module.exports = router;
