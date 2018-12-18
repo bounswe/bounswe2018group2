@@ -14,6 +14,7 @@ import { cropText } from "../../utils";
 import { Link } from "react-router-dom";
 import { doGetAllJobs } from "../../data/api";
 import HeaderBar from "../../components/HeaderBar";
+import FilterPane from "./FilterPane";
 
 const options = { year: "numeric", month: "long", day: "numeric" };
 const dateFormatter = new Intl.DateTimeFormat("en-EN", options);
@@ -129,15 +130,7 @@ class DashboardBase extends React.Component {
                     background="tint1"
                     paddingY={30}
                     margin={5}>
-                    <Pane
-                        flex="1"
-                        background="white"
-                        marginLeft={40}
-                        paddingTop={30}
-                        padding={20}
-                        border="default">
-                        <Heading size={400}>Filter</Heading>
-                    </Pane>
+                    <FilterPane/>
                     <Pane
                         flex="3"
                         background="white"
@@ -145,7 +138,8 @@ class DashboardBase extends React.Component {
                         height="100%"
                         padding={30}
                         marginLeft={20}
-                        marginRight={40}>
+                        marginRight={40}
+                        style={{ flexBasis: "75%" }}>
                         <SearchInput
                             placeholder="Search projects"
                             marginTop={10}
