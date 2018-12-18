@@ -6,12 +6,20 @@ class FilterPane extends React.Component {
     constructor(props) {
         super(props);
 
+        const {
+            category,
+            minPrice,
+            maxPrice,
+            minDuration,
+            maxDuration
+        } = props;
+
         this.state = {
-            category: "",
-            minPrice: "",
-            maxPrice: "",
-            minDuration: "",
-            maxDuration: ""
+            category,
+            minPrice,
+            maxPrice,
+            minDuration,
+            maxDuration
         };
     }
 
@@ -24,7 +32,7 @@ class FilterPane extends React.Component {
             maxDuration
         } = this.props;
 
-        const hasFilterApplied = category || minPrice || maxPrice || !!minDuration || !!maxDuration;
+        const hasFilterApplied = category || !!minPrice || !!maxPrice || !!minDuration || !!maxDuration;
         return (
             <Pane
                 flex="1"
@@ -38,9 +46,9 @@ class FilterPane extends React.Component {
                 {hasFilterApplied && (
                     <Pane marginTop={30}>
                         <Heading size={400}>Applied filters</Heading>
-                        <Paragraph>∙ Category: {category}</Paragraph>
-                        <Paragraph>∙ Price range: {minPrice}₺ - {maxPrice}₺</Paragraph>
-                        <Paragraph>∙ Est. Duration Range: {minDuration} - {maxDuration} days</Paragraph>
+                        {category && <Paragraph>∙ Category: {category}</Paragraph>}
+                        {(!!minPrice || !!maxPrice) && <Paragraph>∙ Price range: {minPrice || 0}₺ - {maxPrice || "∞"}₺</Paragraph>}
+                        {(!!minDuration || !!maxDuration) && <Paragraph>∙ Est. Duration Range: {minDuration || 0} - {maxDuration || "∞"} days</Paragraph>}
                     </Pane>
                 )}
                 <Pane marginTop={30}>
@@ -70,7 +78,7 @@ class FilterPane extends React.Component {
                         <TextInput placeholder="max days" type="number" width="auto" value={this.state.maxDuration} onChange={e => this.setState({ maxDuration: e.target.value })}/>
                     </Pane>
                 </Pane>
-                <Button marginTop={30} width="100%" appearance="primary" intent="success" onClick={() => console.log(this.state)}>Apply filter</Button>
+                <Button marginTop={30} width="100%" appearance="primary" intent="success" onClick={() => this.props.onApplyFilter(this.state)}>Apply filter</Button>
             </Pane>
         );
     }

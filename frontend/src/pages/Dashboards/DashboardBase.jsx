@@ -99,8 +99,23 @@ class DashboardBase extends React.Component {
         this.state = {
             jobs: [],
             errMessage: "",
-            jobsLoading: true
+            jobsLoading: true,
+            filter: {
+                category: "",
+                minPrice: "",
+                maxPrice: "",
+                minDuration: "",
+                maxDuration: ""
+            }
         };
+
+        this.handleApplyFilter = this.handleApplyFilter.bind(this);
+    }
+
+    handleApplyFilter(filter) {
+        this.setState({
+            filter
+        });
     }
 
     componentDidMount() {
@@ -130,7 +145,7 @@ class DashboardBase extends React.Component {
                     background="tint1"
                     paddingY={30}
                     margin={5}>
-                    <FilterPane/>
+                    <FilterPane {...this.state.filter} onApplyFilter={this.handleApplyFilter}/>
                     <Pane
                         flex="3"
                         background="white"
