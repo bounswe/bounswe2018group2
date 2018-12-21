@@ -544,13 +544,13 @@ exports.request_update = async function(req, res) {
                 msg: "This job is not created by this client"
             });
         }
-        var job_update_array = {
+        const job_update_array = {
             job_id: job_id,
             user_id: user_id,
             type: "request"
         };
         try {
-            const job_update = await Job_biddings.create(job_update_array);
+            const job_update = await Job_update.create(job_update_array);
             //TODO Notifications to freelancer
             //TODO Testing
             res.status(200).send({
@@ -560,6 +560,52 @@ exports.request_update = async function(req, res) {
         } catch (e) {
             res.status(400).send({
                 msg: "Could not create new request",
+                additionalMsg: e.message
+            });
+        }
+    }
+};
+
+/**
+ * @api {post} /job/createupdate If freelancer wants to create a milestone or completion,
+ * @apiName RequestUpdate
+ * @apiGroup Job
+ * @apiParam {Integer} job_id Mandatory
+ * @apiParam {String} type "milestone" or "completion"
+ * @apiSuccess {String} msg Success message.
+ */
+exports.create_update = async function(req, res) {
+    const { job_id, type } = req.body;
+    if (req.user.type !== "freelancer") {
+        res.status(400).send({
+            msg: "User's type is not freelancer."
+        });
+    } else {
+        const user_id = req.user.id;
+        const freelancer_job = await Freelancer_job.findOne({
+            where: { job_id: job_id, user_id: user_id }
+        });
+        if (freelancer_job.user_id !== user_id) {
+            res.status(400).send({
+                msg: "This job is not assigned to this freelancer."
+            });
+        }
+        const job_update_array = {
+            job_id: job_id,
+            user_id: user_id,
+            type: type
+        };
+        try {
+            const job_update = await Job_update.create(job_update_array);
+            //TODO Notifications to client
+            //TODO Testing
+            res.status(200).send({
+                msg: type + " is successfully created",
+                id: job_update.id
+            });
+        } catch (e) {
+            res.status(400).send({
+                msg: "Could not create the update",
                 additionalMsg: e.message
             });
         }
