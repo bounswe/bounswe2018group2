@@ -10,7 +10,15 @@ module.exports = (sequelize, DataTypes) => {
         {}
     );
     Job_update.associate = function(models) {
-        // associations can be defined here
+        Job_update.belongsTo(models.User, {
+            foreignKey: "user_id",
+            targetKey: "id"
+        });
+        Job_update.belongsTo(models.Job, {
+            foreignKey: "job_id",
+            as: "Job",
+            targetKey: "id"
+        });
     };
     return Job_update;
 };
