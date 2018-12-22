@@ -522,7 +522,7 @@ exports.deleteJob = async function(req, res) {
 };
 
 /**
- * @api {post} /job/requestupdate If client wants an update on the job, use this request
+ * @api {post} /job/requestupdate  Request Update -> If client wants an update on the job, use this request
  * @apiName RequestUpdate
  * @apiGroup Job
  * @apiParam {Integer} job_id Mandatory
@@ -567,8 +567,8 @@ exports.request_update = async function(req, res) {
 };
 
 /**
- * @api {post} /job/createupdate If freelancer wants to create a milestone or completion,
- * @apiName RequestUpdate
+ * @api {post} /job/createupdate  Create Update -> If freelancer wants to create a milestone or completion,
+ * @apiName CreateUpdate
  * @apiGroup Job
  * @apiParam {Integer} job_id Mandatory
  * @apiParam {String} type "milestone" or "completion"
