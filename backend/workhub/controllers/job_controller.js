@@ -10,6 +10,7 @@ const Profile = db.Profile;
 const Job_biddings = db.Job_biddings;
 const Notifs = db.Notifications;
 const Freelancer_job = db.Freelancer_job;
+const Job_update = db.Job_updates;
 
 /**
  * @api {post} /job/create Create Job
@@ -84,7 +85,7 @@ exports.create = function(req, res) {
 exports.getAllJobs = function(req, res) {
     Job.findAll({
         include: [{ model: User, as: "Client", required: true }],
-        order: [['updatedAt','DESC']]
+        order: [["updatedAt", "DESC"]]
     }).then(jobs => {
         res.status(200).send({
             msg: "Got ALL jobs. Every single one. Goddamn.",
@@ -140,7 +141,7 @@ exports.create_bid = async function(req, res) {
     } else {
         const job = await Job.findOne({
             where: { id: job_id }
-        })
+        });
         if (!job) {
             res.status(400).send({
                 msg: "Invalid job_id."
@@ -169,24 +170,29 @@ exports.create_bid = async function(req, res) {
                 status: "waiting"
             };
         }
-        try{
+        try {
             const bid = await Job_biddings.create(bidding_array);
             const fName = `${req.user.firstName} ${req.user.lastName}`;
             const jName = job.header;
-            const notifresult = await createNotification(fName, jName, job_id, req.user.id, job.client_id, "bid_get");
+            const notifresult = await createNotification(
+                fName,
+                jName,
+                job_id,
+                req.user.id,
+                job.client_id,
+                "bid_get"
+            );
 
             res.status(200).send({
                 msg: "Bid is successfully created",
                 id: bid.id
             });
-        }catch (e){
+        } catch (e) {
             res.status(400).send({
                 msg: "Could not create new bid",
                 additionalMsg: e.message
             });
         }
-
-
     }
 };
 
@@ -335,29 +341,36 @@ exports.accept_bid = async function(req, res) {
     });
 
     //TO DO : ADD START AND END DATES
-    try{
+    try {
         const free_job = await Freelancer_job.create({
             user_id: bid.freelancer_id,
             job_id: bid.job_id
         });
-    }catch(e){
+    } catch (e) {
         res.status(400).send({
             msg: "Could not create a freelancer/job association",
             additionalMsg: e.message
         });
     }
 
-    try{
-        const bidres = await bid.updateAttributes({status: "accepted"});
+    try {
+        const bidres = await bid.updateAttributes({ status: "accepted" });
         const fName = `${req.user.firstName} ${req.user.lastName}`;
         const jName = job.header;
-        const notifresult = await createNotification(fName, jName, bid.job_id, req.user.id, bid.freelancer_id, "bid_accept");
+        const notifresult = await createNotification(
+            fName,
+            jName,
+            bid.job_id,
+            req.user.id,
+            bid.freelancer_id,
+            "bid_accept"
+        );
 
         res.status(200).send({
             msg: "Bid is successfully accepted",
             id: bid.id
         });
-    }catch(e){
+    } catch (e) {
         res.status(400).send({
             msg: "Could not accept the bid",
             additionalMsg: e.message
@@ -394,17 +407,24 @@ exports.reject_bid = async function(req, res) {
         });
         return;
     }
-    try{
-        const bidres = await bid.updateAttributes({status: "rejected"});
+    try {
+        const bidres = await bid.updateAttributes({ status: "rejected" });
         const fName = `${req.user.firstName} ${req.user.lastName}`;
         const jName = job.header;
-        const notifresult = await createNotification(fName, jName, bid.job_id, req.user.id, bid.freelancer_id, "bid_reject");
+        const notifresult = await createNotification(
+            fName,
+            jName,
+            bid.job_id,
+            req.user.id,
+            bid.freelancer_id,
+            "bid_reject"
+        );
 
         res.status(200).send({
             msg: "Bid is successfully rejected",
             id: bid.id
         });
-    }catch(e){
+    } catch (e) {
         res.status(400).send({
             msg: "Could not reject the bid",
             additionalMsg: e.message
@@ -412,20 +432,21 @@ exports.reject_bid = async function(req, res) {
     }
 };
 
-async function createNotification(uName, jName,job_id, send_id, rec_id, type){
+async function createNotification(uName, jName, job_id, send_id, rec_id, type) {
     //uName represents the freelancer in bid_get, and the client in the other two. Keep that in mind.
 
     var description = "";
-    if (type === "bid_get"){
+    if (type === "bid_get") {
         description = `New bid received for ${jName} by ${uName}!`;
-    }else if(type == "bid_accept"){
+    } else if (type == "bid_accept") {
         description = `${uName} has accepted your bid on ${jName}!`;
-    }else if(type === "bid_reject"){
+    } else if (type === "bid_reject") {
         description = `${uName} has rejected your bid on ${jName}.`;
-    }else{
-        description = "This message should not appear. Feel free to send the admins a warning if it does!"
+    } else {
+        description =
+            "This message should not appear. Feel free to send the admins a warning if it does!";
     }
-    
+
     const res = await Notifs.create({
         sender_id: send_id,
         receiver_id: rec_id,
@@ -433,7 +454,7 @@ async function createNotification(uName, jName,job_id, send_id, rec_id, type){
         description: description,
         message_type: type,
         isRead: false
-    })
+    });
 
     return res;
 }
@@ -451,7 +472,7 @@ exports.getAllBids = async function(req, res) {
     }
 
     Job_biddings.findAll({
-        where: {job_id: job_id},
+        where: { job_id: job_id },
         include: [{ model: User, as: "Freelancer", required: true }]
     }).then(bids => {
         res.status(200).send({
@@ -461,7 +482,7 @@ exports.getAllBids = async function(req, res) {
     });
 };
 
-exports.deleteJob = async function(req,res){
+exports.deleteJob = async function(req, res) {
     const user_id = req.user.id;
     const { job_id } = req.body;
     const job = await Job.findOne({
@@ -471,11 +492,9 @@ exports.deleteJob = async function(req,res){
     if (!job) {
         res.status(400).send({
             msg: "Invalid job_id."
-
         });
         return;
     }
-
 
     const client = await User.findOne({
         where: { id: user_id }
@@ -500,6 +519,95 @@ exports.deleteJob = async function(req,res){
                 additionalMsg: e.message
             });
         });
+};
 
+/**
+ * @api {post} /job/requestupdate  Request Update -> If client wants an update on the job, use this request
+ * @apiName RequestUpdate
+ * @apiGroup Job
+ * @apiParam {Integer} job_id Mandatory
+ * @apiSuccess {String} msg Success message.
+ */
+exports.request_update = async function(req, res) {
+    const { job_id } = req.body;
+    if (req.user.type !== "client") {
+        res.status(400).send({
+            msg: "User's type is not client."
+        });
+    } else {
+        const user_id = req.user.id;
+        const job = await Job.findOne({
+            where: { id: job_id }
+        });
+        if (job.client_id !== user_id) {
+            res.status(400).send({
+                msg: "This job is not created by this client"
+            });
+        }
+        const job_update_array = {
+            job_id: job_id,
+            user_id: user_id,
+            type: "request"
+        };
+        try {
+            const job_update = await Job_update.create(job_update_array);
+            //TODO Notifications to freelancer
+            //TODO Testing
+            res.status(200).send({
+                msg: "Request is successfully created",
+                id: job_update.id
+            });
+        } catch (e) {
+            res.status(400).send({
+                msg: "Could not create new request",
+                additionalMsg: e.message
+            });
+        }
+    }
+};
 
+/**
+ * @api {post} /job/createupdate  Create Update -> If freelancer wants to create a milestone or completion,
+ * @apiName CreateUpdate
+ * @apiGroup Job
+ * @apiParam {Integer} job_id Mandatory
+ * @apiParam {String} type "milestone" or "completion"
+ * @apiSuccess {String} msg Success message.
+ */
+exports.create_update = async function(req, res) {
+    const { job_id, type } = req.body;
+    if (req.user.type !== "freelancer") {
+        res.status(400).send({
+            msg: "User's type is not freelancer."
+        });
+    } else {
+        const user_id = req.user.id;
+        const freelancer_job = await Freelancer_job.findOne({
+            where: { job_id: job_id, user_id: user_id }
+        });
+        if (freelancer_job.user_id !== user_id) {
+            res.status(400).send({
+                msg: "This job is not assigned to this freelancer."
+            });
+        }
+        const job_update_array = {
+            job_id: job_id,
+            user_id: user_id,
+            type: type
+        };
+        try {
+            const job_update = await Job_update.create(job_update_array);
+            //TODO Notifications to client
+            //TODO Testing
+            res.status(200).send({
+                msg: type + " is successfully created",
+                id: job_update.id
+            });
+        } catch (e) {
+            res.status(400).send({
+                msg: "Could not create the update",
+                additionalMsg: e.message
+            });
+        }
+    }
 };

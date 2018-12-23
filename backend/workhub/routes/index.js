@@ -33,7 +33,8 @@ router.post("/job/cancelbid", auth, job.cancel_bid);
 router.post("/job/acceptbid", auth, job.accept_bid);
 router.post("/job/rejectbid", auth, job.reject_bid);
 router.get("/job/getallbids/:jobId", auth, job.getAllBids);
-
+router.post("/job/requestupdate", auth, job.request_update());
+router.post("/job/createupdate", auth, job.create_update());
 router.post("/message/sendnotification", auth, notif.create);
 
 module.exports = router;
