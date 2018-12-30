@@ -110,9 +110,45 @@ class DashboardBase extends React.Component {
         };
 
         this.handleApplyFilter = this.handleApplyFilter.bind(this);
+        this.handleRemoveFilter = this.handleRemoveFilter.bind(this);
+    }
+
+    getFilteredJobs() {
+        const { filter, jobs } = this.state;
+        return jobs.filter(job => {
+            if (filter.category && job.category !== filter.category) {
+                return false;
+            }
+
+            if (filter.minPrice && job.price <= filter.minPrice) {
+                return false;
+            }
+
+            if (filter.maxPrice && job.price >= filter.maxPrice) {
+                return false;
+            }
+
+            if (filter.minDuration && job.duration <= filter.minDuration) {
+                return false;
+            }
+
+            if (filter.maxDuration && job.duration > filter.maxDuration) {
+                return false;
+            }
+
+            return true;
+        });
     }
 
     handleApplyFilter(filter) {
+        this.setState({
+            filter
+        });
+    }
+
+    handleRemoveFilter(filterName) {
+        const { filter } = this.state;
+        filter[filterName] = "";
         this.setState({
             filter
         });
@@ -135,6 +171,7 @@ class DashboardBase extends React.Component {
     }
 
     render() {
+        const filteredJobs = this.getFilteredJobs();
         return (
             <Pane background="tint1" width="100%" height="100%">
                 <HeaderBar userType={this.props.userType} />
@@ -145,7 +182,7 @@ class DashboardBase extends React.Component {
                     background="tint1"
                     paddingY={30}
                     margin={5}>
-                    <FilterPane {...this.state.filter} onApplyFilter={this.handleApplyFilter}/>
+                    <FilterPane {...this.state.filter} onApplyFilter={this.handleApplyFilter} onRemoveFilter={this.handleRemoveFilter}/>
                     <Pane
                         flex="3"
                         background="white"
@@ -170,7 +207,7 @@ class DashboardBase extends React.Component {
                         </Paragraph>
                         <Pane marginTop={16}>
                             {!this.state.jobsLoading &&
-                                this.state.jobs
+                                filteredJobs
                                     .filter(job => !!job.header)
                                     .map(job => {
                                         return (

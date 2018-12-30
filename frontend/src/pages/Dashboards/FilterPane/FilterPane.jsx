@@ -1,6 +1,10 @@
 import React from "react";
-import { Pane, Heading, Combobox, Button, TextInput, Text } from "evergreen-ui";
+import { Pane, Heading, Combobox, Button, TextInput, Text, IconButton } from "evergreen-ui";
 import { Paragraph } from "evergreen-ui/commonjs/typography";
+
+function CrossButton(props) {
+    return <IconButton onClick={props.onClick} icon="cross" height={20} style={{ display: "inline-flex", marginRight: 5 }}/>;
+}
 
 class FilterPane extends React.Component {
     constructor(props) {
@@ -46,9 +50,9 @@ class FilterPane extends React.Component {
                 {hasFilterApplied && (
                     <Pane marginTop={30}>
                         <Heading size={400}>Applied filters</Heading>
-                        {category && <Paragraph>∙ Category: {category}</Paragraph>}
-                        {(!!minPrice || !!maxPrice) && <Paragraph>∙ Price range: {minPrice || 0}₺ - {maxPrice || "∞"}₺</Paragraph>}
-                        {(!!minDuration || !!maxDuration) && <Paragraph>∙ Est. Duration Range: {minDuration || 0} - {maxDuration || "∞"} days</Paragraph>}
+                        {category && <Paragraph>∙ Category: {category} <CrossButton onClick={() => this.props.onRemoveFilter("category")}/></Paragraph>}
+                {(!!minPrice || !!maxPrice) && <Paragraph>∙ Price range: {minPrice && [minPrice, <CrossButton key="btn" onClick={() => this.props.onRemoveFilter("minPrice")}/>] || 0}₺ - {maxPrice && [maxPrice, <CrossButton key="btn" onClick={() => this.props.onRemoveFilter("maxPrice")}/>] || "∞"}₺</Paragraph>}
+                {(!!minDuration || !!maxDuration) && <Paragraph>∙ Est. Duration Range: {minDuration && [minDuration, <CrossButton key="btn" onClick={() => this.props.onRemoveFilter("minDuration")}/>] || 0} - {maxDuration && [maxDuration, <CrossButton key="btn" onClick={() => this.props.onRemoveFilter("maxDuration")}/>] || "∞"} days</Paragraph>}
                     </Pane>
                 )}
                 <Pane marginTop={30}>
