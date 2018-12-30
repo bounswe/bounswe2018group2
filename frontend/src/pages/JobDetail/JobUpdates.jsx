@@ -1,6 +1,8 @@
 import { Pane, Paragraph, Heading, Badge } from "evergreen-ui";
 import React from "react";
 import { Icon } from "evergreen-ui/commonjs/icon";
+import { Button } from "evergreen-ui/commonjs/buttons";
+import { TextInput } from "evergreen-ui/commonjs/text-input";
 
 class JobUpdates extends React.Component {
     render() {
@@ -44,6 +46,18 @@ class JobUpdates extends React.Component {
                         </Heading>
                         <Paragraph>We are doing great champ.</Paragraph>
                     </Pane>
+                </Pane>
+                <Pane marginTop={20}>
+                    <TextInput placeholder="Write a commit message" />
+                    <Button intent="success" marginLeft={7}>
+                        Commit
+                    </Button>
+                    <Button
+                        appearance="primary"
+                        intent="success"
+                        marginLeft={7}>
+                        Complete Job
+                    </Button>
                 </Pane>
             </Pane>
         );
