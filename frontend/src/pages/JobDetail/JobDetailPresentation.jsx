@@ -4,6 +4,7 @@ import { Pane, Icon } from "evergreen-ui";
 import JobDetailBody from "./JobDetailBody";
 import JobDetailUser from "./JobDetailUser";
 import JobBiddings from "./JobBiddings";
+import JobUpdates from "./JobUpdates";
 
 class JobDetailPresentation extends React.Component {
     render() {
@@ -62,18 +63,23 @@ class JobDetailPresentation extends React.Component {
                             marginLeft="20px"
                             padding="24px"
                             width="100%">
-                            {this.props.job && (
-                                <JobBiddings
-                                    jobId={this.props.job.id}
-                                    bidsLoading={this.props.bidsLoading}
-                                    bids={this.props.bids}
-                                    canAcceptBid={this.props.canAcceptBid}
-                                    canCreateBid={this.props.canCreateBid}
-                                    onAcceptBidClick={
-                                        this.props.onAcceptBidClick
-                                    }
-                                />
-                            )}
+                            {this.props.job &&
+                                this.props.job.bidding_status === "open" && (
+                                    <JobBiddings
+                                        jobId={this.props.job.id}
+                                        bidsLoading={this.props.bidsLoading}
+                                        bids={this.props.bids}
+                                        canAcceptBid={this.props.canAcceptBid}
+                                        canCreateBid={this.props.canCreateBid}
+                                        onAcceptBidClick={
+                                            this.props.onAcceptBidClick
+                                        }
+                                    />
+                                )}
+                            {this.props.job &&
+                                this.props.job.bidding_status === "closed" && (
+                                    <JobUpdates />
+                                )}
                         </Pane>
                     </Pane>
                 </Pane>

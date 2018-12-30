@@ -120,8 +120,7 @@ class JobDetail extends React.Component {
     handleAcceptBidConfirm() {
         doAcceptBid(this.state.acceptBidDetails.bidId)
             .then(body => {
-                // window.location.reload();
-                console.log(body);
+                window.location.reload();
             })
             .catch(err => {
                 toaster.danger(err.message);
