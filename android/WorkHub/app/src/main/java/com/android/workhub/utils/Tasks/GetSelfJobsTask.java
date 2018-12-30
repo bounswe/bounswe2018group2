@@ -8,7 +8,7 @@ import com.android.workhub.utils.WorkHubServiceListener;
 public class GetSelfJobsTask extends WorkHubRequester<GetAllJobsReturnModel> {
 
     public GetSelfJobsTask(WorkHubServiceListener<GetAllJobsReturnModel> listener) {
-        super(EndpointManager.getSelfJobs(), listener);
+        super(EndpointManager.getSelfJobsUrl(), listener);
     }
 
     public void run(String token) {

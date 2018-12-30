@@ -220,6 +220,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:textAllCaps="false"
+                    android:background="@drawable/button_shape"
                     android:text="Sign Up"
                     />
 

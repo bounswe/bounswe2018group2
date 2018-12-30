@@ -25,6 +25,7 @@ import com.android.workhub.models.CreateUpdateModel;
 import com.android.workhub.models.JobBidModel;
 import com.android.workhub.models.JobDetailModel;
 import com.android.workhub.models.JobDetailReturnModel;
+import com.android.workhub.models.RequestUpdateModel;
 import com.android.workhub.models.SendNotificationModel;
 import com.android.workhub.models.SimpleMessageModel;
 import com.android.workhub.utils.ServerCall;
@@ -59,6 +60,7 @@ public class JobDetailPage extends Fragment {
     TextView amountLabel;
     Spinner spinnerCreateUpdate;
     Button createUpdateButton;
+    Button requestUpdateButton;
 
     //see bids
     Button seeAllBidsButton;
@@ -105,6 +107,7 @@ public class JobDetailPage extends Fragment {
         jobBidDescriptionLabel=mainView.findViewById(R.id.textView9);
         createUpdateButton = mainView.findViewById(R.id.createUpdateButton);
         spinnerCreateUpdate = mainView.findViewById(R.id.spinnerCreateUpdate);
+        requestUpdateButton=mainView.findViewById(R.id.requestUpdateButton);
         ArrayList<String> list = new ArrayList<>();
         list.add("milestone");
         list.add("completion");
@@ -113,15 +116,25 @@ public class JobDetailPage extends Fragment {
 
         if(!isMine){
             seeAllBidsButton.setVisibility(View.GONE);
+            spinnerCreateUpdate.setVisibility(View.GONE);
+            createUpdateButton.setVisibility(View.GONE);
+            requestUpdateButton.setVisibility(View.GONE);
+
+
+        }
+        else{
             if("freelancer".equals(type)){
                 spinnerCreateUpdate.setVisibility(View.VISIBLE);
                 createUpdateButton.setVisibility(View.VISIBLE);
+                requestUpdateButton.setVisibility(View.GONE);
             }else if("client".equals(type)){
                 spinnerCreateUpdate.setVisibility(View.GONE);
                 createUpdateButton.setVisibility(View.GONE);
+                requestUpdateButton.setVisibility(View.VISIBLE);
             }else{
                 spinnerCreateUpdate.setVisibility(View.GONE);
                 createUpdateButton.setVisibility(View.GONE);
+                requestUpdateButton.setVisibility(View.GONE);
             }
         }
 
@@ -239,6 +252,9 @@ public class JobDetailPage extends Fragment {
             @Override
             public void onClick(View view) {
                 JobBidModel model = new JobBidModel();
+                if(bidAmount.getText().toString().equals("")||jobBidDescription.getText().toString().equals("")){
+                   return;
+                }
                 model.setAmount(Integer.parseInt(bidAmount.getText().toString()));
                 model.setDescription(jobBidDescription.getText().toString());
                 model.setJob_id(job_id);
@@ -312,6 +328,24 @@ public class JobDetailPage extends Fragment {
                        Toast.makeText(getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                    }
                });
+            }
+        });
+
+        requestUpdateButton.setOnClickListener(new View.OnClickListener() {
+            RequestUpdateModel model=new RequestUpdateModel(job_id);
+            @Override
+            public void onClick(View view) {
+                ServerCall.requestUpdate(token,model, new WorkHubServiceListener<SimpleMessageModel>() {
+                    @Override
+                    public void onSuccess(SimpleMessageModel data) {
+                        Toast.makeText(getActivity().getApplicationContext(), "Update is success", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Toast.makeText(getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 

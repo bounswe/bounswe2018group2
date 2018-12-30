@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         ahBottomNavigation.addItem(item1);
         ahBottomNavigation.addItem(item2);
         ahBottomNavigation.addItem(item3);
-        ahBottomNavigation.setDefaultBackgroundColor(Color.parseColor("#16f5e5"));
+        ahBottomNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.colorAccent));
         ahBottomNavigation.setAccentColor(Color.parseColor("#8d2cc3"));
 
         ahBottomNavigation.setInactiveColor(Color.WHITE);
