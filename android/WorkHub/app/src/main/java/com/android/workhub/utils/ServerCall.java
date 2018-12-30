@@ -1,5 +1,6 @@
 package com.android.workhub.utils;
 
+import com.android.workhub.models.CreateUpdateModel;
 import com.android.workhub.models.GetAllBidsReturnModel;
 import com.android.workhub.models.GetAllJobsReturnModel;
 import com.android.workhub.models.GetSelfReturnModel;
@@ -17,8 +18,10 @@ import com.android.workhub.models.UpdateProfileModel;
 import com.android.workhub.utils.Tasks.AcceptBidTask;
 import com.android.workhub.utils.Tasks.CreateJobBidTask;
 import com.android.workhub.utils.Tasks.CreateJobTask;
+import com.android.workhub.utils.Tasks.CreateUpdateTask;
 import com.android.workhub.utils.Tasks.GetAllBidsTask;
 import com.android.workhub.utils.Tasks.GetAllJobsTask;
+import com.android.workhub.utils.Tasks.GetSelfJobsTask;
 import com.android.workhub.utils.Tasks.GetSelfTask;
 import com.android.workhub.utils.Tasks.JobDetailTask;
 import com.android.workhub.utils.Tasks.LoginTask;
@@ -97,5 +100,15 @@ public class ServerCall {
     public static void rejectBid(String token, PostBidModel model, final WorkHubServiceListener<SimpleMessageModel> listener){
         RejectBidTask task = new RejectBidTask(listener);
         task.run(token,model);
+    }
+
+    public static void createUpdate(String token, CreateUpdateModel model, final WorkHubServiceListener<SimpleMessageModel> listener){
+        CreateUpdateTask task = new CreateUpdateTask(listener);
+        task.run(token,model);
+    }
+
+    public static void getSelfJobs(String token,final WorkHubServiceListener<GetAllJobsReturnModel> listener){
+        GetSelfJobsTask task = new GetSelfJobsTask(listener);
+        task.run(token);
     }
 }

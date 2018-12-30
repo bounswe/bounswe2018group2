@@ -43,5 +43,11 @@ public class EndpointManager {
     public static String getAcceptBidUrl(){return SERVER_URL+"/job/acceptbid";}
 
     public static String getRejectBidUrl(){return SERVER_URL+"/job/rejectbid";}
+
+    public static String getCreateUpdateUrl(){ return SERVER_URL+ "/job/createupdate";}
+
+    public static String getSelfJobs(){ return SERVER_URL+ "/job/getselfjobs";}
+
+
 }
 

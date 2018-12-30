@@ -105,6 +105,7 @@ public class SignupActivity extends AppCompatActivity {
                                 editor = sharedPreferences.edit();
                                 editor.putString("token",data.getToken());
                                 editor.putString("email", emailView.getText().toString());
+                                editor.putString("type",type);
                                 editor.apply();
                                 Intent intent = new Intent(SignupActivity.this,MainActivity.class);
                                 startActivity(intent);
