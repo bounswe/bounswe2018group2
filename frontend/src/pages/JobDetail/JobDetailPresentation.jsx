@@ -78,7 +78,7 @@ class JobDetailPresentation extends React.Component {
                                 )}
                             {this.props.job &&
                                 this.props.job.bidding_status === "closed" && (
-                                    <JobUpdates />
+                                    <JobUpdates job={this.props.job} />
                                 )}
                         </Pane>
                     </Pane>
