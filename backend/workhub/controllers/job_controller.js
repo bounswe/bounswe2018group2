@@ -210,10 +210,29 @@ exports.jobDetails = async function(req, res) {
         where: {job_id: job_id}
     });
 
+    let freelancer = {};
+
+    if (job.bidding_status === "closed"){
+        try {
+            let free = await Freelancer_job.findOne({
+                where: {job_id: job_id}
+            });
+            freelancer = await User.findOne({
+                where: {id: free.user_id}
+            })
+        }catch(e){
+            res.status(400).send({
+                msg: "Couldn't find freelancer."
+            });
+            return; 
+        }
+    }
+
     res.status(200).send({
         msg: "Success.",
         job: job,
-        job_anno: job_annotation
+        job_anno: job_annotation,
+        freelancer: freelancer
     });
 };
 
