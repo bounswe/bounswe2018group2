@@ -781,7 +781,7 @@ exports.create_update = async function(req, res) {
             jName,
             job_id,
             user_id,
-            freelancer_id,
+            client_id,
             "deliver_update"
             );
             //TODO Testing
