@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Pane, Icon } from "evergreen-ui";
+import { Pane, Icon, Spinner } from "evergreen-ui";
 import JobDetailBody from "./JobDetailBody";
 import JobDetailUser from "./JobDetailUser";
 import JobBiddings from "./JobBiddings";
@@ -63,6 +63,14 @@ class JobDetailPresentation extends React.Component {
                             marginLeft="20px"
                             padding="24px"
                             width="100%">
+                            {!this.props.job && (
+                                <Pane
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="center">
+                                    <Spinner />
+                                </Pane>
+                            )}
                             {this.props.job &&
                                 this.props.job.bidding_status === "open" && (
                                     <JobBiddings
