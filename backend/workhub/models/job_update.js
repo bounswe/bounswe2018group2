@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
         {
             job_id: DataTypes.INTEGER,
             user_id: DataTypes.INTEGER,
-            type: ENUM("milestone", "completion", "request")
+            type: DataTypes.ENUM("milestone", "completion", "request")
         },
         {}
     );
