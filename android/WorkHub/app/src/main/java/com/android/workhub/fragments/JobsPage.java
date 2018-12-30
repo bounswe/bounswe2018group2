@@ -24,6 +24,7 @@ import com.android.workhub.utils.WorkHubServiceListener;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class JobsPage extends Fragment {
     ArrayList<JobModel> jobList;
@@ -46,36 +47,16 @@ public class JobsPage extends Fragment {
             Toast.makeText(getActivity().getApplicationContext(), "You need to login, please click settings menu on the top right", Toast.LENGTH_SHORT).show();
             return mainView;
         }
-        ServerCall.getSelf(token, new WorkHubServiceListener<GetSelfReturnModel>() {
+        ServerCall.getSelfJobs(token, new WorkHubServiceListener<GetAllJobsReturnModel>() {
             @Override
-            public void onSuccess(GetSelfReturnModel data) {
-                id=data.getId();
-                type=data.getType();
-
-                if(type.equals("client")) {
-
-                    ServerCall.getAllJobs(new WorkHubServiceListener<GetAllJobsReturnModel>() {
-                        @Override
-                        public void onSuccess(GetAllJobsReturnModel data) {
-                            for(JobModel job:data.getJobs()){
-                                if(id==job.getClientId()){
-                                    jobList.add(job);
-                                    jobAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Exception e) {
-                            Toast.makeText(getActivity().getApplicationContext(), "getAlljobs fail", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
+            public void onSuccess(GetAllJobsReturnModel data) {
+                jobList.addAll(Arrays.asList(data.getJobs()));
+                jobAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(getActivity().getApplicationContext(), "Check Your Connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
         list = mainView.findViewById(R.id.jobList);

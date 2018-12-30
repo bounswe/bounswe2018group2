@@ -223,6 +223,28 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/price" />
 
+            <Spinner
+                android:id="@+id/spinnerCreateUpdate"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="@android:color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/seeAllBidsButton" />
+
+            <Button
+                android:id="@+id/createUpdateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Create Update"
+                android:textAllCaps="false"
+                app:layout_constraintStart_toEndOf="@+id/spinnerCreateUpdate"
+                app:layout_constraintTop_toBottomOf="@+id/seeAllBidsButton" />
+
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v4.widget.NestedScrollView>
