@@ -196,7 +196,8 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="Bidding"
+                android:text="Bid"
+                android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/bidAmount"
                 app:layout_constraintTop_toBottomOf="@+id/jobBidDescription" />

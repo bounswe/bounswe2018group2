@@ -42,6 +42,10 @@ public class JobsPage extends Fragment {
         //type=sharedPreferences.getString("type","");
         token = sharedPreferences.getString("token","");
         jobList=new ArrayList<JobModel>();
+        if(token.equals("")){
+            Toast.makeText(getActivity().getApplicationContext(), "You need to login, please click settings menu on the top right", Toast.LENGTH_SHORT).show();
+            return mainView;
+        }
         ServerCall.getSelf(token, new WorkHubServiceListener<GetSelfReturnModel>() {
             @Override
             public void onSuccess(GetSelfReturnModel data) {

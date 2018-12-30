@@ -55,7 +55,7 @@ public class JobAdapter extends ArrayAdapter {
             Date date = new Date();
             try {
                 date = format.parse(currentNavigationItem.getDueDate());
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 Log.e("JobDetail", "onFailure: " + e.toString() );
                 isError = true;
             }
