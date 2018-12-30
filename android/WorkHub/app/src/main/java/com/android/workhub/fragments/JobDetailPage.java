@@ -142,14 +142,20 @@ public class JobDetailPage extends Fragment {
                 price.setText("$"+data.getJob().getPrice()+"");
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
                 Date date = new Date();
+                boolean isError = false;
                 try {
                     date = format.parse(data.getJob().getDuedate());
-                } catch (ParseException e) {
+                } catch (Exception e) {
                     Log.e("JobDetail", "onFailure: " + e.toString() );
+                    isError = true;
                 }
-                String dateString = new SimpleDateFormat("dd/MM/yyyy",
-                        Locale.getDefault()).format(date);
-                due_date.setText(dateString);
+                if(!isError){
+                    String dateString = new SimpleDateFormat("dd/MM/yyyy",
+                            Locale.getDefault()).format(date);
+                    due_date.setText(dateString);
+
+                }
+
 
                 if(data.getJob().getBidding_status().equals("open")){
                     bidding_status.setText("open");
@@ -160,6 +166,11 @@ public class JobDetailPage extends Fragment {
                     bidding_status.setText("closed");
                     bidding_status.setTextColor(Color.RED);
                     isBiddingOpen = false;
+                    jobBidDescription.setVisibility(View.GONE);
+                    bidAmount.setVisibility(View.GONE);
+                    biddingButton.setVisibility(View.GONE);
+                    jobBidDescriptionLabel.setVisibility(View.GONE);
+                    amountLabel.setVisibility(View.GONE);
                 }
 
 
@@ -253,13 +264,9 @@ public class JobDetailPage extends Fragment {
             //for freelance
             else {
                 seeAllBidsButton.setVisibility(View.INVISIBLE);
-                if(!isBiddingOpen){
-                    jobBidDescription.setVisibility(View.GONE);
-                    bidAmount.setVisibility(View.GONE);
-                    biddingButton.setVisibility(View.GONE);
-                    jobBidDescriptionLabel.setVisibility(View.GONE);
-                    amountLabel.setVisibility(View.GONE);
-                }
+
+
+
             }
 
 

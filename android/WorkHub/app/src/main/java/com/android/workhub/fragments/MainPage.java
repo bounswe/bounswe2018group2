@@ -60,9 +60,12 @@ public class MainPage extends Fragment {
         addJobButton = mainView.findViewById(R.id.button_add_job);
         id = sharedPreferences.getInt("id",0);
         type = sharedPreferences.getString("type","");
-        if(email == null || email.equals("")){
+        if(email == null || email.equals("")) {
             guestView.setText("You are signed as a guest");
             addJobButton.setVisibility(View.GONE);
+        }else if(type.equals("freelancer")){
+            addJobButton.setVisibility(View.GONE);
+
         }else{
             guestView.setText("");
             addJobButton.setVisibility(View.VISIBLE);
