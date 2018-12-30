@@ -11,6 +11,7 @@ const Job_biddings = db.Job_biddings;
 const Notifs = db.Notifications;
 const Freelancer_job = db.Freelancer_job;
 const Job_update = db.Job_updates;
+const Job_annotation = db.Job_annotations;
 
 /**
  * @api {post} /job/create Create Job
@@ -84,6 +85,7 @@ exports.create = function(req, res) {
  */
 exports.getAllJobs = function(req, res) {
     Job.findAll({
+        where: {bidding_status: "open"},
         include: [{ model: User, as: "Client", required: true }],
         order: [["updatedAt", "DESC"]]
     }).then(jobs => {
@@ -101,26 +103,82 @@ exports.getAllJobs = function(req, res) {
  * @apiGroup Job
  * @apiParam {Integer} job_id Wanted job's id.
  * @apiSuccess {String} msg Success message.
- * @apiSuccess {Object[]} Founded job as JSON object
+ * @apiSuccess {Object[]} job Found job as JSON object
+ * @apiSuccess {Object[]} job_anno job's annotations as JSON object
  */
-exports.jobDetails = function(req, res) {
+exports.jobDetails = async function(req, res) {
     var job_id = req.params.jobId;
-    Job.findOne({
+    let job = await Job.findOne({
         where: { id: job_id },
         include: [{ model: User, as: "Client", required: true }]
-    }).then(job => {
-        if (!job) {
-            res.status(400).send({
-                msg: "Invalid job_id."
-            });
-            return;
-        }
-        job_detail = job.toJSON();
-        res.status(200).send({
-            msg: "Success.",
-            job: job_detail
-        });
     });
+    if (!job) {
+        res.status(400).send({
+            msg: "Invalid job_id."
+        });
+        return;
+    }
+
+    let job_annotation = await Job_annotation.findAll({
+        where: {job_id: job_id}
+    });
+
+    res.status(200).send({
+        msg: "Success.",
+        job: job,
+        job_anno: job_annotation
+    });
+};
+
+/**
+ * @api {get} /job/details/:job_id Job Details
+ * @apiVersion 0.2.0
+ * @apiName jobDetails
+ * @apiGroup Job
+ * @apiParam {Integer} job_id Wanted job's id.
+ * @apiSuccess {String} msg Success message.
+ * @apiSuccess {Object[]} job Found job as JSON object
+ * @apiSuccess {Object[]} job_anno job's annotations as JSON object
+ */
+exports.createAnnotation = async function(req, res) {
+    var job_id = req.params.jobId;
+    const { text, position_x, position_y } = req.body;
+    let job = await Job.findOne({
+        where: { id: job_id },
+    });
+    if (!job) {
+        res.status(400).send({
+            msg: "Invalid job_id."
+        });
+        return;
+    }
+
+    if (job.client_id != req.user.id) {
+        res.status(400).send({
+            msg: "The job does not belong to you."
+        });
+        return;
+    }
+
+    try{
+        let job_annotation = await Job_annotation.create({
+            job_id: job_id,
+            text: text,
+            position_x: position_x,
+            position_y: position_y
+        });
+    }catch(e){
+        res.status(400).send({
+            msg: "Couldn't create annotation."
+        });
+        return;
+    }
+
+
+    res.status(200).send({
+        msg: "Annotation successfully created.",
+    });
+
 };
 
 /**
@@ -433,7 +491,8 @@ exports.reject_bid = async function(req, res) {
 };
 
 async function createNotification(uName, jName, job_id, send_id, rec_id, type) {
-    //uName represents the freelancer in bid_get, and the client in the other two. Keep that in mind.
+    //uName represents the freelancer in bid_get and deliver_update, and the client in the other three. Keep that in mind.
+    //why the fuck did I think this was a good idea?
 
     var description = "";
     if (type === "bid_get") {
@@ -442,6 +501,10 @@ async function createNotification(uName, jName, job_id, send_id, rec_id, type) {
         description = `${uName} has accepted your bid on ${jName}!`;
     } else if (type === "bid_reject") {
         description = `${uName} has rejected your bid on ${jName}.`;
+    } else if (type === "request_update") {
+        description = `${uName} has requested an update on ${jName}.`;
+    } else if (type === "deliver_update") {
+        description = `${uName} has delivered an update on ${jName}.`;
     } else {
         description =
             "This message should not appear. Feel free to send the admins a warning if it does!";
@@ -551,7 +614,26 @@ exports.request_update = async function(req, res) {
         };
         try {
             const job_update = await Job_update.create(job_update_array);
-            //TODO Notifications to freelancer
+
+            const freejob = await Freelancer_job.findOne({
+                where: {
+                    job_id: job_id,
+                }
+            });
+
+            let freelancer_id = freejob.user_id;
+            const fName = `${req.user.firstName} ${req.user.lastName}`;
+            const jName = job.header;
+
+            const notifresult = await createNotification(
+            fName,
+            jName,
+            job_id,
+            req.user.id,
+            freelancer_id,
+            "request_update"
+            );
+
             //TODO Testing
             res.status(200).send({
                 msg: "Request is successfully created",
@@ -585,6 +667,11 @@ exports.create_update = async function(req, res) {
         const freelancer_job = await Freelancer_job.findOne({
             where: { job_id: job_id, user_id: user_id }
         });
+        const job = await Job.findOne({
+            where: {id: job_id}
+        });
+
+
         if (freelancer_job.user_id !== user_id) {
             res.status(400).send({
                 msg: "This job is not assigned to this freelancer."
@@ -597,7 +684,19 @@ exports.create_update = async function(req, res) {
         };
         try {
             const job_update = await Job_update.create(job_update_array);
-            //TODO Notifications to client
+
+            let client_id = job.client_id;
+            const fName = `${req.user.firstName} ${req.user.lastName}`;
+            const jName = job.header;
+
+            const notifresult = await createNotification(
+            fName,
+            jName,
+            job_id,
+            user_id,
+            freelancer_id,
+            "deliver_update"
+            );
             //TODO Testing
             res.status(200).send({
                 msg: type + " is successfully created",
