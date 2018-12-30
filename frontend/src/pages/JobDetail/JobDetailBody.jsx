@@ -1,5 +1,4 @@
 import React from "react";
-import { doCreateAnnotation } from "../../data/api";
 import {
     Pane,
     Card,
@@ -44,7 +43,6 @@ class JobDetailBody extends React.Component {
 
         this.state = {
             windowSelection: null,
-            addAnnotationLoading: false,
             annotationText: "",
             annotations: [],
             selection: null
@@ -106,26 +104,16 @@ class JobDetailBody extends React.Component {
 
     handleCreateAnnotation() {
         const { selection, annotationText } = this.state;
-        const { job } = this.props;
-        this.setState({
-            addAnnotationLoading: true
-        });
-
-        doCreateAnnotation(job.id, {
+        this.props.onCreateAnnotation({
             startOffset: selection.startOffset,
             endOffset: selection.endOffset,
             text: annotationText
-        })
-            .then(() => {
-                this.setState({
-                    addAnnotationLoading: false
-                });
-            })
-            .catch(() => {
-                this.setState({
-                    addAnnotationLoading: false
-                });
-            });
+        });
+
+        this.setState({
+            selection: null,
+            annotationText: ""
+        });
     }
 
     createSelectionRects() {
@@ -181,7 +169,6 @@ class JobDetailBody extends React.Component {
         const {
             windowSelection,
             selection,
-            addAnnotationLoading,
             shownAnnotation,
             annotations
         } = this.state;
@@ -278,8 +265,7 @@ class JobDetailBody extends React.Component {
                                 />
                                 <Button
                                     marginTop={5}
-                                    onClick={this.handleCreateAnnotation}
-                                    isLoading={addAnnotationLoading}>
+                                    onClick={this.handleCreateAnnotation}>
                                     Add annotation
                                 </Button>
                             </Card>

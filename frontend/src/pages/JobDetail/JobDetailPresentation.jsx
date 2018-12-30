@@ -49,6 +49,9 @@ class JobDetailPresentation extends React.Component {
                                 job={this.props.job}
                                 jobAnnotations={this.props.jobAnnotations}
                                 canAcceptBid={this.props.canAcceptBid}
+                                onCreateAnnotation={
+                                    this.props.onCreateAnnotation
+                                }
                             />
                         </Pane>
                         <Pane
