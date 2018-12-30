@@ -97,6 +97,46 @@ exports.getAllJobs = function(req, res) {
 };
 
 /**
+ * @api {get} /job/getselfjobs Get Self Jobs
+ * @apiVersion 0.2.0
+ * @apiName GetSelfJobs
+ * @apiGroup Job
+ * @apiSuccess {String} msg Success message.
+ * @apiSuccess {Object[]} jobs List of jobs found, as objects.
+ */
+exports.getSelfJobs = function(req, res) {
+    if (req.user.type === "client"){
+         Job.findAll({
+                where: {client_id: req.user.id},
+                //include: [{ model: User, as: "Client", required: true }],
+                order: [["updatedAt", "DESC"]]
+         }).then(jobs => {
+                res.status(200).send({
+                    msg: "Got all jobs for client.",
+                    jobs
+                });
+         });
+    }else{
+        Freelancer_job.findAll({
+            where: {user_id: req.user.id},
+            include: [{ model: Job, as: "Job", required: true },{ model: User, as: "Freelancer", required: true }],
+            order: [["updatedAt", "DESC"]]
+        }).then(job_assocs =>{
+            let jobs = [];
+            for (i = 0; i < job_assocs.length; i++){
+                let job_single = job_assocs[i].Job;
+                jobs.unshift(job_single);
+            }
+            res.status(200).send({
+                msg: "Got all jobs for freelancer",
+                jobs
+            })
+        })
+    }
+   
+};
+
+/**
  * @api {get} /job/details/:job_id Job Details
  * @apiVersion 0.2.0
  * @apiName jobDetails
