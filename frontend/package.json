@@ -25,6 +25,7 @@
     "devDependencies": {
         "evergreen-ui": "^4.0.2",
         "js-cookie": "^2.2.0",
+        "lodash.debounce": "^4.0.8",
         "react-router-dom": "^4.3.1",
         "react-star-rating-component": "^1.4.1"
     }
