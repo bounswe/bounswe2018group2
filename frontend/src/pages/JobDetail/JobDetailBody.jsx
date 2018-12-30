@@ -1,17 +1,40 @@
 import React from "react";
-import { Pane, Card, Paragraph, Heading, Strong, Spinner, IconButton, Button, Textarea, Label } from "evergreen-ui";
+import { doCreateAnnotation } from "../../data/api";
+import {
+    Pane,
+    Card,
+    Paragraph,
+    Heading,
+    Strong,
+    Spinner,
+    IconButton,
+    Button,
+    Textarea,
+    Label
+} from "evergreen-ui";
 import debounce from "lodash.debounce";
 
 const options = { year: "numeric", month: "long", day: "numeric" };
 const dateFormatter = new Intl.DateTimeFormat("en-EN", options);
 
+function selectRange(el, start, end) {
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.setStart(el, start);
+    range.setEnd(el, end);
+    selection.removeAllRanges();
+    selection.addRange(range);
+}
+
 class AnnotationPane extends React.Component {
     render() {
         return (
-            <Pane position="absolute" style={{ top: this.props.top, left: this.props.left }}>
+            <Pane
+                position="absolute"
+                style={{ top: this.props.top, left: this.props.left }}>
                 {this.props.children}
             </Pane>
-        )
+        );
     }
 }
 
@@ -21,18 +44,26 @@ class JobDetailBody extends React.Component {
 
         this.state = {
             windowSelection: null,
-            selection: null,
-            annotationRect: null,
-            addingAnnotation: false,
-            annotationText: ""
+            addAnnotationLoading: false,
+            annotationText: "",
+            annotations: [],
+            selection: null
         };
 
-        this.handleSelectionChange = debounce(this.handleSelectionChange).bind(this);
+        this.handleSelectionChange = debounce(this.handleSelectionChange).bind(
+            this
+        );
         this.handleDescriptionRef = this.handleDescriptionRef.bind(this);
         this.handleWindowClick = this.handleWindowClick.bind(this);
+        this.handleCreateAnnotation = this.handleCreateAnnotation.bind(this);
     }
 
     handleSelectionChange() {
+        const { canAcceptBid } = this.props;
+        if (!canAcceptBid) {
+            return;
+        }
+
         const windowSelection = window.getSelection();
         if (windowSelection.isCollapsed) {
             this.setState({
@@ -68,7 +99,54 @@ class JobDetailBody extends React.Component {
 
     handleWindowClick() {
         this.setState({
-            selection: null
+            selection: null,
+            annotationText: ""
+        });
+    }
+
+    handleCreateAnnotation() {
+        const { selection, annotationText } = this.state;
+        const { job } = this.props;
+        this.setState({
+            addAnnotationLoading: true
+        });
+
+        doCreateAnnotation(job.id, {
+            startOffset: selection.startOffset,
+            endOffset: selection.endOffset,
+            text: annotationText
+        })
+            .then(() => {
+                this.setState({
+                    addAnnotationLoading: false
+                });
+            })
+            .catch(() => {
+                this.setState({
+                    addAnnotationLoading: false
+                });
+            });
+    }
+
+    createSelectionRects() {
+        const { jobAnnotations } = this.props;
+        const annotations = jobAnnotations.map(annotation => {
+            selectRange(
+                this.descriptionEl.firstChild,
+                annotation.position_x,
+                annotation.position_y
+            );
+            const selection = window.getSelection();
+            const range = selection.getRangeAt(0);
+            return {
+                id: annotation.id,
+                rect: range.getBoundingClientRect(),
+                text: annotation.text
+            };
+        });
+
+        this.setState({
+            annotations
         });
     }
 
@@ -88,13 +166,25 @@ class JobDetailBody extends React.Component {
         window.removeEventListener("click", this.handleWindowClick);
     }
 
+    componentDidUpdate(prevProps, _) {
+        if (this.props.jobAnnotations !== prevProps.jobAnnotations) {
+            this.createSelectionRects();
+            window.getSelection().removeAllRanges();
+        }
+    }
+
     handleDescriptionRef(el) {
         this.descriptionEl = el;
     }
 
     render() {
-        const { windowSelection, selection } = this.state;
-
+        const {
+            windowSelection,
+            selection,
+            addAnnotationLoading,
+            shownAnnotation,
+            annotations
+        } = this.state;
         const { job } = this.props;
         if (!job) {
             return (
@@ -103,6 +193,7 @@ class JobDetailBody extends React.Component {
                 </Pane>
             );
         }
+
         const dueTime =
             typeof job.duedate === "string"
                 ? new Date(job.duedate)
@@ -110,12 +201,63 @@ class JobDetailBody extends React.Component {
         return (
             <Pane overflowY="auto">
                 <Heading size={600}>{job.header}</Heading>
+                {annotations &&
+                    annotations.map(annotation => {
+                        return (
+                            <Pane
+                                position="absolute"
+                                key={annotation.id}
+                                top={annotation.rect.top}
+                                left={annotation.rect.left}
+                                width={annotation.rect.width}
+                                onMouseOver={ev =>
+                                    this.setState({
+                                        shownAnnotation: {
+                                            text: annotation.text,
+                                            rect: ev.target.getBoundingClientRect()
+                                        }
+                                    })
+                                }
+                                onMouseOut={() =>
+                                    this.setState({ shownAnnotation: null })
+                                }
+                                height="20px"
+                                style={{ background: "rgba(0, 0, 0, 0.1)" }}
+                            />
+                        );
+                    })}
+                {shownAnnotation && (
+                    <Pane
+                        position="absolute"
+                        top={shownAnnotation.rect.top}
+                        left={shownAnnotation.rect.right}
+                        maxWidth={320}
+                        background="white"
+                        elevation={2}
+                        padding={20}>
+                        <Paragraph>{shownAnnotation.text}</Paragraph>
+                    </Pane>
+                )}
                 {selection && (
                     <>
-                        <Pane position="absolute" top={selection.rect.top} left={selection.rect.left} width={selection.rect.width} height={16} style={{ backgroundColor: "rgba(0, 255, 0, 0.2)"}}>
-                        </Pane>
-                        <AnnotationPane top={selection.rect.bottom} left={selection.rect.right + 10}>
-                            <Card onClickCapture={ev => ev.stopPropagation()} elevation={2} zIndex={100} padding={15} width={320} background="white">
+                        <Pane
+                            position="absolute"
+                            top={selection.rect.top}
+                            left={selection.rect.left}
+                            width={selection.rect.width}
+                            height={16}
+                            style={{ backgroundColor: "rgba(0, 255, 0, 0.2)" }}
+                        />
+                        <AnnotationPane
+                            top={selection.rect.bottom}
+                            left={selection.rect.right + 5}>
+                            <Card
+                                onClick={ev => ev.stopPropagation()}
+                                elevation={2}
+                                zIndex={100}
+                                padding={15}
+                                width={320}
+                                background="white">
                                 <Label
                                     htmlFor="textarea-2"
                                     marginBottom={4}
@@ -124,17 +266,42 @@ class JobDetailBody extends React.Component {
                                 </Label>
                                 <Textarea
                                     id="textarea-2"
-                                    placeholder={`Add a descriptive annotation for "${selection.text}"`}/>
-                                <Button marginTop={5}>Add annotation</Button>
+                                    onChange={ev =>
+                                        this.setState({
+                                            annotationText: ev.target.value
+                                        })
+                                    }
+                                    value={this.state.annotationText}
+                                    placeholder={`Add a descriptive annotation for "${
+                                        selection.text
+                                    }"`}
+                                />
+                                <Button
+                                    marginTop={5}
+                                    onClick={this.handleCreateAnnotation}
+                                    isLoading={addAnnotationLoading}>
+                                    Add annotation
+                                </Button>
                             </Card>
                         </AnnotationPane>
                     </>
                 )}
-                {windowSelection && !selection && (
-                    <AnnotationPane left={windowSelection.rect.right}>
-                        <IconButton onClickCapture={(ev) => { ev.stopPropagation();  this.setState(state => { return { addingAnnotation: true, selection: state.windowSelection } })}} icon="annotation"/>
-                    </AnnotationPane>
-                )}
+                {windowSelection &&
+                    !selection && (
+                        <AnnotationPane left={windowSelection.rect.right}>
+                            <IconButton
+                                onClickCapture={ev => {
+                                    ev.stopPropagation();
+                                    this.setState(state => {
+                                        return {
+                                            selection: state.windowSelection
+                                        };
+                                    });
+                                }}
+                                icon="annotation"
+                            />
+                        </AnnotationPane>
+                    )}
                 <Paragraph marginTop="3px" size={300}>
                     Last updated at{" "}
                     <Strong size={300}>
@@ -176,5 +343,9 @@ class JobDetailBody extends React.Component {
         );
     }
 }
+
+JobDetailBody.defaultProps = {
+    jobAnnotations: []
+};
 
 export default JobDetailBody;

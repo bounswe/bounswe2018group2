@@ -32,6 +32,7 @@ class JobDetail extends React.Component {
             .then(body => {
                 this.setState({
                     jobDetail: body.job,
+                    jobAnnotations: body.job_anno,
                     canAcceptBid: body.job.Client.id === window.user.id,
                     canCreateBid: window.user.type === "freelancer"
                 });
@@ -107,6 +108,7 @@ class JobDetail extends React.Component {
                 )}
                 <JobDetailPresentation
                     job={this.state.jobDetail}
+                    jobAnnotations={this.state.jobAnnotations}
                     canAcceptBid={this.state.canAcceptBid}
                     canCreateBid={this.state.canCreateBid}
                     onAcceptBidClick={this.handleAcceptBidClick}

@@ -47,6 +47,7 @@ class JobDetailPresentation extends React.Component {
                             width="100%">
                             <JobDetailBody
                                 job={this.props.job}
+                                jobAnnotations={this.props.jobAnnotations}
                                 canAcceptBid={this.props.canAcceptBid}
                             />
                         </Pane>

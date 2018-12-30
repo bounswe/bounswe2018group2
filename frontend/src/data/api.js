@@ -110,6 +110,21 @@ function doAcceptBid(bidId) {
     }).then(handleResponse);
 }
 
+function doCreateAnnotation(jobId, annotation) {
+    return fetch(`${properties.APIURLs.createAnnotation}/${jobId}`, {
+        method: "POST",
+        headers: {
+            ...defaultHeaders,
+            "user-token": window.workhubToken
+        },
+        body: JSON.stringify({
+            text: annotation.text,
+            position_x: annotation.startOffset,
+            position_y: annotation.endOffset
+        })
+    }).then(handleResponse);
+}
+
 export {
     doLogin,
     doGetMember,
@@ -119,5 +134,6 @@ export {
     doGetAllJobs,
     doCreateBid,
     doGetJobBids,
-    doAcceptBid
+    doAcceptBid,
+    doCreateAnnotation
 };
