@@ -46,8 +46,8 @@ public class EndpointManager {
 
     public static String getCreateUpdateUrl(){ return SERVER_URL+ "/job/createupdate";}
 
-    public static String getSelfJobs(){ return SERVER_URL+ "/job/getselfjobs";}
-
+    public static String getSelfJobsUrl(){ return SERVER_URL+ "/job/getselfjobs";}
+    public static String getRequestUpdateUrl(){ return SERVER_URL+ "/job/requestupdate";}
 
 }
 

@@ -11,6 +11,7 @@ import com.android.workhub.models.JobModel;
 import com.android.workhub.models.LoginModel;
 import com.android.workhub.models.LoginReturnModel;
 import com.android.workhub.models.PostBidModel;
+import com.android.workhub.models.RequestUpdateModel;
 import com.android.workhub.models.SendNotificationModel;
 import com.android.workhub.models.SimpleMessageModel;
 import com.android.workhub.models.UpdateJobBidModel;
@@ -27,6 +28,7 @@ import com.android.workhub.utils.Tasks.JobDetailTask;
 import com.android.workhub.utils.Tasks.LoginTask;
 import com.android.workhub.utils.Tasks.LogoutTask;
 import com.android.workhub.utils.Tasks.RejectBidTask;
+import com.android.workhub.utils.Tasks.RequestJobTask;
 import com.android.workhub.utils.Tasks.SendNotificationTask;
 import com.android.workhub.utils.Tasks.SignUpTask;
 import com.android.workhub.utils.Tasks.UpdateJobBidTask;
@@ -110,5 +112,9 @@ public class ServerCall {
     public static void getSelfJobs(String token,final WorkHubServiceListener<GetAllJobsReturnModel> listener){
         GetSelfJobsTask task = new GetSelfJobsTask(listener);
         task.run(token);
+    }
+    public static void requestUpdate(String token, RequestUpdateModel model, final WorkHubServiceListener<SimpleMessageModel> listener){
+        RequestJobTask task = new RequestJobTask(listener);
+        task.run(token,model);
     }
 }

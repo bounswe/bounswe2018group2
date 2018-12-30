@@ -18,7 +18,7 @@
         android:gravity="center"
         android:textStyle="bold"
         android:textSize="16sp"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toStartOf="@+id/dueDate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,32 +28,32 @@
         android:layout_width="250dp"
         android:layout_height="100dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
-        android:textColor="@android:color/white"
+        android:layout_marginTop="8dp"
+        android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header" />
+        app:layout_constraintTop_toBottomOf="@+id/jobImage" />
 
     <TextView
         android:id="@+id/dueDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:textStyle="italic"
+        android:layout_marginEnd="8dp"
         android:textColor="@android:color/holo_blue_light"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/price" />
 
     <TextView
         android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:textStyle="bold"
+        android:layout_marginEnd="8dp"
         android:textColor="@android:color/holo_green_dark"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dueDate"/>
+        app:layout_constraintTop_toBottomOf="@+id/jobImage" />
 
     <TextView
         android:id="@+id/statusLabel"
@@ -72,7 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         app:layout_constraintStart_toEndOf="@+id/statusLabel"
         app:layout_constraintTop_toBottomOf="@+id/description" />
 
@@ -93,7 +93,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         app:layout_constraintStart_toEndOf="@+id/durationLabel"
         app:layout_constraintTop_toBottomOf="@+id/description" />
 
@@ -105,11 +105,22 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/statusLabel" />
 
+    <ImageView
+        android:id="@+id/jobImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header"
+        android:src="@drawable/search" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#16f5e5</color>
+    <color name="colorPrimary">#08998f</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#16f5e5</color>
-    <color name="jobColor">#f4a512</color>
+    <color name="colorAccent">#08998f</color>
+    <color name="jobColor">#ffffff</color>
 </resources>
