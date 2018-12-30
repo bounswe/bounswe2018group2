@@ -128,13 +128,60 @@ exports.getSelfJobs = function(req, res) {
                 jobs.unshift(job_single);
             }
             res.status(200).send({
-                msg: "Got all jobs for freelancer",
+                msg: "Got all jobs for freelancer.",
                 jobs
             })
         })
     }
    
 };
+
+/**
+ * @api {get} /job/getuserjobs/:userId Get User's Jobs
+ * @apiVersion 0.2.0
+ * @apiName GetUserJobs
+ * @apiGroup Job
+ * @apiSuccess {String} msg Success message.
+ * @apiSuccess {Object[]} jobs List of jobs found, as objects.
+ */
+exports.getUserJobs = async function(req, res) {
+    const user_id = req.params.userId;
+
+    let user = await User.findOne({
+        where: {id: user_id}
+    })
+
+    if (user.type === "client"){
+         Job.findAll({
+                where: {client_id: user.id},
+                //include: [{ model: User, as: "Client", required: true }],
+                order: [["updatedAt", "DESC"]]
+         }).then(jobs => {
+                res.status(200).send({
+                    msg: "Got all jobs for client.",
+                    jobs
+                });
+         });
+    }else{
+        Freelancer_job.findAll({
+            where: {user_id: user.id},
+            include: [{ model: Job, as: "Job", required: true },{ model: User, as: "Freelancer", required: true }],
+            order: [["updatedAt", "DESC"]]
+        }).then(job_assocs =>{
+            let jobs = [];
+            for (i = 0; i < job_assocs.length; i++){
+                let job_single = job_assocs[i].Job;
+                jobs.unshift(job_single);
+            }
+            res.status(200).send({
+                msg: "Got all jobs for freelancer.",
+                jobs
+            })
+        })
+    }
+   
+};
+
 
 /**
  * @api {get} /job/details/:job_id Job Details
