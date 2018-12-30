@@ -45,7 +45,10 @@ class JobDetailPresentation extends React.Component {
                             marginLeft="20px"
                             padding="24px"
                             width="100%">
-                            <JobDetailBody job={this.props.job} />
+                            <JobDetailBody
+                                job={this.props.job}
+                                canAcceptBid={this.props.canAcceptBid}
+                            />
                         </Pane>
                         <Pane
                             borderRadius={5}
