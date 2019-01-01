@@ -1,6 +1,7 @@
 html,
 body {
-    min-height: 100%;
+    min-height: 100vh;
+    height: 100%;
     font-family: "SF UI Text", system-ui, sans-serif;
 }
 

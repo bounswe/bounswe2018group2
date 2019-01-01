@@ -89,9 +89,17 @@ class JobDetailPresentation extends React.Component {
                                 this.props.job.bidding_status === "closed" && (
                                     <JobUpdates
                                         job={this.props.job}
+                                        onMakePaymentClick={
+                                            this.props.onMakePaymentClick
+                                        }
                                         onCompleteJob={this.props.onCompleteJob}
-                                        onRequestUpdate={this.props.onRequestUpdate}
-                                        onCreateUpdate={this.props.onCreateUpdate}/>
+                                        onRequestUpdate={
+                                            this.props.onRequestUpdate
+                                        }
+                                        onCreateUpdate={
+                                            this.props.onCreateUpdate
+                                        }
+                                    />
                                 )}
                         </Pane>
                     </Pane>

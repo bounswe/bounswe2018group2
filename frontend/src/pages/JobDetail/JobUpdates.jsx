@@ -133,6 +133,123 @@ class JobUpdates extends React.Component {
             });
     }
 
+    renderUpdateForm() {
+        const { user } = window;
+        if (user.type === "freelancer") {
+            return (
+                <Pane marginTop={20} display="flex">
+                    <Dropzone onDrop={this.handleDrop}>
+                        {({ getRootProps, isDragActive }) => {
+                            return (
+                                <div
+                                    {...getRootProps()}
+                                    style={{ position: "relative" }}>
+                                    {isDragActive && (
+                                        <Pane
+                                            position="absolute"
+                                            width="100%"
+                                            height="100%"
+                                            top={0}
+                                            left={0}
+                                            background="rgba(0, 0, 0, 0.2)"
+                                            border="2px solid #000000"
+                                            display="flex"
+                                            justifyContent="center"
+                                            alignItems="center">
+                                            Drop here
+                                        </Pane>
+                                    )}
+                                    <Pane>
+                                        <TextInput
+                                            placeholder="Write a commit message"
+                                            onChange={ev =>
+                                                this.setState({
+                                                    message: ev.target.value
+                                                })
+                                            }
+                                            value={this.state.message}
+                                        />
+                                        <Paragraph size={300}>
+                                            Hint: You can add a file by dropping
+                                            it on the input
+                                        </Paragraph>
+                                    </Pane>
+                                </div>
+                            );
+                        }}
+                    </Dropzone>
+                    <Button
+                        intent="success"
+                        marginLeft={7}
+                        onClick={this.handleCommitClick}
+                        isLoading={this.state.commitLoading}>
+                        Commit
+                    </Button>
+                    <Button
+                        appearance="primary"
+                        intent="success"
+                        marginLeft={7}
+                        onClick={this.handleCompleteJobClick}
+                        isLoading={this.state.completeLoading}>
+                        Complete Job
+                    </Button>
+                </Pane>
+            );
+        }
+
+        return (
+            <Pane marginTop={20} display="flex">
+                <Dropzone onDrop={this.handleDrop}>
+                    {({ getRootProps, isDragActive }) => {
+                        return (
+                            <div
+                                {...getRootProps()}
+                                style={{ position: "relative" }}>
+                                {isDragActive && (
+                                    <Pane
+                                        position="absolute"
+                                        width="100%"
+                                        height="100%"
+                                        top={0}
+                                        left={0}
+                                        background="rgba(0, 0, 0, 0.2)"
+                                        border="2px solid #000000"
+                                        display="flex"
+                                        justifyContent="center"
+                                        alignItems="center">
+                                        Drop here
+                                    </Pane>
+                                )}
+                                <Pane>
+                                    <TextInput
+                                        placeholder="Request an update"
+                                        onChange={ev =>
+                                            this.setState({
+                                                message: ev.target.value
+                                            })
+                                        }
+                                        value={this.state.message}
+                                    />
+                                    <Paragraph size={300}>
+                                        Hint: You can add a file by dropping it
+                                        on the input
+                                    </Paragraph>
+                                </Pane>
+                            </div>
+                        );
+                    }}
+                </Dropzone>
+                <Button
+                    intent="danger"
+                    marginLeft={7}
+                    isLoading={this.state.requestLoading}
+                    onClick={this.handleRequestUpdateClick}>
+                    Request
+                </Button>
+            </Pane>
+        );
+    }
+
     render() {
         const { user } = window;
         const { job } = this.props;
@@ -261,116 +378,33 @@ class JobUpdates extends React.Component {
                             </Pane>
                         );
                     })}
-                {user.type === "freelancer" && (
-                    <Pane marginTop={20} display="flex">
-                        <Dropzone onDrop={this.handleDrop}>
-                            {({ getRootProps, isDragActive }) => {
-                                return (
-                                    <div
-                                        {...getRootProps()}
-                                        style={{ position: "relative" }}>
-                                        {isDragActive && (
-                                            <Pane
-                                                position="absolute"
-                                                width="100%"
-                                                height="100%"
-                                                top={0}
-                                                left={0}
-                                                background="rgba(0, 0, 0, 0.2)"
-                                                border="2px solid #000000"
-                                                display="flex"
-                                                justifyContent="center"
-                                                alignItems="center">
-                                                Drop here
-                                            </Pane>
-                                        )}
-                                        <Pane>
-                                            <TextInput
-                                                placeholder="Write a commit message"
-                                                onChange={ev =>
-                                                    this.setState({
-                                                        message: ev.target.value
-                                                    })
-                                                }
-                                                value={this.state.message}
-                                            />
-                                            <Paragraph size={300}>
-                                                Hint: You can add a file by
-                                                dropping it on the input
-                                            </Paragraph>
-                                        </Pane>
-                                    </div>
-                                );
-                            }}
-                        </Dropzone>
+
+                {job.status === "in-progress" && this.renderUpdateForm()}
+                {job.status === "waiting-payment" && (
+                    <Heading as="h2" size={500} marginTop={20}>
+                        <Badge color="red">Payment</Badge> Waiting for payment…
+                    </Heading>
+                )}
+                {job.status === "completed" && (
+                    <Heading as="h2" size={500} marginTop={20}>
+                        <Badge color="green">Payment</Badge> Payment has been
+                        done. Job is all completed, Congrats!{" "}
+                        <span role="img" aria-label="tada">
+                            🎉
+                        </span>
+                    </Heading>
+                )}
+                {job.status === "waiting-payment" &&
+                    user.type === "client" && (
                         <Button
-                            intent="success"
-                            marginLeft={7}
-                            onClick={this.handleCommitClick}
-                            isLoading={this.state.commitLoading}>
-                            Commit
-                        </Button>
-                        <Button
+                            marginTop={20}
+                            height={56}
                             appearance="primary"
-                            intent="success"
-                            marginLeft={7}
-                            onClick={this.handleCompleteJobClick}
-                            isLoading={this.state.completeLoading}>
-                            Complete Job
-                        </Button>
-                    </Pane>
-                )}
-                {user.type === "client" && (
-                    <Pane marginTop={20} display="flex">
-                        <Dropzone onDrop={this.handleDrop}>
-                            {({ getRootProps, isDragActive }) => {
-                                return (
-                                    <div
-                                        {...getRootProps()}
-                                        style={{ position: "relative" }}>
-                                        {isDragActive && (
-                                            <Pane
-                                                position="absolute"
-                                                width="100%"
-                                                height="100%"
-                                                top={0}
-                                                left={0}
-                                                background="rgba(0, 0, 0, 0.2)"
-                                                border="2px solid #000000"
-                                                display="flex"
-                                                justifyContent="center"
-                                                alignItems="center">
-                                                Drop here
-                                            </Pane>
-                                        )}
-                                        <Pane>
-                                            <TextInput
-                                                placeholder="Request an update"
-                                                onChange={ev =>
-                                                    this.setState({
-                                                        message: ev.target.value
-                                                    })
-                                                }
-                                                value={this.state.message}
-                                            />
-                                            <Paragraph size={300}>
-                                                Hint: You can add a file by
-                                                dropping it on the input
-                                            </Paragraph>
-                                        </Pane>
-                                    </div>
-                                );
-                            }}
-                        </Dropzone>
-                        <Button
                             intent="danger"
-                            marginLeft={7}
-                            isLoading={this.state.requestLoading}
-                            onClick={this.handleRequestUpdateClick}>
-                            Request
+                            onClick={this.props.onMakePaymentClick}>
+                            Make payment
                         </Button>
-                    </Pane>
-                )}
+                    )}
             </Pane>
         );
     }

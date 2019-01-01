@@ -200,6 +200,9 @@ class ClientProfileArea extends React.Component {
                                 <Table.TextHeaderCell>
                                     Bidding Status
                                 </Table.TextHeaderCell>
+                                <Table.TextHeaderCell>
+                                    Job Status
+                                </Table.TextHeaderCell>
                             </Table.Head>
                             <Table.Body height={240}>
                                 {this.state.jobs.map(job => (
@@ -225,6 +228,9 @@ class ClientProfileArea extends React.Component {
                                         </Table.TextCell>
                                         <Table.TextCell isNumber>
                                             {job.bidding_status}
+                                        </Table.TextCell>
+                                        <Table.TextCell isNumber>
+                                            {job.status}
                                         </Table.TextCell>
                                     </Table.Row>
                                 ))}
