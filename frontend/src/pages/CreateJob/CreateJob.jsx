@@ -13,9 +13,10 @@ import {
 import Dropzone from 'react-dropzone'
 import { Redirect } from "react-router-dom";
 import DayPicker from "react-day-picker";
+import { toBase64 } from "../../utils/utils";
 import "react-day-picker/lib/style.css";
 import React from "react";
-import { doCreateJob } from "../../data/api";
+import { doCreateJob, doUpload } from "../../data/api";
 import { Code } from "evergreen-ui/commonjs/typography";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US");
@@ -35,6 +36,10 @@ const categories = [
     }
 ];
 
+function waitingFilesToText(files) {
+    return files.reduce((prev, file) => `${prev} ![${file.name}](Uploading…)`, "");
+}
+
 class CreateJob extends React.Component {
     constructor(props) {
         super(props);
@@ -49,8 +54,7 @@ class CreateJob extends React.Component {
             datePickerShown: false,
             selectedCategory: null,
             hasDueDate: false,
-            dueDate: null,
-            droppedFile: null
+            dueDate: null
         };
     }
 
@@ -103,6 +107,33 @@ class CreateJob extends React.Component {
             });
     };
 
+    handleDrop = acceptedFiles => {
+        acceptedFiles.forEach(file => {
+            this.setState(state => {
+                return {
+                    description: state.description + waitingFilesToText(acceptedFiles)
+                }
+            });
+
+            return toBase64(file).then(base64File => doUpload(base64File, file.name)).then(result => {
+                this.setState(state => {
+                    const { url } = result;
+                    return {
+                        description: state.description.replace(`![${file.name}](Uploading…)`, `![${file.name}](${url})`)
+                    };
+                })
+            }).catch(e => {
+                console.error(e);
+                toaster.danger(e.msg);
+                this.setState(state => {
+                    return {
+                        description: state.description.replace(`![${file.name}](Uploading…)`, "")
+                    };
+                });
+            })
+        });
+    }
+
     formatDueDate() {
         const { dueDate } = this.state;
         return dateFormatter.format(dueDate);
@@ -112,7 +143,6 @@ class CreateJob extends React.Component {
         if (this.state.createdJobID) {
             return <Redirect to={`/job/${this.state.createdJobID}`} />;
         }
-        console.log(this.state.droppedFile);
         return (
             <Pane
                 background="tint1"
@@ -145,7 +175,7 @@ class CreateJob extends React.Component {
                             display="block">
                             Description
                         </Label>
-                        <Dropzone onDrop={acceptedFiles => { this.setState({ droppedFile: acceptedFiles[0] })}}>
+                        <Dropzone onDrop={this.handleDrop}>
                             {({getRootProps, isDragActive}) => {
                                 return (
                                     <div {...getRootProps()} style={{ position: "relative" }}>
