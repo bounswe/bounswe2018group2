@@ -13,5 +13,9 @@ module.exports = {
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
     host: process.env.MYSQL_HOST,
+    awsKeyId: process.env.AWS_KEY_ID,
+    awsSecretKey: process.env.AWS_SECRET_KEY,
+    bucketName: "workhub-image-storage",
+    bucketURL: "https://s3-us-west-2.amazonaws.com/workhub-image-storage",
     dialect: "mysql"
 };

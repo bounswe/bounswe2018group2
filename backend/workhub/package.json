@@ -9,6 +9,7 @@
         "seed": "./node_modules/.bin/sequelize db:seed"
     },
     "dependencies": {
+        "aws-sdk": "^2.377.0",
         "bcryptjs": "^2.4.3",
         "cookie-parser": "~1.4.3",
         "debug": "~2.6.9",
