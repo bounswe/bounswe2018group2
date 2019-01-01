@@ -5,7 +5,8 @@ import {
     doGetJobDetail,
     doGetJobBids,
     doAcceptBid,
-    doCreateAnnotation
+    doCreateAnnotation,
+    doCreateUpdate
 } from "../../data/api";
 import JobDetailPresentation from "./JobDetailPresentation";
 
@@ -19,6 +20,7 @@ class JobDetail extends React.Component {
             jobDetail: null,
             bids: [],
             bidsLoading: true,
+            paymentPopupOpen: false,
             showBidAcceptDialog: false,
             acceptBidDetails: null,
             hasError: false,
@@ -34,6 +36,10 @@ class JobDetail extends React.Component {
         this.handleCompleteJob = this.handleCompleteJob.bind(this);
         this.handleRequestUpdate = this.handleRequestUpdate.bind(this);
         this.handleCreateUpdate = this.handleCreateUpdate.bind(this);
+        this.handleMakePaymentClick = this.handleMakePaymentClick.bind(this);
+        this.handleMakePaymentConfirm = this.handleMakePaymentConfirm.bind(
+            this
+        );
     }
 
     handleCreateAnnotationError(err) {
@@ -85,6 +91,7 @@ class JobDetail extends React.Component {
                     jobAnnotations: body.job_anno,
                     jobDetail: {
                         ...body.job,
+                        ...{ price: body.bid },
                         ...{ updates: body.job_updates },
                         ...{ freelancer: body.freelancer }
                     },
@@ -135,21 +142,7 @@ class JobDetail extends React.Component {
     }
 
     handleCompleteJob(message) {
-        this.setState(state => {
-            const { jobDetail } = state;
-            jobDetail.updates.unshift({
-                id: "added",
-                job_id: jobDetail.id,
-                user_id: "me",
-                type: "completion",
-                description: message,
-                createdAt: Date.now()
-            });
-
-            return {
-                jobDetail
-            }
-        });
+        window.reload();
     }
 
     handleRequestUpdate(message) {
@@ -166,7 +159,7 @@ class JobDetail extends React.Component {
 
             return {
                 jobDetail
-            }
+            };
         });
     }
 
@@ -183,8 +176,38 @@ class JobDetail extends React.Component {
             });
             return {
                 jobDetail
-            }
+            };
         });
+    }
+
+    handleMakePaymentClick() {
+        this.setState({
+            paymentPopupOpen: true
+        });
+    }
+
+    handleMakePaymentConfirm() {
+        const { jobDetail } = this.state;
+        this.setState({
+            paymentLoading: true
+        });
+        doCreateUpdate(jobDetail.id, "payment", "")
+            .then(() => {
+                this.setState({
+                    paymentLoading: false,
+                    paymentPopupOpen: false
+                });
+
+                window.reload();
+            })
+            .catch(e => {
+                console.error(e);
+                this.setState({
+                    paymentLoading: false
+                });
+
+                toaster.danger(e.msg);
+            });
     }
 
     render() {
@@ -213,6 +236,26 @@ class JobDetail extends React.Component {
                         </Paragraph>
                     </Dialog>
                 )}
+                {this.state.paymentPopupOpen && (
+                    <Dialog
+                        isShown={this.state.paymentPopupOpen}
+                        title="Make payment for the job"
+                        intent="success"
+                        onConfirm={this.handleMakePaymentConfirm}
+                        onCloseComplete={() =>
+                            this.setState({ paymentPopupOpen: false })
+                        }
+                        confirmLabel={
+                            this.state.paymentLoading
+                                ? "Payment being processed…"
+                                : "Pay now!"
+                        }>
+                        <Heading>
+                            {this.state.jobDetail.freelancer.firstName} will get{" "}
+                            {this.state.jobDetail.price || 10}₺ for this job.
+                        </Heading>
+                    </Dialog>
+                )}
                 <JobDetailPresentation
                     job={this.state.jobDetail}
                     jobAnnotations={this.state.jobAnnotations}
@@ -222,6 +265,7 @@ class JobDetail extends React.Component {
                     onCreateAnnotation={this.handleCreateAnnotation}
                     bidsLoading={this.state.bidsLoading}
                     bids={this.state.bids}
+                    onMakePaymentClick={this.handleMakePaymentClick}
                     onCreateUpdate={this.handleCreateUpdate}
                     onRequestUpdate={this.handleRequestUpdate}
                     onCompleteJob={this.handleCompleteJob}
