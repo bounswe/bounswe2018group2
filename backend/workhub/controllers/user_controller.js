@@ -6,6 +6,7 @@ const User = db.User;
 const Sessions = db.Sessions;
 const Profile = db.Profile;
 const Category = db.Category;
+const Freelancer_category = db.Freelancer_category;
 
 const saltRounds = 10;
 
@@ -190,6 +191,35 @@ exports.updateProfile = async function(req, res) {
                     "Something could not be updated. Have fun figuring out what it was!"
             });
         }
+    }
+};
+/**
+ * @api {post} /user/addinterests  adds categories to freelancer
+ * @apiName addInterests
+ * @apiGroup User
+ * @apiParam {categories} array of integer category_ids.
+ * @apiSuccess {String} msg Success message.
+ */
+exports.addInterests = async function(req, res) {
+    const { categories } = req.body;
+    var user_id = req.user.id;
+    let user = await User.findOne({
+        where: { id: user_id }
+    });
+    if (!user) {
+        res.status(400).send({
+            msg: "User not found!"
+        });
+    } else {
+        for (let i = 0; i < categories.length; i++) {
+            Freelancer_category.create({
+                freelancer_id: user_id,
+                category_id: categories[i]
+            });
+        }
+        res.status(200).send({
+            msg: "Categories are added successfully"
+        });
     }
 };
 
