@@ -7,21 +7,75 @@ import {
     Text,
     Table,
     Button,
-    Heading
+    Heading,
+    toaster
 } from "evergreen-ui";
 import imgclient from "./images.png";
+import { Redirect } from "react-router-dom";
 import StarRatingComponent from "react-star-rating-component";
 import HeaderBar from "../../../components/HeaderBar";
+import { doGetSelfJobs, doGetJobDetail } from "../../../data/api";
 
 class ClientProfileArea extends React.Component {
     constructor() {
         super();
-        this.state = { selectedIndex: 0 };
+        this.state = {
+            selectedIndex: 0,
+            isSelected: false,
+            selectedJobId: -1,
+            jobs: [],
+            freelancers: {}
+        };
+    }
+    componentDidMount() {
+        doGetSelfJobs()
+            .then(body => {
+                this.setState({
+                    jobs: body.jobs
+                });
+                let newState = {};
+                body.jobs.forEach(element => {
+                    doGetJobDetail(element.id)
+                        .then(res => {
+                            if (
+                                typeof res.freelancer.firstName !== "undefined"
+                            ) {
+                                newState[res.job.id] =
+                                    res.freelancer.firstName +
+                                    " " +
+                                    res.freelancer.lastName;
+                            } else {
+                                newState[res.job.id] = "-";
+                            }
+                            this.setState({
+                                freelancers: newState
+                            });
+                        })
+                        .catch(err => {
+                            this.setState({
+                                hasError: true
+                            });
+                            toaster.danger(err.message);
+                        });
+                });
+            })
+            .catch(err => {
+                this.setState({
+                    hasError: true
+                });
+                toaster.danger(err.message);
+            });
     }
     render() {
+        if (this.state.isSelected) {
+            this.setState({
+                isSelected: false
+            });
+            return <Redirect to={`/job/${this.state.selectedJobId}`} />;
+        }
         return (
             <Pane background="tint1">
-                <HeaderBar userType={this.props.user.type}/>
+                <HeaderBar userType={this.props.user.type} />
                 <Pane padding={16} background="tint1" display="flex">
                     <Pane>
                         <Pane
@@ -136,58 +190,44 @@ class ClientProfileArea extends React.Component {
 
                         <Table marginTop={20}>
                             <Table.Head>
+                                <Table.TextHeaderCell>Job</Table.TextHeaderCell>
                                 <Table.TextHeaderCell>
                                     Freelancer
                                 </Table.TextHeaderCell>
                                 <Table.TextHeaderCell>
-                                    Project Name
-                                </Table.TextHeaderCell>
-                                <Table.TextHeaderCell>
                                     Last Activity
                                 </Table.TextHeaderCell>
-                                <Table.TextHeaderCell>ltv</Table.TextHeaderCell>
+                                <Table.TextHeaderCell>
+                                    Bidding Status
+                                </Table.TextHeaderCell>
                             </Table.Head>
                             <Table.Body height={240}>
-                                <Table.Row intent="warning">
-                                    <Table.TextCell>
-                                        Jack Philips
-                                    </Table.TextCell>
-                                    <Table.TextCell>
-                                        Painting of my new village
-                                    </Table.TextCell>
-                                    <Table.TextCell>6 month ago</Table.TextCell>
-                                    <Table.TextCell isNumber>
-                                        $150
-                                    </Table.TextCell>
-                                </Table.Row>
-
-                                <Table.Row intent="danger">
-                                    <Table.TextCell>
-                                        Julia Williamson
-                                    </Table.TextCell>
-                                    <Table.TextCell>
-                                        Repairing my beautiful baby.
-                                    </Table.TextCell>
-                                    <Table.TextCell>
-                                        10 months ago
-                                    </Table.TextCell>
-                                    <Table.TextCell isNumber>
-                                        $250
-                                    </Table.TextCell>
-                                </Table.Row>
-
-                                <Table.Row intent="success">
-                                    <Table.TextCell>
-                                        Jonathan Martin
-                                    </Table.TextCell>
-                                    <Table.TextCell>
-                                        Giving my cat hugs
-                                    </Table.TextCell>
-                                    <Table.TextCell>2 moths ago</Table.TextCell>
-                                    <Table.TextCell isNumber>
-                                        $242
-                                    </Table.TextCell>
-                                </Table.Row>
+                                {this.state.jobs.map(job => (
+                                    <Table.Row
+                                        key={job.id}
+                                        isSelectable
+                                        onSelect={() => {
+                                            this.setState({
+                                                selectedJobId: job.id,
+                                                isSelected: true
+                                            });
+                                        }}>
+                                        <Table.TextCell>
+                                            {job.header}
+                                        </Table.TextCell>
+                                        <Table.TextCell>
+                                            {this.state.freelancers[job.id]}
+                                        </Table.TextCell>
+                                        <Table.TextCell>
+                                            {new Date(
+                                                job.updatedAt
+                                            ).toLocaleDateString()}
+                                        </Table.TextCell>
+                                        <Table.TextCell isNumber>
+                                            {job.bidding_status}
+                                        </Table.TextCell>
+                                    </Table.Row>
+                                ))}
                             </Table.Body>
                         </Table>
 

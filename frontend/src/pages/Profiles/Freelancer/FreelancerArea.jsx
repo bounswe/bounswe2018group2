@@ -7,20 +7,51 @@ import {
     Text,
     Table,
     Button,
-    Heading
+    Heading,
+    toaster
 } from "evergreen-ui";
 import imgfreelancer from "./images.jpg";
 import StarRatingComponent from "react-star-rating-component";
 import HeaderBar from "../../../components/HeaderBar";
+import { doGetSelfJobs } from "../../../data/api";
+import { Redirect } from "react-router-dom";
+
 class FreelancerProfileArea extends React.Component {
     constructor() {
         super();
-        this.state = { selectedIndex: 0 };
+        this.state = {
+            selectedIndex: 0,
+            isSelected: false,
+            selectedJobId: -1,
+            jobs: []
+        };
     }
+
+    componentDidMount() {
+        doGetSelfJobs()
+            .then(body => {
+                this.setState({
+                    jobs: body.jobs
+                });
+            })
+            .catch(err => {
+                this.setState({
+                    hasError: true
+                });
+                toaster.danger(err.message);
+            });
+    }
+
     render() {
+        if (this.state.isSelected) {
+            this.setState({
+                isSelected: false
+            });
+            return <Redirect to={`/job/${this.state.selectedJobId}`} />;
+        }
         return (
             <Pane background="tint1">
-                <HeaderBar userType={this.props.user.type}/>
+                <HeaderBar userType={this.props.user.type} />
                 <Pane padding={16} background="tint1" display="flex">
                     <Pane>
                         <Pane
@@ -146,62 +177,46 @@ class FreelancerProfileArea extends React.Component {
 
                         <Table marginTop={20}>
                             <Table.Head>
+                                <Table.TextHeaderCell>Job</Table.TextHeaderCell>
                                 <Table.TextHeaderCell>
-                                    Freelancer
+                                    Client
                                 </Table.TextHeaderCell>
                                 <Table.TextHeaderCell>
                                     Last Activity
                                 </Table.TextHeaderCell>
-                                <Table.TextHeaderCell>ltv</Table.TextHeaderCell>
+                                <Table.TextHeaderCell>
+                                    Bidding Status
+                                </Table.TextHeaderCell>
                             </Table.Head>
                             <Table.Body height={240}>
-                                <Table.Row intent="warning">
-                                    <Table.TextCell>
-                                        Jack Philips
-                                    </Table.TextCell>
-                                    <Table.TextCell>
-                                        6 minutes ago
-                                    </Table.TextCell>
-                                    <Table.TextCell isNumber>
-                                        $242
-                                    </Table.TextCell>
-                                </Table.Row>
-
-                                <Table.Row intent="danger">
-                                    <Table.TextCell>
-                                        Julia Williamson
-                                    </Table.TextCell>
-                                    <Table.TextCell>
-                                        10 minutes ago
-                                    </Table.TextCell>
-                                    <Table.TextCell isNumber>
-                                        $242
-                                    </Table.TextCell>
-                                </Table.Row>
-
-                                <Table.Row intent="success">
-                                    <Table.TextCell>
-                                        Jonathan Martin
-                                    </Table.TextCell>
-                                    <Table.TextCell>
-                                        6 minutes ago
-                                    </Table.TextCell>
-                                    <Table.TextCell isNumber>
-                                        $242
-                                    </Table.TextCell>
-                                </Table.Row>
-
-                                <Table.Row intent="none">
-                                    <Table.TextCell>
-                                        Maria Bennett
-                                    </Table.TextCell>
-                                    <Table.TextCell>
-                                        6 minutes ago
-                                    </Table.TextCell>
-                                    <Table.TextCell isNumber>
-                                        $242
-                                    </Table.TextCell>
-                                </Table.Row>
+                                {this.state.jobs.map(job => (
+                                    <Table.Row
+                                        key={job.id}
+                                        isSelectable
+                                        onSelect={() => {
+                                            this.setState({
+                                                selectedJobId: job.id,
+                                                isSelected: true
+                                            });
+                                        }}>
+                                        <Table.TextCell>
+                                            {job.header}
+                                        </Table.TextCell>
+                                        <Table.TextCell>
+                                            {job.Client.firstName +
+                                                " " +
+                                                job.Client.lastName}
+                                        </Table.TextCell>
+                                        <Table.TextCell>
+                                            {new Date(
+                                                job.updatedAt
+                                            ).toLocaleDateString()}
+                                        </Table.TextCell>
+                                        <Table.TextCell isNumber>
+                                            {job.bidding_status}
+                                        </Table.TextCell>
+                                    </Table.Row>
+                                ))}
                             </Table.Body>
                         </Table>
 

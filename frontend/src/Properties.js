@@ -6,6 +6,7 @@ const properties = {
         signup: `${baseURL}/user/create`,
         member: `${baseURL}/member`,
         allJobs: `${baseURL}/job/getalljobs`,
+        selfJobs: `${baseURL}/job/getselfjobs`,
         createJob: `${baseURL}/job/create`,
         jobDetail: `${baseURL}/job/details`,
         jobBids: `${baseURL}/job/getallbids`,
