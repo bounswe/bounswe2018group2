@@ -272,6 +272,7 @@ exports.jobDetails = async function(req, res) {
         order: [["createdAt", "DESC"]]
     });
     let freelancer = {};
+    let price = job.price;
 
     if (job.bidding_status === "closed") {
         try {
@@ -287,6 +288,19 @@ exports.jobDetails = async function(req, res) {
             });
             return;
         }
+
+        try {
+            let winningbid = await Job_biddings.findOne({
+                where: {job_id: job_id, bidding_status: "accepted"}
+            })
+            price = winningbid.amount;
+        } catch (e) {
+            res.status(400).send({
+                msg: "Couldn't find winning bid."
+            });
+            return;
+        }
+
     }
 
     let categories = [];
@@ -313,7 +327,8 @@ exports.jobDetails = async function(req, res) {
         job_anno: job_annotation,
         freelancer: freelancer,
         categories: categories,
-        job_updates: job_updates
+        job_updates: job_updates,
+        bid: price
     });
 };
 
