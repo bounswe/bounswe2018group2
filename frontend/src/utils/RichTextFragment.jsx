@@ -11,11 +11,10 @@ class RichTextFragment extends React.Component {
             const link = matchText.split("(")[1].split(")")[0];
 
             if (hasMedia) {
-                const imgText = basic ? insideText : `<img src="${link}" alt="${insideText}"/>`;
-                text = text.replace(
-                    matchText,
-                    imgText
-                );
+                const imgText = basic
+                    ? insideText
+                    : `<img src="${link}" alt="${insideText}"/>`;
+                text = text.replace(matchText, imgText);
                 return;
             }
 
@@ -28,7 +27,7 @@ class RichTextFragment extends React.Component {
             <span
                 ref={this.props.baseRef}
                 dangerouslySetInnerHTML={{ __html: text }}
-                className={this.props.class}
+                className={this.props.className}
             />
         );
     }

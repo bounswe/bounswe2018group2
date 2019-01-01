@@ -159,7 +159,7 @@ function doUpload(base64File, name) {
             key: name,
             file: base64File
         })
-    });
+    }).then(handleResponse);
 }
 
 function doRequestUpdate(jobId, description) {
