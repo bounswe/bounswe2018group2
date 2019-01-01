@@ -10,7 +10,7 @@ const Profile = db.Profile;
 const Job_biddings = db.Job_biddings;
 const Notifs = db.Notifications;
 const Freelancer_job = db.Freelancer_job;
-const Job_update = db.Job_updates;
+const Job_update = db.Job_update;
 const Job_annotation = db.Job_annotations;
 
 /**
@@ -85,7 +85,7 @@ exports.create = function(req, res) {
  */
 exports.getAllJobs = function(req, res) {
     Job.findAll({
-        where: {bidding_status: "open"},
+        where: { bidding_status: "open" },
         include: [{ model: User, as: "Client", required: true }],
         order: [["updatedAt", "DESC"]]
     }).then(jobs => {
@@ -105,28 +105,33 @@ exports.getAllJobs = function(req, res) {
  * @apiSuccess {Object[]} jobs List of jobs found, as objects.
  */
 exports.getSelfJobs = async function(req, res) {
-    if (req.user.type === "client"){
-         Job.findAll({
-                where: {client_id: req.user.id},
-                include: [{ model: User, as: "Client", required: true }],
-                order: [["updatedAt", "DESC"]]
-         }).then(jobs => {
-                res.status(200).send({
-                    msg: "Got all jobs for client.",
-                    jobs
-                });
-         });
-    }else{
-        let job_assocs = await Freelancer_job.findAll({
-            where: {user_id: req.user.id},
-            include: [{ model: Job, as: "Job", required: true },{ model: User, as: "Freelancer", required: true }],
+    if (req.user.type === "client") {
+        Job.findAll({
+            where: { client_id: req.user.id },
+            include: [{ model: User, as: "Client", required: true }],
             order: [["updatedAt", "DESC"]]
-        })
+        }).then(jobs => {
+            res.status(200).send({
+                msg: "Got all jobs for client.",
+                jobs
+            });
+        });
+    } else {
+        let job_assocs = await Freelancer_job.findAll({
+            where: { user_id: req.user.id },
+            include: [
+                { model: Job, as: "Job", required: true },
+                { model: User, as: "Freelancer", required: true }
+            ],
+            order: [["updatedAt", "DESC"]]
+        });
         let jobs = [];
-        for (i = 0; i < job_assocs.length; i++){
+        for (i = 0; i < job_assocs.length; i++) {
             let job_single = job_assocs[i].Job.toJSON();
             console.log(job_single);
-            let client = await User.findOne({where: {id: job_single.client_id}});
+            let client = await User.findOne({
+                where: { id: job_single.client_id }
+            });
             job_single["Client"] = client.toJSON();
             console.log("YEET");
             console.log(job_single);
@@ -135,9 +140,8 @@ exports.getSelfJobs = async function(req, res) {
         res.status(200).send({
             msg: "Got all jobs for freelancer.",
             jobs
-        })
+        });
     }
-   
 };
 
 /**
@@ -152,40 +156,41 @@ exports.getUserJobs = async function(req, res) {
     const user_id = req.params.userId;
 
     let user = await User.findOne({
-        where: {id: user_id}
-    })
+        where: { id: user_id }
+    });
 
-    if (user.type === "client"){
-         Job.findAll({
-                where: {client_id: user.id},
-                //include: [{ model: User, as: "Client", required: true }],
-                order: [["updatedAt", "DESC"]]
-         }).then(jobs => {
-                res.status(200).send({
-                    msg: "Got all jobs for client.",
-                    jobs
-                });
-         });
-    }else{
-        Freelancer_job.findAll({
-            where: {user_id: user.id},
-            include: [{ model: Job, as: "Job", required: true },{ model: User, as: "Freelancer", required: true }],
+    if (user.type === "client") {
+        Job.findAll({
+            where: { client_id: user.id },
+            //include: [{ model: User, as: "Client", required: true }],
             order: [["updatedAt", "DESC"]]
-        }).then(job_assocs =>{
+        }).then(jobs => {
+            res.status(200).send({
+                msg: "Got all jobs for client.",
+                jobs
+            });
+        });
+    } else {
+        Freelancer_job.findAll({
+            where: { user_id: user.id },
+            include: [
+                { model: Job, as: "Job", required: true },
+                { model: User, as: "Freelancer", required: true }
+            ],
+            order: [["updatedAt", "DESC"]]
+        }).then(job_assocs => {
             let jobs = [];
-            for (i = 0; i < job_assocs.length; i++){
+            for (i = 0; i < job_assocs.length; i++) {
                 let job_single = job_assocs[i].Job;
                 jobs.unshift(job_single);
             }
             res.status(200).send({
                 msg: "Got all jobs for freelancer.",
                 jobs
-            })
-        })
+            });
+        });
     }
-   
 };
-
 
 /**
  * @api {get} /job/details/:job_id Job Details
@@ -211,24 +216,24 @@ exports.jobDetails = async function(req, res) {
     }
 
     let job_annotation = await Job_annotation.findAll({
-        where: {job_id: job_id}
+        where: { job_id: job_id }
     });
 
     let freelancer = {};
 
-    if (job.bidding_status === "closed"){
+    if (job.bidding_status === "closed") {
         try {
             let free = await Freelancer_job.findOne({
-                where: {job_id: job_id}
+                where: { job_id: job_id }
             });
             freelancer = await User.findOne({
-                where: {id: free.user_id}
-            })
-        }catch(e){
+                where: { id: free.user_id }
+            });
+        } catch (e) {
             res.status(400).send({
                 msg: "Couldn't find freelancer."
             });
-            return; 
+            return;
         }
     }
 
@@ -254,7 +259,7 @@ exports.createAnnotation = async function(req, res) {
     var job_id = req.params.jobId;
     const { text, position_x, position_y } = req.body;
     let job = await Job.findOne({
-        where: { id: job_id },
+        where: { id: job_id }
     });
     if (!job) {
         res.status(400).send({
@@ -270,25 +275,23 @@ exports.createAnnotation = async function(req, res) {
         return;
     }
 
-    try{
+    try {
         let job_annotation = await Job_annotation.create({
             job_id: job_id,
             text: text,
             position_x: position_x,
             position_y: position_y
         });
-    }catch(e){
+    } catch (e) {
         res.status(400).send({
             msg: "Couldn't create annotation."
         });
         return;
     }
 
-
     res.status(200).send({
-        msg: "Annotation successfully created.",
+        msg: "Annotation successfully created."
     });
-
 };
 
 /**
@@ -499,7 +502,8 @@ exports.accept_bid = async function(req, res) {
     }
 
     job.updateAttributes({
-        bidding_status: "closed"
+        bidding_status: "closed",
+        status: "in-progress"
     }).catch(e => {
         res.status(400).send({
             msg: "Could not update the job",
@@ -699,10 +703,11 @@ exports.deleteJob = async function(req, res) {
  * @apiName RequestUpdate
  * @apiGroup Job
  * @apiParam {Integer} job_id Mandatory
+ * @apiParam {String} description Optional
  * @apiSuccess {String} msg Success message.
  */
 exports.request_update = async function(req, res) {
-    const { job_id } = req.body;
+    const { job_id, description } = req.body;
     if (req.user.type !== "client") {
         res.status(400).send({
             msg: "User's type is not client."
@@ -720,14 +725,15 @@ exports.request_update = async function(req, res) {
         const job_update_array = {
             job_id: job_id,
             user_id: user_id,
-            type: "request"
+            type: "request",
+            description: description
         };
         try {
             const job_update = await Job_update.create(job_update_array);
 
             const freejob = await Freelancer_job.findOne({
                 where: {
-                    job_id: job_id,
+                    job_id: job_id
                 }
             });
 
@@ -736,12 +742,12 @@ exports.request_update = async function(req, res) {
             const jName = job.header;
 
             const notifresult = await createNotification(
-            fName,
-            jName,
-            job_id,
-            req.user.id,
-            freelancer_id,
-            "request_update"
+                fName,
+                jName,
+                job_id,
+                req.user.id,
+                freelancer_id,
+                "request_update"
             );
 
             //TODO Testing
@@ -763,11 +769,12 @@ exports.request_update = async function(req, res) {
  * @apiName CreateUpdate
  * @apiGroup Job
  * @apiParam {Integer} job_id Mandatory
- * @apiParam {String} type "milestone" or "completion"
+ * @apiParam {String} type "milestone" or "completion". For payment send "payment"
+ * @apiParam {String} description  OPTIONAL
  * @apiSuccess {String} msg Success message.
  */
 exports.create_update = async function(req, res) {
-    const { job_id, type } = req.body;
+    const { job_id, type, description } = req.body;
     if (req.user.type !== "freelancer") {
         res.status(400).send({
             msg: "User's type is not freelancer."
@@ -778,9 +785,14 @@ exports.create_update = async function(req, res) {
             where: { job_id: job_id, user_id: user_id }
         });
         const job = await Job.findOne({
-            where: {id: job_id}
+            where: { id: job_id }
         });
 
+        if (type === "payment") {
+            job.updateAttributes({
+                status: "completed"
+            });
+        }
 
         if (freelancer_job.user_id !== user_id) {
             res.status(400).send({
@@ -790,22 +802,27 @@ exports.create_update = async function(req, res) {
         const job_update_array = {
             job_id: job_id,
             user_id: user_id,
-            type: type
+            type: type,
+            description: description
         };
         try {
             const job_update = await Job_update.create(job_update_array);
-
+            if (type === "completion") {
+                job.updateAttributes({
+                    status: "waiting-payment"
+                });
+            }
             let client_id = job.client_id;
             const fName = `${req.user.firstName} ${req.user.lastName}`;
             const jName = job.header;
 
             const notifresult = await createNotification(
-            fName,
-            jName,
-            job_id,
-            user_id,
-            client_id,
-            "deliver_update"
+                fName,
+                jName,
+                job_id,
+                user_id,
+                client_id,
+                "deliver_update"
             );
             //TODO Testing
             res.status(200).send({

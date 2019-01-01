@@ -12,6 +12,15 @@ module.exports = (sequelize, DataTypes) => {
             bidding_status: {
                 type: DataTypes.ENUM("open", "closed"),
                 defaultValue: "open"
+            },
+            status: {
+                type: DataTypes.ENUM(
+                    "bidding",
+                    "in-progress",
+                    "waiting-payment",
+                    "completed"
+                ),
+                defaultValue: "bidding"
             }
         },
         {}
