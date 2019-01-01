@@ -88,6 +88,15 @@ function doGetAllJobs() {
     }).then(handleResponse);
 }
 
+function doGetSelfJobs() {
+    return fetch(properties.APIURLs.selfJobs, {
+        headers: {
+            ...defaultHeaders,
+            "user-token": window.workhubToken
+        }
+    }).then(handleResponse);
+}
+
 function doGetJobBids(jobId) {
     return fetch(`${properties.APIURLs.jobBids}/${jobId}`, {
         headers: {
@@ -117,6 +126,7 @@ export {
     doCreateJob,
     doGetJobDetail,
     doGetAllJobs,
+    doGetSelfJobs,
     doCreateBid,
     doGetJobBids,
     doAcceptBid
