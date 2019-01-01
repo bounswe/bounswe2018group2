@@ -79,8 +79,11 @@ class JobDetail extends React.Component {
         doGetJobDetail(id)
             .then(body => {
                 this.setState({
-                    jobDetail: body.job,
                     jobAnnotations: body.job_anno,
+                    jobDetail: {
+                        ...body.job,
+                        ...{ freelancer: body.freelancer }
+                    },
                     canAcceptBid: body.job.Client.id === window.user.id,
                     canCreateBid: window.user.type === "freelancer"
                 });

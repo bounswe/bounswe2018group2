@@ -10,14 +10,18 @@ class JobUpdates extends React.Component {
         if (user.type === "client" && user.id !== job.Client.id) {
             return (
                 <Pane>
-                    <Paragraph>Bidding for this job is closed.</Paragraph>
+                    <Paragraph>This job is taken</Paragraph>
                 </Pane>
             );
         }
 
-        // if (user.type === "freelancer" && user.id !== job.Freelancer.id) {
-        //     return;
-        // }
+        if (user.type === "freelancer" && user.id !== job.freelancer.id) {
+            return (
+                <Pane>
+                    <Paragraph>Bidding for this job is closed.</Paragraph>
+                </Pane>
+            );
+        }
 
         return (
             <Pane display="flex" flexDirection="column">
