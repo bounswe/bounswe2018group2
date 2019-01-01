@@ -7,13 +7,17 @@ import {
     Textarea,
     Checkbox,
     Label,
+    Paragraph,
     toaster
 } from "evergreen-ui";
+import Dropzone from 'react-dropzone'
 import { Redirect } from "react-router-dom";
 import DayPicker from "react-day-picker";
+import { toBase64 } from "../../utils/utils";
 import "react-day-picker/lib/style.css";
 import React from "react";
-import { doCreateJob } from "../../data/api";
+import { doCreateJob, doUpload } from "../../data/api";
+import { Code } from "evergreen-ui/commonjs/typography";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US");
 
@@ -31,6 +35,10 @@ const categories = [
         value: 2
     }
 ];
+
+function waitingFilesToText(files) {
+    return files.reduce((prev, file) => `${prev} ![${file.name}](Uploading…)`, "");
+}
 
 class CreateJob extends React.Component {
     constructor(props) {
@@ -99,6 +107,33 @@ class CreateJob extends React.Component {
             });
     };
 
+    handleDrop = acceptedFiles => {
+        acceptedFiles.forEach(file => {
+            this.setState(state => {
+                return {
+                    description: state.description + waitingFilesToText(acceptedFiles)
+                }
+            });
+
+            return toBase64(file).then(base64File => doUpload(base64File, file.name)).then(result => {
+                this.setState(state => {
+                    const { url } = result;
+                    return {
+                        description: state.description.replace(`![${file.name}](Uploading…)`, `![${file.name}](${url})`)
+                    };
+                })
+            }).catch(e => {
+                console.error(e);
+                toaster.danger(e.msg);
+                this.setState(state => {
+                    return {
+                        description: state.description.replace(`![${file.name}](Uploading…)`, "")
+                    };
+                });
+            })
+        });
+    }
+
     formatDueDate() {
         const { dueDate } = this.state;
         return dateFormatter.format(dueDate);
@@ -106,9 +141,8 @@ class CreateJob extends React.Component {
 
     render() {
         if (this.state.createdJobID) {
-            return <Redirect to={`/job/${this.state.createdJobID}`}/>;
+            return <Redirect to={`/job/${this.state.createdJobID}`} />;
         }
-
         return (
             <Pane
                 background="tint1"
@@ -141,17 +175,51 @@ class CreateJob extends React.Component {
                             display="block">
                             Description
                         </Label>
-                        <Textarea
-                            name="Description"
-                            value={this.state.description}
-                            onChange={e =>
-                                this.setState({ description: e.target.value })
-                            }
-                            type="text"
-                            required
-                            label="Description"
-                            placeholder="A clear description"
-                        />
+                        <Dropzone onDrop={this.handleDrop}>
+                            {({getRootProps, isDragActive}) => {
+                                return (
+                                    <div {...getRootProps()} style={{ position: "relative" }}>
+                                        {isDragActive && (
+                                            <Pane
+                                                position="absolute"
+                                                width="100%"
+                                                height="100%"
+                                                top={0}
+                                                left={0}
+                                                background="rgba(0, 0, 0, 0.2)"
+                                                border="2px solid #000000"
+                                                display="flex"
+                                                justifyContent="center"
+                                                alignItems="center">
+                                                Drop here
+                                            </Pane>
+                                        )}
+                                        <Pane>
+                                            <Textarea
+                                                name="Description"
+                                                value={this.state.description}
+                                                onChange={e =>
+                                                    this.setState({ description: e.target.value })
+                                                }
+                                                type="text"
+                                                required
+                                                label="Description"
+                                                placeholder="A clear description"
+                                            />
+                                        </Pane>
+                                    </div>
+                                );
+                            }}
+                        </Dropzone>
+                        <Paragraph marginTop={4} size={300}>
+                            Hint: You can add images with dropping into text
+                            area or writing{" "}
+                            <Code size={300}>
+                                ![image's alt text](http://placekitten.com/120)
+                            </Code>{" "}
+                            and links with writing{" "}
+                            <Code size={300}>[link text](http://ergun.sh)</Code>
+                        </Paragraph>
                         <Pane display="flex" alignItems="center" marginTop={12}>
                             <TextInputField
                                 flex="1"

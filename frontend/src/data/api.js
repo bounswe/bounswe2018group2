@@ -148,6 +148,20 @@ function doGetRelatedWords(str) {
     });
 }
 
+function doUpload(base64File, name) {
+    return fetch(properties.APIURLs.upload, {
+        method: "POST",
+        headers: {
+            ...defaultHeaders,
+            "user-token": window.workhubToken
+        },
+        body: JSON.stringify({
+            key: name,
+            file: base64File
+        })
+    }).then(handleResponse);
+}
+
 export {
     doLogin,
     doGetMember,
@@ -160,5 +174,6 @@ export {
     doGetJobBids,
     doAcceptBid,
     doCreateAnnotation,
-    doGetRelatedWords
+    doGetRelatedWords,
+    doUpload
 };
