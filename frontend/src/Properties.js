@@ -13,7 +13,10 @@ const properties = {
         createBid: `${baseURL}/job/createbid`,
         acceptBid: `${baseURL}/job/acceptbid`,
         createAnnotation: `${baseURL}/job/createannotation`,
-        relatedWords: "https://api.datamuse.com/words"
+        requestUpdate: `${baseURL}/job/requestupdate`,
+        createUpdate: `${baseURL}/job/createupdate`,
+        relatedWords: "https://api.datamuse.com/words",
+        upload: `${baseURL}/media/upload`
     }
 };
 
