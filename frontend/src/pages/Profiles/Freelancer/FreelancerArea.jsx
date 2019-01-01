@@ -8,20 +8,26 @@ import {
     Table,
     Button,
     Heading,
+    Checkbox,
     toaster
 } from "evergreen-ui";
 import imgfreelancer from "./images.jpg";
 import StarRatingComponent from "react-star-rating-component";
 import HeaderBar from "../../../components/HeaderBar";
-import { doGetSelfJobs } from "../../../data/api";
+import {
+    doGetSelfJobs,
+    doAddInterests,
+    doRemoveInterests
+} from "../../../data/api";
 import { Redirect } from "react-router-dom";
 
 class FreelancerProfileArea extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             selectedIndex: 0,
             isSelected: false,
+            selectedCategories: props.user.categories.fulfillmentValue,
             selectedJobId: -1,
             jobs: []
         };
@@ -42,6 +48,10 @@ class FreelancerProfileArea extends React.Component {
             });
     }
 
+    handleAddInterest(id) {}
+
+    handleRemoveInterest(id) {}
+
     render() {
         if (this.state.isSelected) {
             this.setState({
@@ -49,6 +59,7 @@ class FreelancerProfileArea extends React.Component {
             });
             return <Redirect to={`/job/${this.state.selectedJobId}`} />;
         }
+
         return (
             <Pane background="tint1">
                 <HeaderBar userType={this.props.user.type} />
@@ -269,76 +280,50 @@ class FreelancerProfileArea extends React.Component {
                                     display="flex"
                                     alignItems="center"
                                     justifyContent="center"
-                                    border="default"
-                                    aria-hidden={2 !== this.state.selectedIndex}
-                                    display={
-                                        2 === this.state.selectedIndex
-                                            ? "block"
-                                            : "none"
-                                    }>
-                                    <Heading is="h1" padding={5}>
+                                    flexWrap="wrap"
+                                    border="default">
+                                    <Heading is="h2" padding={5}>
                                         My Preferences{" "}
                                     </Heading>
-                                    <Component initialState={{ checked: true }}>
-                                        {({ state, setState }) => (
+                                    {Object.keys(window.categories).map(key => {
+                                        const category = window.categories[key];
+                                        return (
                                             <Checkbox
-                                                label="Controlled usage"
-                                                checked={state.checked}
-                                                onChange={e =>
-                                                    setState({
-                                                        checked:
-                                                            e.target.checked
-                                                    })
-                                                }
+                                                label={category.name}
+                                                checked={this.state.selectedCategories.includes(
+                                                    category.id
+                                                )}
+                                                marginLeft={15}
+                                                onChange={ev => {
+                                                    this.setState(state => {
+                                                        let selectedCategories = state.selectedCategories.splice(
+                                                            0
+                                                        );
+                                                        const isChecked = selectedCategories.includes(
+                                                            category.id
+                                                        );
+                                                        if (isChecked) {
+                                                            const index = selectedCategories.indexOf(
+                                                                category.id
+                                                            );
+                                                            selectedCategories.splice(
+                                                                index,
+                                                                1
+                                                            );
+                                                        } else {
+                                                            selectedCategories.push(
+                                                                category.id
+                                                            );
+                                                        }
+
+                                                        return {
+                                                            selectedCategories
+                                                        };
+                                                    });
+                                                }}
                                             />
-                                        )}
-                                    </Component>
-                                    <Component initialState={{ checked: true }}>
-                                        {({ state, setState }) => (
-                                            <Checkbox
-                                                label="Controlled usage"
-                                                checked={state.checked}
-                                                onChange={e =>
-                                                    setState({
-                                                        checked:
-                                                            e.target.checked
-                                                    })
-                                                }
-                                            />
-                                        )}
-                                    </Component>
-                                    <Component initialState={{ checked: true }}>
-                                        {({ state, setState }) => (
-                                            <Checkbox
-                                                label="Controlled usage"
-                                                checked={state.checked}
-                                                onChange={e =>
-                                                    setState({
-                                                        checked:
-                                                            e.target.checked
-                                                    })
-                                                }
-                                            />
-                                        )}
-                                    </Component>
-                                    <Component initialState={{ checked: true }}>
-                                        {({ state, setState }) => (
-                                            <Checkbox
-                                                label="Controlled usage"
-                                                checked={state.checked}
-                                                onChange={e =>
-                                                    setState({
-                                                        checked:
-                                                            e.target.checked
-                                                    })
-                                                }
-                                            />
-                                        )}
-                                    </Component>
-                                    <Button appearance="primary" marginTop={20}>
-                                        {" "}
-                                        Add Categories
-                                    </Button>
+                                        );
+                                    })}
                                 </Pane>
                             </Pane>
 

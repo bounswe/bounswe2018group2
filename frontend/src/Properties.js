@@ -17,6 +17,8 @@ const properties = {
         createUpdate: `${baseURL}/job/createupdate`,
         allCategories: `${baseURL}/user/getcategories`,
         relatedWords: "https://api.datamuse.com/words",
+        addInterests: `${baseURL}/user/addinterests`,
+        removeInterests: `${baseURL}/user/removeinterests`,
         upload: `${baseURL}/media/upload`
     }
 };
