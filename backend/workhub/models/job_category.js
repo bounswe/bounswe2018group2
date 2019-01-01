@@ -11,12 +11,12 @@ module.exports = (sequelize, DataTypes) => {
     Job_category.associate = function(models) {
         Job_category.belongsTo(models.Job, {
             foreignKey: "job_id",
-            as: "Job",
+            as: "Jobfields",
             targetKey: "id"
         });
         Job_category.belongsTo(models.Category, {
             foreignKey: "category_id",
-            as: "Category",
+            as: "Categoryfields",
             targetKey: "id"
         });
     };

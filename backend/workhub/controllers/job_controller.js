@@ -4,12 +4,14 @@ const crypto = require("crypto");
 
 const Job = db.Job;
 const Job_category = db.Job_category;
+const Categories = db.Category;
 const User = db.User;
 const Sessions = db.Sessions;
 const Profile = db.Profile;
 const Job_biddings = db.Job_biddings;
 const Notifs = db.Notifications;
 const Freelancer_job = db.Freelancer_job;
+const Freelancer_category = db.Freelancer_category;
 const Job_update = db.Job_update;
 const Job_annotation = db.Job_annotations;
 
@@ -75,6 +77,21 @@ exports.create = function(req, res) {
     }
 };
 
+
+//fffffucking N^2 RUNTIME
+function arrayContains(main, sub){
+    console.log(main + " " + sub);
+    if (sub.length === 0) {return false;}
+    for (i = 0 ; i < sub.length; i++){
+        for (j = 0 ; j < main.length; j++){
+            if (main[j] === sub[i]){
+                return true;
+            }   
+        }
+    }
+    return false;
+}
+
 /**
  * @api {get} /job/getalljobs Get All Jobs
  * @apiVersion 0.2.0
@@ -83,16 +100,51 @@ exports.create = function(req, res) {
  * @apiSuccess {String} msg Success message.
  * @apiSuccess {Object[]} jobs List of jobs found, as objects.
  */
-exports.getAllJobs = function(req, res) {
-    Job.findAll({
+exports.getAllJobs = async function(req, res) {
+    let jobs = await Job.findAll({
         where: { bidding_status: "open" },
-        include: [{ model: User, as: "Client", required: true }],
+        include: [{ model: User, as: "Client", required: true }, { model: Job_category, as: "Jobfields", required: false }],
         order: [["updatedAt", "DESC"]]
-    }).then(jobs => {
-        res.status(200).send({
-            msg: "Got ALL jobs. Every single one. Goddamn.",
-            jobs
-        });
+    });
+    if (req.user.type === "freelancer"){
+        let prefs = await Freelancer_category.findAll({
+            where: {freelancer_id: req.user.id}
+        })
+
+        if (prefs.length > 0){
+            let pref_ids = prefs.map(a => a.category_id);
+
+            //sort by whether they have preferred categories or not.
+            jobs.sort(function (a,b){
+                let ids_a = a["Jobfields"].map(x => x.category_id);
+                let ids_b = b["Jobfields"].map(x => x.category_id);
+                if (ids_a.length > 0 && ids_b.length === 0){
+                    return -1;
+                    console.log("more!");
+                }else if(ids_a.length === 0 && ids_b.length > 0){
+                    return 1;
+                    console.log("less!");
+                }else if(ids_a.length > 0 && ids_b.length > 0){
+                    console.log("weird...");
+                    if (arrayContains(ids_a, pref_ids) && !arrayContains(ids_b, pref_ids)){
+                        return -1;
+                    }else if (!arrayContains(ids_a, pref_ids) && arrayContains(ids_b, pref_ids)){
+                        return 1;
+                    }else{
+                        return 0;
+                    }
+                }
+                return 0;
+            });
+        }
+
+    }
+
+
+
+    res.status(200).send({
+        msg: "Got ALL jobs. Every single one. Goddamn.",
+        jobs
     });
 };
 
@@ -128,13 +180,10 @@ exports.getSelfJobs = async function(req, res) {
         let jobs = [];
         for (i = 0; i < job_assocs.length; i++) {
             let job_single = job_assocs[i].Job.toJSON();
-            console.log(job_single);
             let client = await User.findOne({
                 where: { id: job_single.client_id }
             });
             job_single["Client"] = client.toJSON();
-            console.log("YEET");
-            console.log(job_single);
             jobs.unshift(job_single);
         }
         res.status(200).send({
@@ -237,11 +286,30 @@ exports.jobDetails = async function(req, res) {
         }
     }
 
+    let categories = [];
+    try {
+        let cate = await Job_category.findAll({
+            where: { job_id: job_id }
+        });
+        for (i = 0; i < cate.length ; i++){
+            let cate_single = await Categories.findOne({
+                where: {id: cate[i].category_id}
+            });
+            categories.push(cate_single.toJSON());
+        }
+    } catch (e) {
+        res.status(400).send({
+            msg: "Couldn't find categories."
+        });
+        return;
+    }
+
     res.status(200).send({
         msg: "Success.",
         job: job,
         job_anno: job_annotation,
-        freelancer: freelancer
+        freelancer: freelancer,
+        categories: categories
     });
 };
 

@@ -4,7 +4,11 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING
   }, {});
   Category.associate = function(models) {
-    Category.belongsToMany(models.Job, {through:'Job_category', foreignKey: 'category_id'});
+    Category.hasMany(models.Job_category, {
+        foreignKey: "category_id",
+        as: "Categoryfields",
+        targetKey: "id"
+    });
   };
   return Category;
 };
