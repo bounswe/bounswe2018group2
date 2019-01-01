@@ -31,7 +31,7 @@ class ClientProfileArea extends React.Component {
                     jobs: body.jobs
                 });
                 let newState = {};
-                this.state.jobs.forEach(element => {
+                body.jobs.forEach(element => {
                     doGetJobDetail(element.id)
                         .then(res => {
                             if (
