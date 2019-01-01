@@ -10,7 +10,8 @@ const properties = {
         jobDetail: `${baseURL}/job/details`,
         jobBids: `${baseURL}/job/getallbids`,
         createBid: `${baseURL}/job/createbid`,
-        acceptBid: `${baseURL}/job/acceptbid`
+        acceptBid: `${baseURL}/job/acceptbid`,
+        createAnnotation: `${baseURL}/job/createannotation`
     }
 };
 

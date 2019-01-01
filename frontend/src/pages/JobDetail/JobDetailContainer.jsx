@@ -1,7 +1,12 @@
 import React from "react";
 import { Dialog, Heading, Paragraph, toaster } from "evergreen-ui";
 import { Redirect } from "react-router-dom";
-import { doGetJobDetail, doGetJobBids, doAcceptBid } from "../../data/api";
+import {
+    doGetJobDetail,
+    doGetJobBids,
+    doAcceptBid,
+    doCreateAnnotation
+} from "../../data/api";
 import JobDetailPresentation from "./JobDetailPresentation";
 
 class JobDetail extends React.Component {
@@ -16,11 +21,54 @@ class JobDetail extends React.Component {
             bidsLoading: true,
             showBidAcceptDialog: false,
             acceptBidDetails: null,
-            hasError: false
+            hasError: false,
+            jobAnnotations: []
         };
 
         this.handleAcceptBidClick = this.handleAcceptBidClick.bind(this);
         this.handleAcceptBidConfirm = this.handleAcceptBidConfirm.bind(this);
+        this.handleCreateAnnotation = this.handleCreateAnnotation.bind(this);
+        this.handleCreateAnnotationError = this.handleCreateAnnotationError.bind(
+            this
+        );
+    }
+
+    handleCreateAnnotationError(err) {
+        const jobAnnotations = this.state.jobAnnotations.slice(0);
+        const index = jobAnnotations.findIndex(
+            annotation => annotation.id === "pending"
+        );
+        jobAnnotations.splice(index, 1);
+        this.setState({
+            jobAnnotations
+        });
+
+        toaster.danger(err.message);
+    }
+
+    handleCreateAnnotation(annotation) {
+        const { jobDetail } = this.state;
+        const jobAnnotations = this.state.jobAnnotations.slice(0);
+        jobAnnotations.push({
+            id: "pending",
+            position_x: annotation.startOffset,
+            position_y: annotation.endOffset,
+            text: annotation.text
+        });
+
+        this.setState({
+            jobAnnotations
+        });
+
+        doCreateAnnotation(jobDetail.id, {
+            startOffset: annotation.startOffset,
+            endOffset: annotation.endOffset,
+            text: annotation.text
+        })
+            .then(() => {
+                // no-op
+            })
+            .catch(this.handleCreateAnnotationError);
     }
 
     componentDidMount() {
@@ -32,6 +80,7 @@ class JobDetail extends React.Component {
             .then(body => {
                 this.setState({
                     jobDetail: body.job,
+                    jobAnnotations: body.job_anno,
                     canAcceptBid: body.job.Client.id === window.user.id,
                     canCreateBid: window.user.type === "freelancer"
                 });
@@ -107,9 +156,11 @@ class JobDetail extends React.Component {
                 )}
                 <JobDetailPresentation
                     job={this.state.jobDetail}
+                    jobAnnotations={this.state.jobAnnotations}
                     canAcceptBid={this.state.canAcceptBid}
                     canCreateBid={this.state.canCreateBid}
                     onAcceptBidClick={this.handleAcceptBidClick}
+                    onCreateAnnotation={this.handleCreateAnnotation}
                     bidsLoading={this.state.bidsLoading}
                     bids={this.state.bids}
                 />
