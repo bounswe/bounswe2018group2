@@ -14,6 +14,7 @@ import { cropText } from "../../utils";
 import { Link } from "react-router-dom";
 import { doGetAllJobs } from "../../data/api";
 import HeaderBar from "../../components/HeaderBar";
+import FilterPane from "./FilterPane";
 
 const options = { year: "numeric", month: "long", day: "numeric" };
 const dateFormatter = new Intl.DateTimeFormat("en-EN", options);
@@ -98,8 +99,59 @@ class DashboardBase extends React.Component {
         this.state = {
             jobs: [],
             errMessage: "",
-            jobsLoading: true
+            jobsLoading: true,
+            filter: {
+                category: "",
+                minPrice: "",
+                maxPrice: "",
+                minDuration: "",
+                maxDuration: ""
+            }
         };
+
+        this.handleApplyFilter = this.handleApplyFilter.bind(this);
+        this.handleRemoveFilter = this.handleRemoveFilter.bind(this);
+    }
+
+    getFilteredJobs() {
+        const { filter, jobs } = this.state;
+        return jobs.filter(job => {
+            if (filter.category && job.category !== filter.category) {
+                return false;
+            }
+
+            if (filter.minPrice && job.price <= filter.minPrice) {
+                return false;
+            }
+
+            if (filter.maxPrice && job.price >= filter.maxPrice) {
+                return false;
+            }
+
+            if (filter.minDuration && job.duration <= filter.minDuration) {
+                return false;
+            }
+
+            if (filter.maxDuration && job.duration > filter.maxDuration) {
+                return false;
+            }
+
+            return true;
+        });
+    }
+
+    handleApplyFilter(filter) {
+        this.setState({
+            filter
+        });
+    }
+
+    handleRemoveFilter(filterName) {
+        const { filter } = this.state;
+        filter[filterName] = "";
+        this.setState({
+            filter
+        });
     }
 
     componentDidMount() {
@@ -119,6 +171,7 @@ class DashboardBase extends React.Component {
     }
 
     render() {
+        const filteredJobs = this.getFilteredJobs();
         return (
             <Pane background="tint1" width="100%" height="100%">
                 <HeaderBar userType={this.props.userType} />
@@ -129,15 +182,7 @@ class DashboardBase extends React.Component {
                     background="tint1"
                     paddingY={30}
                     margin={5}>
-                    <Pane
-                        flex="1"
-                        background="white"
-                        marginLeft={40}
-                        paddingTop={30}
-                        padding={20}
-                        border="default">
-                        <Heading size={400}>Filter</Heading>
-                    </Pane>
+                    <FilterPane {...this.state.filter} onApplyFilter={this.handleApplyFilter} onRemoveFilter={this.handleRemoveFilter}/>
                     <Pane
                         flex="3"
                         background="white"
@@ -145,7 +190,8 @@ class DashboardBase extends React.Component {
                         height="100%"
                         padding={30}
                         marginLeft={20}
-                        marginRight={40}>
+                        marginRight={40}
+                        style={{ flexBasis: "75%" }}>
                         <SearchInput
                             placeholder="Search projects"
                             marginTop={10}
@@ -161,7 +207,7 @@ class DashboardBase extends React.Component {
                         </Paragraph>
                         <Pane marginTop={16}>
                             {!this.state.jobsLoading &&
-                                this.state.jobs
+                                filteredJobs
                                     .filter(job => !!job.header)
                                     .map(job => {
                                         return (
