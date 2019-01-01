@@ -36,6 +36,6 @@ router.post("/job/rejectbid", auth, job.reject_bid);
 router.get("/job/getallbids/:jobId", auth, job.getAllBids);
 
 router.post("/message/sendnotification", auth, notif.create);
-router.post("/media/upload", media.uploadFile);
+router.post("/media/upload", auth, media.uploadFile);
 
 module.exports = router;
