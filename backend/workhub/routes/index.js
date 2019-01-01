@@ -24,6 +24,7 @@ router.post("/job/create", auth, job.create);
 router.get("/job/getalljobs", job.getAllJobs);
 router.get("/job/getselfjobs", auth, job.getSelfJobs);
 router.get("/job/getuserjobs/:userId", job.getUserJobs);
+router.get("/user/getcategories", user.getAllCategories);
 
 router.get("/job/getfreelancers", user.getAllFreelancers);
 router.get("/job/details/:jobId", job.jobDetails);
@@ -39,6 +40,6 @@ router.post("/job/requestupdate", auth, job.request_update);
 router.post("/job/createupdate", auth, job.create_update);
 router.post("/message/sendnotification", auth, notif.create);
 
-router.post("/job/createannotation/:jobId",auth, job.createAnnotation);
+router.post("/job/createannotation/:jobId", auth, job.createAnnotation);
 
 module.exports = router;

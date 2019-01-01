@@ -41,6 +41,7 @@ app.use(function(err, req, res, next) {
     res.send({
         msg: "App error. Must have been a big mess-up."
     });
+    console.log(err);
 });
 
 db.sequelize
