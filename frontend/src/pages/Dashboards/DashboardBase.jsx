@@ -10,7 +10,7 @@ import {
     SearchInput,
     Text
 } from "evergreen-ui";
-import { cropText } from "../../utils";
+import { cropText, getCategoryColor } from "../../utils/utils";
 import { Link } from "react-router-dom";
 import { doGetAllJobs, doGetRelatedWords } from "../../data/api";
 import HeaderBar from "../../components/HeaderBar";
@@ -26,8 +26,7 @@ const JobCard = props => {
         title,
         description,
         createdDate,
-        // bidNumber,
-        /* categories, */
+        categories,
         price,
         clientName
     } = props;
@@ -57,7 +56,6 @@ const JobCard = props => {
                             <Icon icon="time" color="default" />{" "}
                             <Text marginLeft={5}>
                                 Opened at {dateFormatter.format(createdDate)}
-                                {/* {bidNumber} bid */}
                             </Text>
                         </Pane>
                         <Pane display="flex" alignItems="center">
@@ -69,23 +67,25 @@ const JobCard = props => {
                             </Text>
                         </Pane>
                     </Pane>
-                    <Pane display="flex" alignItems="center" marginTop={5}>
-                        <Icon icon="tag" color="default" />
-                        <Text marginLeft={5}>
-                            <Badge isSolid color="green">
-                                Article Writing
-                            </Badge>{" "}
-                            <Badge isSolid color="yellow">
-                                Web development
-                            </Badge>{" "}
-                            <Badge isSolid color="orange">
-                                Javascript
-                            </Badge>{" "}
-                            <Badge isSolid color="purple">
-                                HTML
-                            </Badge>
-                        </Text>
-                    </Pane>
+                    {!!categories.length && (
+                        <Pane display="flex" alignItems="center" marginTop={5}>
+                            <Icon icon="tag" color="default" />
+                            <Text marginLeft={5}>
+                                {categories.map((category, index) => {
+                                    return (
+                                        <Badge
+                                            isSolid
+                                            color={getCategoryColor(
+                                                category.id
+                                            )}
+                                            marginLeft={index !== 0 && 5}>
+                                            {category.name}
+                                        </Badge>
+                                    );
+                                })}
+                            </Text>
+                        </Pane>
+                    )}
                 </Pane>
             </Pane>
             <Pane flex={1} justifyContent="flex-end">
@@ -128,7 +128,12 @@ class DashboardBase extends React.Component {
     getFilteredJobs() {
         const { filter, jobs, searchParams } = this.state;
         const filteredJobs = jobs.filter(job => {
-            if (filter.category && job.category !== filter.category) {
+            if (
+                filter.category &&
+                !job.categories.some(
+                    category => category.name === filter.category
+                )
+            ) {
                 return false;
             }
 
@@ -159,8 +164,15 @@ class DashboardBase extends React.Component {
         return filteredJobs.filter(job =>
             searchParams.some(
                 param =>
-                    job.header.includes(param) ||
-                    job.description.includes(param)
+                    job.header.toLowerCase().includes(param.toLowerCase()) ||
+                    job.description
+                        .toLowerCase()
+                        .includes(param.toLowerCase()) ||
+                    job.categories.some(category =>
+                        category.name
+                            .toLowerCase()
+                            .includes(param.toLowerCase())
+                    )
             )
         );
     }
@@ -193,8 +205,14 @@ class DashboardBase extends React.Component {
     componentDidMount() {
         doGetAllJobs()
             .then(jobsResult => {
+                const jobs = jobsResult.jobs.map(job => {
+                    job.categories = job.Jobfields.map(
+                        field => window.categories[field.category_id]
+                    );
+                    return job;
+                });
                 this.setState({
-                    jobs: jobsResult.jobs,
+                    jobs,
                     jobsLoading: false
                 });
             })
@@ -282,10 +300,12 @@ class DashboardBase extends React.Component {
                                                 jobId={job.id}
                                                 title={job.header}
                                                 description={job.description}
+                                                categories={
+                                                    job.categories || []
+                                                }
                                                 createdDate={
                                                     new Date(job.createdAt)
                                                 }
-                                                bidNumber={5}
                                                 price={job.price}
                                                 clientName={`${
                                                     job.Client.firstName

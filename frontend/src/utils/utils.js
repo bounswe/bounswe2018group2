@@ -15,3 +15,17 @@ export function toBase64(file) {
         reader.onerror = error => reject(error);
     });
 }
+
+const BADGE_COLORS = [
+    "green",
+    "blue",
+    "red",
+    "orange",
+    "purple",
+    "yellow",
+    "teal"
+];
+
+export function getCategoryColor(categoryId) {
+    return BADGE_COLORS[categoryId % BADGE_COLORS.length];
+}

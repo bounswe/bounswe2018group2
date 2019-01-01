@@ -10,7 +10,7 @@ import {
     Paragraph,
     toaster
 } from "evergreen-ui";
-import Dropzone from 'react-dropzone'
+import Dropzone from "react-dropzone";
 import { Redirect } from "react-router-dom";
 import DayPicker from "react-day-picker";
 import { toBase64 } from "../../utils/utils";
@@ -21,23 +21,11 @@ import { Code } from "evergreen-ui/commonjs/typography";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US");
 
-const categories = [
-    {
-        name: "Product Design",
-        value: 0
-    },
-    {
-        name: "Website development",
-        value: 1
-    },
-    {
-        name: "Android development",
-        value: 2
-    }
-];
-
 function waitingFilesToText(files) {
-    return files.reduce((prev, file) => `${prev} ![${file.name}](Uploading…)`, "");
+    return files.reduce(
+        (prev, file) => `${prev} ![${file.name}](Uploading…)`,
+        ""
+    );
 }
 
 class CreateJob extends React.Component {
@@ -52,7 +40,7 @@ class CreateJob extends React.Component {
             submitLoading: false,
             creatdJobID: null,
             datePickerShown: false,
-            selectedCategory: null,
+            selectedCategories: [],
             hasDueDate: false,
             dueDate: null
         };
@@ -71,7 +59,7 @@ class CreateJob extends React.Component {
             description,
             price,
             duration,
-            selectedCategory,
+            selectedCategories,
             dueDate
         } = this.state;
 
@@ -81,7 +69,7 @@ class CreateJob extends React.Component {
             description,
             due_date: dueDate,
             price,
-            categories: selectedCategory ? [selectedCategory.value] : [],
+            categories: selectedCategories.map(category => category.value),
             duration
         };
 
@@ -111,28 +99,38 @@ class CreateJob extends React.Component {
         acceptedFiles.forEach(file => {
             this.setState(state => {
                 return {
-                    description: state.description + waitingFilesToText(acceptedFiles)
-                }
+                    description:
+                        state.description + waitingFilesToText(acceptedFiles)
+                };
             });
 
-            return toBase64(file).then(base64File => doUpload(base64File, file.name)).then(result => {
-                this.setState(state => {
-                    const { url } = result;
-                    return {
-                        description: state.description.replace(`![${file.name}](Uploading…)`, `![${file.name}](${url})`)
-                    };
+            return toBase64(file)
+                .then(base64File => doUpload(base64File, file.name))
+                .then(result => {
+                    this.setState(state => {
+                        const { url } = result;
+                        return {
+                            description: state.description.replace(
+                                `![${file.name}](Uploading…)`,
+                                `![${file.name}](${url})`
+                            )
+                        };
+                    });
                 })
-            }).catch(e => {
-                console.error(e);
-                toaster.danger(e.msg);
-                this.setState(state => {
-                    return {
-                        description: state.description.replace(`![${file.name}](Uploading…)`, "")
-                    };
+                .catch(e => {
+                    console.error(e);
+                    toaster.danger(e.msg);
+                    this.setState(state => {
+                        return {
+                            description: state.description.replace(
+                                `![${file.name}](Uploading…)`,
+                                ""
+                            )
+                        };
+                    });
                 });
-            })
         });
-    }
+    };
 
     formatDueDate() {
         const { dueDate } = this.state;
@@ -176,9 +174,12 @@ class CreateJob extends React.Component {
                             Description
                         </Label>
                         <Dropzone onDrop={this.handleDrop}>
-                            {({getRootProps, isDragActive}) => {
+                            {({ getRootProps, isDragActive }) => {
                                 return (
-                                    <div {...getRootProps()} style={{ position: "relative" }}>
+                                    <div
+                                        {...getRootProps()}
+                                        style={{ position: "relative" }}
+                                        tabIndex="-1">
                                         {isDragActive && (
                                             <Pane
                                                 position="absolute"
@@ -199,7 +200,10 @@ class CreateJob extends React.Component {
                                                 name="Description"
                                                 value={this.state.description}
                                                 onChange={e =>
-                                                    this.setState({ description: e.target.value })
+                                                    this.setState({
+                                                        description:
+                                                            e.target.value
+                                                    })
                                                 }
                                                 type="text"
                                                 required
@@ -237,33 +241,64 @@ class CreateJob extends React.Component {
                             <Pane
                                 display="flex"
                                 flex="1"
+                                paddingLeft={15}
                                 justifyContent="flex-end"
                                 alignItems="flex-end">
                                 <SelectMenu
+                                    isMultiSelect
                                     height={300}
                                     width={180}
                                     hasTitle={true}
                                     hasFilter={true}
                                     title="Select category"
-                                    options={categories.map(category => ({
-                                        label: category.name,
-                                        value: category.value
-                                    }))}
-                                    selected={
-                                        this.state.selectedCategory &&
-                                        this.state.selectedCategory.name
-                                    }
+                                    options={Object.keys(window.categories).map(
+                                        key => {
+                                            const category =
+                                                window.categories[key];
+                                            return {
+                                                label: category.name,
+                                                value: category.id
+                                            };
+                                        }
+                                    )}
+                                    selected={this.state.selectedCategories.map(
+                                        category => category.value
+                                    )}
                                     onSelect={item =>
-                                        this.setState({
-                                            selectedCategory: {
-                                                name: item.label,
-                                                value: item.value
-                                            }
+                                        this.setState(state => {
+                                            const {
+                                                selectedCategories
+                                            } = state;
+                                            selectedCategories.push(item);
+                                            return {
+                                                selectedCategories
+                                            };
                                         })
-                                    }>
+                                    }
+                                    onDeselect={item => {
+                                        this.setState(state => {
+                                            let { selectedCategories } = state;
+                                            selectedCategories.splice(
+                                                selectedCategories.findIndex(
+                                                    val =>
+                                                        val.value === item.value
+                                                ),
+                                                1
+                                            );
+                                            return {
+                                                selectedCategories
+                                            };
+                                        });
+                                    }}>
                                     <Button>
-                                        {this.state.selectedCategory
-                                            ? this.state.selectedCategory.name
+                                        {this.state.selectedCategories.length
+                                            ? this.state.selectedCategories.reduce(
+                                                  (prev, category) =>
+                                                      prev +
+                                                      category.label +
+                                                      ", ",
+                                                  ""
+                                              )
                                             : "Select category..."}
                                     </Button>
                                 </SelectMenu>

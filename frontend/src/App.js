@@ -44,12 +44,19 @@ class App extends React.Component {
             });
 
             Promise.all([doGetMember(), doGetAllCategories()])
-                .then(([user, categories]) => {
+                .then(([user, categoriesResp]) => {
                     window.user = user;
-                    window.categories = categories;
+                    window.categories = categoriesResp.categories.reduce(
+                        (prev, category) => {
+                            prev[category.id] = category;
+                            return prev;
+                        },
+                        {}
+                    );
+
                     this.setState({
                         user,
-                        categories,
+                        categories: categoriesResp.categories,
                         loading: false
                     });
                 })
