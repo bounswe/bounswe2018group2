@@ -26,7 +26,7 @@ class FilterPane extends React.Component {
             maxDuration
         };
     }
-
+    /* eslint-disable no-mixed-operators */
     render() {
         const {
             category,
