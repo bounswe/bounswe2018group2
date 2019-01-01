@@ -91,6 +91,7 @@ class JobDetail extends React.Component {
                     jobAnnotations: body.job_anno,
                     jobDetail: {
                         ...body.job,
+                        ...{ categories: body.categories },
                         ...{ price: body.bid },
                         ...{ updates: body.job_updates },
                         ...{ freelancer: body.freelancer }
