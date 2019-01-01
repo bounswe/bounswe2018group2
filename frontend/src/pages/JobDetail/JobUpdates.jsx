@@ -1,7 +1,10 @@
-import { Pane, Paragraph, Heading, Badge } from "evergreen-ui";
+import { Pane, Paragraph, Heading, Small, Badge, toaster } from "evergreen-ui";
 import React from "react";
 import { Button } from "evergreen-ui/commonjs/buttons";
 import { TextInput } from "evergreen-ui/commonjs/text-input";
+import { doCreateUpdate, doRequestUpdate } from "../../data/api";
+const options = { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" };
+const dateFormatter = new Intl.DateTimeFormat("en-EN", options);
 
 class JobUpdates extends React.Component {
     constructor(props) {
@@ -22,39 +25,55 @@ class JobUpdates extends React.Component {
     }
 
     handleCompleteJobClick() {
+        const { job } = this.props;
+
         this.setState({
             completeLoading: true
         });
 
-        setTimeout(() => {
+        doCreateUpdate(job.id, "completion", this.state.message).then(() => {
+            this.props.onCompleteJob(this.state.message);
             this.setState({
+                message: "",
                 completeLoading: false
             });
-        }, 2000);
+        }).catch(e => {
+            toaster.danger(e.msg);
+        });
     }
 
     handleCommitClick() {
+        const { job } = this.props;
         this.setState({
             commitLoading: true
         });
 
-        setTimeout(() => {
+        doCreateUpdate(job.id, "milestone", this.state.message).then(() => {
+            this.props.onCreateUpdate(this.state.message);
             this.setState({
+                message: "",
                 commitLoading: false
             });
-        }, 2000);
+        }).catch(e => {
+            toaster.danger(e.msg);
+        });
     }
 
     handleRequestUpdateClick() {
+        const { job } = this.props;
         this.setState({
             requestLoading: true
         });
 
-        setTimeout(() => {
+        doRequestUpdate(job.id, this.state.message).then(() => {
+            this.props.onRequestUpdate(this.state.message);
             this.setState({
+                message: "",
                 requestLoading: false
             });
-        }, 2000);
+        }).catch(e => {
+            toaster.danger(e.msg);
+        });
     }
 
     render() {
@@ -81,28 +100,53 @@ class JobUpdates extends React.Component {
                 <Heading size={700} marginBottom={10}>
                     Job updates
                 </Heading>
-                <Pane marginTop={20} display="flex" alignItems="top">
-                    <Pane marginTop={1}>
-                        <Badge color="red">Request</Badge>
-                    </Pane>
-                    <Pane marginLeft={5}>
-                        <Heading as="h2" size={500}>
-                            Ergun Erdogmus requested an update
-                        </Heading>
-                        <Paragraph>What state are we in?</Paragraph>
-                    </Pane>
-                </Pane>
-                <Pane marginTop={20} display="flex" alignItems="top">
-                    <Pane marginTop={1}>
-                        <Badge color="green">Commit</Badge>
-                    </Pane>
-                    <Pane marginLeft={5}>
-                        <Heading as="h2" size={500}>
-                            Freelancer Ali committed an update
-                        </Heading>
-                        <Paragraph>We are doing great champ.</Paragraph>
-                    </Pane>
-                </Pane>
+                {job.updates.slice(0).reverse().map(update => {
+                    if (update.type === "request") {
+                        return (
+                            <Pane marginTop={20} display="flex" alignItems="top" key={update.id}>
+                                <Pane marginTop={1}>
+                                    <Badge color="red">Request</Badge>
+                                </Pane>
+                                <Pane marginLeft={5}>
+                                    <Heading as="h2" size={500}>
+                                        {job.Client.firstName + " " + job.Client.lastName} requested an update | <Small>{dateFormatter.format(new Date(update.createdAt))}</Small>
+                                    </Heading>
+                                    {update.description && <Paragraph>{update.description}</Paragraph>}
+                                </Pane>
+                            </Pane>
+                        )
+                    }
+
+                    if (update.type === "milestone") {
+                        return (
+                            <Pane marginTop={20} display="flex" alignItems="top" key={update.id}>
+                                <Pane marginTop={1}>
+                                    <Badge color="green">Commit</Badge>
+                                </Pane>
+                                <Pane marginLeft={5}>
+                                    <Heading as="h2" size={500}>
+                                        {job.freelancer.firstName + " " + job.freelancer.lastName} committed an update | <Small>{dateFormatter.format(new Date(update.createdAt))}</Small>
+                                    </Heading>
+                                    {update.description && <Paragraph>{update.description}</Paragraph>}
+                                </Pane>
+                            </Pane>
+                        );
+                    }
+
+                    return (
+                        <Pane marginTop={20} display="flex" alignItems="top" key={update.id}>
+                            <Pane marginTop={1}>
+                                <Badge color="yellow">Completion</Badge>
+                            </Pane>
+                            <Pane marginLeft={5}>
+                                <Heading as="h2" size={500}>
+                                    {job.freelancer.firstName + " " + job.freelancer.lastName} completed the job | <Small>{dateFormatter.format(new Date(update.createdAt))}</Small>
+                                </Heading>
+                                {update.description && <Paragraph>{update.description}</Paragraph>}
+                            </Pane>
+                        </Pane>
+                    )
+                })}
                 {user.type === "freelancer" && (
                     <Pane marginTop={20}>
                         <TextInput

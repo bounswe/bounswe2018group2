@@ -61,6 +61,7 @@ class JobDetailPresentation extends React.Component {
                             background="white"
                             marginTop="20px"
                             marginLeft="20px"
+                            marginBottom="20px"
                             padding="24px"
                             width="100%">
                             {!this.props.job && (
@@ -86,7 +87,11 @@ class JobDetailPresentation extends React.Component {
                                 )}
                             {this.props.job &&
                                 this.props.job.bidding_status === "closed" && (
-                                    <JobUpdates job={this.props.job} />
+                                    <JobUpdates
+                                        job={this.props.job}
+                                        onCompleteJob={this.props.onCompleteJob}
+                                        onRequestUpdate={this.props.onRequestUpdate}
+                                        onCreateUpdate={this.props.onCreateUpdate}/>
                                 )}
                         </Pane>
                     </Pane>

@@ -159,7 +159,36 @@ function doUpload(base64File, name) {
             key: name,
             file: base64File
         })
+    });
+}
+
+function doRequestUpdate(jobId, description) {
+    return fetch(properties.APIURLs.requestUpdate, {
+        method: "POST",
+        headers: {
+            ...defaultHeaders,
+            "user-token": window.workhubToken
+        },
+        body: JSON.stringify({
+            job_id: jobId,
+            description
+        })
     }).then(handleResponse);
+}
+
+function doCreateUpdate(jobId, type, description) {
+    return fetch(properties.APIURLs.createUpdate, {
+        method: "POST",
+        headers: {
+            ...defaultHeaders,
+            "user-token": window.workhubToken
+        },
+        body: JSON.stringify({
+            job_id: jobId,
+            type,
+            description
+        })
+    });
 }
 
 export {
@@ -175,5 +204,7 @@ export {
     doAcceptBid,
     doCreateAnnotation,
     doGetRelatedWords,
-    doUpload
+    doUpload,
+    doRequestUpdate,
+    doCreateUpdate
 };

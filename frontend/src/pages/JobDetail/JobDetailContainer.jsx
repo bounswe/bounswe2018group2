@@ -31,6 +31,9 @@ class JobDetail extends React.Component {
         this.handleCreateAnnotationError = this.handleCreateAnnotationError.bind(
             this
         );
+        this.handleCompleteJob = this.handleCompleteJob.bind(this);
+        this.handleRequestUpdate = this.handleRequestUpdate.bind(this);
+        this.handleCreateUpdate = this.handleCreateUpdate.bind(this);
     }
 
     handleCreateAnnotationError(err) {
@@ -82,6 +85,7 @@ class JobDetail extends React.Component {
                     jobAnnotations: body.job_anno,
                     jobDetail: {
                         ...body.job,
+                        ...{ updates: body.job_updates },
                         ...{ freelancer: body.freelancer }
                     },
                     canAcceptBid: body.job.Client.id === window.user.id,
@@ -130,6 +134,59 @@ class JobDetail extends React.Component {
             });
     }
 
+    handleCompleteJob(message) {
+        this.setState(state => {
+            const { jobDetail } = state;
+            jobDetail.updates.unshift({
+                id: "added",
+                job_id: jobDetail.id,
+                user_id: "me",
+                type: "completion",
+                description: message,
+                createdAt: Date.now()
+            });
+
+            return {
+                jobDetail
+            }
+        });
+    }
+
+    handleRequestUpdate(message) {
+        this.setState(state => {
+            const { jobDetail } = state;
+            jobDetail.updates.unshift({
+                id: "added",
+                job_id: jobDetail.id,
+                user_id: "me",
+                type: "request",
+                description: message,
+                createdAt: Date.now()
+            });
+
+            return {
+                jobDetail
+            }
+        });
+    }
+
+    handleCreateUpdate(message) {
+        this.setState(state => {
+            const { jobDetail } = state;
+            jobDetail.updates.unshift({
+                id: "added",
+                job_id: jobDetail.id,
+                user_id: "me",
+                type: "milestone",
+                description: message,
+                createdAt: Date.now()
+            });
+            return {
+                jobDetail
+            }
+        });
+    }
+
     render() {
         if (this.state.hasError) {
             return <Redirect to="/" />;
@@ -165,6 +222,9 @@ class JobDetail extends React.Component {
                     onCreateAnnotation={this.handleCreateAnnotation}
                     bidsLoading={this.state.bidsLoading}
                     bids={this.state.bids}
+                    onCreateUpdate={this.handleCreateUpdate}
+                    onRequestUpdate={this.handleRequestUpdate}
+                    onCompleteJob={this.handleCompleteJob}
                 />
             </>
         );
