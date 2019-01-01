@@ -256,17 +256,90 @@ class FreelancerProfileArea extends React.Component {
                             </Pane>
 
                             <Pane
-                                key="tab2"
-                                id={`panel-$"tab2"`}
-                                role="tabpanel"
-                                aria-labelledby="tab2"
-                                aria-hidden={2 !== this.state.selectedIndex}
-                                display={
-                                    2 === this.state.selectedIndex
-                                        ? "block"
-                                        : "none"
-                                }>
-                                <Paragraph>Panel Content 2 </Paragraph>
+                                padding={5}
+                                background="blueTint"
+                                display="vertical">
+                                <Pane
+                                    key="tab2"
+                                    id={`panel-$"tab2"`}
+                                    role="tabpanel"
+                                    aria-labelledby="tab2"
+                                    height={200}
+                                    width={900}
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    border="default"
+                                    aria-hidden={2 !== this.state.selectedIndex}
+                                    display={
+                                        2 === this.state.selectedIndex
+                                            ? "block"
+                                            : "none"
+                                    }>
+                                    <Heading is="h1" padding={5}>
+                                        My Preferences{" "}
+                                    </Heading>
+                                    <Component initialState={{ checked: true }}>
+                                        {({ state, setState }) => (
+                                            <Checkbox
+                                                label="Controlled usage"
+                                                checked={state.checked}
+                                                onChange={e =>
+                                                    setState({
+                                                        checked:
+                                                            e.target.checked
+                                                    })
+                                                }
+                                            />
+                                        )}
+                                    </Component>
+                                    <Component initialState={{ checked: true }}>
+                                        {({ state, setState }) => (
+                                            <Checkbox
+                                                label="Controlled usage"
+                                                checked={state.checked}
+                                                onChange={e =>
+                                                    setState({
+                                                        checked:
+                                                            e.target.checked
+                                                    })
+                                                }
+                                            />
+                                        )}
+                                    </Component>
+                                    <Component initialState={{ checked: true }}>
+                                        {({ state, setState }) => (
+                                            <Checkbox
+                                                label="Controlled usage"
+                                                checked={state.checked}
+                                                onChange={e =>
+                                                    setState({
+                                                        checked:
+                                                            e.target.checked
+                                                    })
+                                                }
+                                            />
+                                        )}
+                                    </Component>
+                                    <Component initialState={{ checked: true }}>
+                                        {({ state, setState }) => (
+                                            <Checkbox
+                                                label="Controlled usage"
+                                                checked={state.checked}
+                                                onChange={e =>
+                                                    setState({
+                                                        checked:
+                                                            e.target.checked
+                                                    })
+                                                }
+                                            />
+                                        )}
+                                    </Component>
+                                    <Button appearance="primary" marginTop={20}>
+                                        {" "}
+                                        Add Categories
+                                    </Button>
+                                </Pane>
                             </Pane>
 
                             <Pane
