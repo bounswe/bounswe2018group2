@@ -218,7 +218,10 @@ exports.jobDetails = async function(req, res) {
     let job_annotation = await Job_annotation.findAll({
         where: { job_id: job_id }
     });
-
+    let job_updates = await Job_update.findAll({
+        where: { job_id: job_id },
+        order: [["createdAt", "DESC"]]
+    });
     let freelancer = {};
 
     if (job.bidding_status === "closed") {
@@ -241,6 +244,7 @@ exports.jobDetails = async function(req, res) {
         msg: "Success.",
         job: job,
         job_anno: job_annotation,
+        job_updates: job_updates,
         freelancer: freelancer
     });
 };
@@ -775,65 +779,60 @@ exports.request_update = async function(req, res) {
  */
 exports.create_update = async function(req, res) {
     const { job_id, type, description } = req.body;
-    if (req.user.type !== "freelancer") {
+
+    const user_id = req.user.id;
+    const freelancer_job = await Freelancer_job.findOne({
+        where: { job_id: job_id, user_id: user_id }
+    });
+    const job = await Job.findOne({
+        where: { id: job_id }
+    });
+
+    if (type === "payment") {
+        job.updateAttributes({
+            status: "completed"
+        });
+    }
+
+    if (freelancer_job.user_id !== user_id) {
         res.status(400).send({
-            msg: "User's type is not freelancer."
+            msg: "This job is not assigned to this freelancer."
         });
-    } else {
-        const user_id = req.user.id;
-        const freelancer_job = await Freelancer_job.findOne({
-            where: { job_id: job_id, user_id: user_id }
-        });
-        const job = await Job.findOne({
-            where: { id: job_id }
-        });
-
-        if (type === "payment") {
+    }
+    const job_update_array = {
+        job_id: job_id,
+        user_id: user_id,
+        type: type,
+        description: description
+    };
+    try {
+        const job_update = await Job_update.create(job_update_array);
+        if (type === "completion") {
             job.updateAttributes({
-                status: "completed"
+                status: "waiting-payment"
             });
         }
+        let client_id = job.client_id;
+        const fName = `${req.user.firstName} ${req.user.lastName}`;
+        const jName = job.header;
 
-        if (freelancer_job.user_id !== user_id) {
-            res.status(400).send({
-                msg: "This job is not assigned to this freelancer."
-            });
-        }
-        const job_update_array = {
-            job_id: job_id,
-            user_id: user_id,
-            type: type,
-            description: description
-        };
-        try {
-            const job_update = await Job_update.create(job_update_array);
-            if (type === "completion") {
-                job.updateAttributes({
-                    status: "waiting-payment"
-                });
-            }
-            let client_id = job.client_id;
-            const fName = `${req.user.firstName} ${req.user.lastName}`;
-            const jName = job.header;
-
-            const notifresult = await createNotification(
-                fName,
-                jName,
-                job_id,
-                user_id,
-                client_id,
-                "deliver_update"
-            );
-            //TODO Testing
-            res.status(200).send({
-                msg: type + " is successfully created",
-                id: job_update.id
-            });
-        } catch (e) {
-            res.status(400).send({
-                msg: "Could not create the update",
-                additionalMsg: e.message
-            });
-        }
+        const notifresult = await createNotification(
+            fName,
+            jName,
+            job_id,
+            user_id,
+            client_id,
+            "deliver_update"
+        );
+        //TODO Testing
+        res.status(200).send({
+            msg: type + " is successfully created",
+            id: job_update.id
+        });
+    } catch (e) {
+        res.status(400).send({
+            msg: "Could not create the update",
+            additionalMsg: e.message
+        });
     }
 };
