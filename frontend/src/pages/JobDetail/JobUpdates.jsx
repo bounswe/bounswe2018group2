@@ -4,6 +4,59 @@ import { Button } from "evergreen-ui/commonjs/buttons";
 import { TextInput } from "evergreen-ui/commonjs/text-input";
 
 class JobUpdates extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            message: "",
+            completeLoading: false,
+            commitLoading: false,
+            requestLoading: false
+        };
+
+        this.handleCompleteJobClick = this.handleCompleteJobClick.bind(this);
+        this.handleCommitClick = this.handleCommitClick.bind(this);
+        this.handleRequestUpdateClick = this.handleRequestUpdateClick.bind(
+            this
+        );
+    }
+
+    handleCompleteJobClick() {
+        this.setState({
+            completeLoading: true
+        });
+
+        setTimeout(() => {
+            this.setState({
+                completeLoading: false
+            });
+        }, 2000);
+    }
+
+    handleCommitClick() {
+        this.setState({
+            commitLoading: true
+        });
+
+        setTimeout(() => {
+            this.setState({
+                commitLoading: false
+            });
+        }, 2000);
+    }
+
+    handleRequestUpdateClick() {
+        this.setState({
+            requestLoading: true
+        });
+
+        setTimeout(() => {
+            this.setState({
+                requestLoading: false
+            });
+        }, 2000);
+    }
+
     render() {
         const { user } = window;
         const { job } = this.props;
@@ -50,24 +103,50 @@ class JobUpdates extends React.Component {
                         <Paragraph>We are doing great champ.</Paragraph>
                     </Pane>
                 </Pane>
-                {/* <Pane marginTop={20}>
-                    <TextInput placeholder="Write a commit message" />
-                    <Button intent="success" marginLeft={7}>
-                        Commit
-                    </Button>
-                    <Button
-                        appearance="primary"
-                        intent="success"
-                        marginLeft={7}>
-                        Complete Job
-                    </Button>
-                </Pane> */}
-                <Pane marginTop={20}>
-                    <TextInput placeholder="Request an update" />
-                    <Button intent="danger" marginLeft={7}>
-                        Request
-                    </Button>
-                </Pane>
+                {user.type === "freelancer" && (
+                    <Pane marginTop={20}>
+                        <TextInput
+                            placeholder="Write a commit message"
+                            onChange={ev =>
+                                this.setState({ message: ev.target.value })
+                            }
+                            value={this.state.message}
+                        />
+                        <Button
+                            intent="success"
+                            marginLeft={7}
+                            onClick={this.handleCommitClick}
+                            isLoading={this.state.commitLoading}>
+                            Commit
+                        </Button>
+                        <Button
+                            appearance="primary"
+                            intent="success"
+                            marginLeft={7}
+                            onClick={this.handleCompleteJobClick}
+                            isLoading={this.state.completeLoading}>
+                            Complete Job
+                        </Button>
+                    </Pane>
+                )}
+                {user.type === "client" && (
+                    <Pane marginTop={20}>
+                        <TextInput
+                            placeholder="Request an update"
+                            onChange={ev =>
+                                this.setState({ message: ev.target.value })
+                            }
+                            value={this.state.message}
+                        />
+                        <Button
+                            intent="danger"
+                            marginLeft={7}
+                            isLoading={this.state.requestLoading}
+                            onClick={this.handleRequestUpdateClick}>
+                            Request
+                        </Button>
+                    </Pane>
+                )}
             </Pane>
         );
     }
