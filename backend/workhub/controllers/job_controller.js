@@ -86,7 +86,7 @@ function arrayContains(main, sub){
         for (j = 0 ; j < main.length; j++){
             if (main[j] === sub[i]){
                 return true;
-            }   
+            }
         }
     }
     return false;
@@ -291,14 +291,13 @@ exports.jobDetails = async function(req, res) {
 
         try {
             let winningbid = await Job_biddings.findOne({
-                where: {job_id: job_id, bidding_status: "accepted"}
+                where: {job_id: job_id, status: "accepted"}
             })
+
             price = winningbid.amount;
         } catch (e) {
-            res.status(400).send({
-                msg: "Couldn't find winning bid."
-            });
-            return;
+            // noop
+            console.error(e);
         }
 
     }
