@@ -312,7 +312,6 @@ exports.getAllFreelancers = async function(req, res) {
  */
 exports.getAllCategories = async function(req, res) {
     let categories = await Category.findAll();
-    console.log("adjkahkdjkhakd");
     if (categories) {
         res.status(200).send({
             msg: "Got all categories.",

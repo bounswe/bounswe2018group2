@@ -31,7 +31,7 @@ function doGetMember(id) {
         : properties.APIURLs.member;
     return fetch(url, {
         headers: { ...defaultHeaders, "user-token": window.workhubToken }
-    });
+    }).then(handleResponse);
 }
 
 function doLogout() {
@@ -191,6 +191,10 @@ function doCreateUpdate(jobId, type, description) {
     });
 }
 
+function doGetAllCategories() {
+    return fetch(properties.APIURLs.allCategories).then(handleResponse);
+}
+
 export {
     doLogin,
     doGetMember,
@@ -206,5 +210,6 @@ export {
     doGetRelatedWords,
     doUpload,
     doRequestUpdate,
-    doCreateUpdate
+    doCreateUpdate,
+    doGetAllCategories
 };

@@ -1,13 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Pane, Spinner } from "evergreen-ui";
+import { Pane, Spinner, toaster } from "evergreen-ui";
 import Cookies from "js-cookie";
 import PrivateRoute from "./utils/PrivateRoute";
 import LoginPage from "./pages/Login";
 import SignupPage from "./pages/SignupPage";
 import Page404 from "./pages/404";
 import ProfileProxy from "./pages/Profiles";
-import { doGetMember, doLogout } from "./data/api";
+import { doGetMember, doLogout, doGetAllCategories } from "./data/api";
 import DashboardProxy from "./pages/Dashboards";
 import CreateJobPage from "./pages/CreateJob";
 import JobDetailPage from "./pages/JobDetail";
@@ -42,25 +42,22 @@ class App extends React.Component {
             this.setState({
                 loading: true
             });
-            doGetMember()
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("User not logged in");
-                    }
 
-                    return response.json();
-                })
-                .then(body => {
-                    window.user = body;
+            Promise.all([doGetMember(), doGetAllCategories()])
+                .then(([user, categories]) => {
+                    window.user = user;
+                    window.categories = categories;
                     this.setState({
-                        user: body,
+                        user,
+                        categories,
                         loading: false
                     });
                 })
-                .catch(() => {
+                .catch(e => {
                     this.setState({
                         loading: false
                     });
+                    toaster.danger(e.msg);
                 });
         } else {
             this.setState({

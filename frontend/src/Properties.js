@@ -15,6 +15,7 @@ const properties = {
         createAnnotation: `${baseURL}/job/createannotation`,
         requestUpdate: `${baseURL}/job/requestupdate`,
         createUpdate: `${baseURL}/job/createupdate`,
+        allCategories: `${baseURL}/user/getcategories`,
         relatedWords: "https://api.datamuse.com/words",
         upload: `${baseURL}/media/upload`
     }
