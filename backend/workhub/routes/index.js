@@ -22,7 +22,7 @@ router.get("/member", auth, user.profileInfo);
 router.get("/member/:userId", auth, user.profileInfo);
 
 router.post("/job/create", auth, job.create);
-router.get("/job/getalljobs", job.getAllJobs);
+router.get("/job/getalljobs", auth, job.getAllJobs);
 router.get("/job/getselfjobs", auth, job.getSelfJobs);
 router.get("/job/getuserjobs/:userId", job.getUserJobs);
 router.get("/user/getcategories", user.getAllCategories);
