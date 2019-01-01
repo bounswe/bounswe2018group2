@@ -1,6 +1,7 @@
 import React from "react";
 import { Pane, Button, Heading, Paragraph } from "evergreen-ui";
 import { Link } from "react-router-dom";
+import RichTextFragment from "../../utils/RichTextFragment";
 
 export default class JobBiddingCard extends React.Component {
     constructor(props) {
@@ -51,7 +52,9 @@ export default class JobBiddingCard extends React.Component {
                         </>
                     )}
                 </Pane>
-                <Paragraph marginTop="5px">{description}</Paragraph>
+                <Paragraph marginTop="5px">
+                    <RichTextFragment>{description}</RichTextFragment>
+                </Paragraph>
             </Pane>
         );
     }

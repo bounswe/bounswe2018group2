@@ -185,7 +185,7 @@ class JobUpdates extends React.Component {
                                         </Heading>
                                         {update.description && (
                                             <Paragraph>
-                                                <RichTextFragment className="richTextSpan">
+                                                <RichTextFragment>
                                                     {update.description}
                                                 </RichTextFragment>
                                             </Paragraph>
@@ -219,7 +219,7 @@ class JobUpdates extends React.Component {
                                         </Heading>
                                         {update.description && (
                                             <Paragraph>
-                                                <RichTextFragment className="richTextSpan">
+                                                <RichTextFragment>
                                                     {update.description}
                                                 </RichTextFragment>
                                             </Paragraph>
@@ -252,7 +252,7 @@ class JobUpdates extends React.Component {
                                     </Heading>
                                     {update.description && (
                                         <Paragraph>
-                                            <RichTextFragment className="richTextSpan">
+                                            <RichTextFragment>
                                                 {update.description}
                                             </RichTextFragment>
                                         </Paragraph>

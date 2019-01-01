@@ -3,11 +3,3 @@
     border-color: grey;
     border-style: solid;
 }
-
-.richTextSpan a {
-    text-decoration: underline;
-}
-
-.richTextSpan img {
-    vertical-align: middle;
-}

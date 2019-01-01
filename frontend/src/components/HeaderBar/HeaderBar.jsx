@@ -40,15 +40,6 @@ function HeaderBar(props) {
             </Pane>
             <Pane>
                 <Button
-                    iconBefore="envelope"
-                    disabled={true}
-                    height={30}
-                    marginRight={16}
-                    appearance="minimal"
-                    intent="none">
-                    Messages
-                </Button>
-                <Button
                     iconBefore="log-out"
                     onClick={window.logout}
                     height={30}

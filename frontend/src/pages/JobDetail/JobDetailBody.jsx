@@ -306,7 +306,7 @@ class JobDetailBody extends React.Component {
                     </Strong>
                 </Paragraph>
                 <Paragraph marginTop="10px">
-                    <RichTextFragment baseRef={this.handleDescriptionRef} class="richTextSpan">
+                    <RichTextFragment baseRef={this.handleDescriptionRef}>
                         {job.description}
                     </RichTextFragment>
                 </Paragraph>

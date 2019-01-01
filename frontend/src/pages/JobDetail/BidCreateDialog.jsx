@@ -1,5 +1,12 @@
 import React from "react";
-import { Dialog, TextInputField, Label, Textarea } from "evergreen-ui";
+import {
+    Dialog,
+    TextInputField,
+    Label,
+    Textarea,
+    Paragraph,
+    Code
+} from "evergreen-ui";
 
 class BidCreateDialog extends React.Component {
     constructor(props) {
@@ -50,6 +57,10 @@ class BidCreateDialog extends React.Component {
                         this.setState({ bidDescription: event.target.value })
                     }
                 />
+                <Paragraph marginTop={4} size={300}>
+                    Hint: You can add links with writing{" "}
+                    <Code size={300}>[link text](http://ergun.sh)</Code>
+                </Paragraph>
             </Dialog>
         );
     }
