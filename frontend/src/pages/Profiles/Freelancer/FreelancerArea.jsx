@@ -14,12 +14,15 @@ import imgfreelancer from "./images.jpg";
 import StarRatingComponent from "react-star-rating-component";
 import HeaderBar from "../../../components/HeaderBar";
 import { doGetSelfJobs } from "../../../data/api";
+import { Redirect } from "react-router-dom";
 
 class FreelancerProfileArea extends React.Component {
     constructor() {
         super();
         this.state = {
             selectedIndex: 0,
+            isSelected: false,
+            selectedJobId: -1,
             jobs: []
         };
     }
@@ -40,6 +43,12 @@ class FreelancerProfileArea extends React.Component {
     }
 
     render() {
+        if (this.state.isSelected) {
+            this.setState({
+                isSelected: false
+            });
+            return <Redirect to={`/job/${this.state.selectedJobId}`} />;
+        }
         return (
             <Pane background="tint1">
                 <HeaderBar userType={this.props.user.type} />
@@ -185,7 +194,10 @@ class FreelancerProfileArea extends React.Component {
                                         key={job.id}
                                         isSelectable
                                         onSelect={() => {
-                                            window.location = "/job/" + job.id;
+                                            this.setState({
+                                                selectedJobId: job.id,
+                                                isSelected: true
+                                            });
                                         }}>
                                         <Table.TextCell>
                                             {job.header}

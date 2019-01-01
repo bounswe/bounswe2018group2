@@ -11,6 +11,7 @@ import {
     toaster
 } from "evergreen-ui";
 import imgclient from "./images.png";
+import { Redirect } from "react-router-dom";
 import StarRatingComponent from "react-star-rating-component";
 import HeaderBar from "../../../components/HeaderBar";
 import { doGetSelfJobs, doGetJobDetail } from "../../../data/api";
@@ -20,6 +21,8 @@ class ClientProfileArea extends React.Component {
         super();
         this.state = {
             selectedIndex: 0,
+            isSelected: false,
+            selectedJobId: -1,
             jobs: [],
             freelancers: {}
         };
@@ -64,6 +67,12 @@ class ClientProfileArea extends React.Component {
             });
     }
     render() {
+        if (this.state.isSelected) {
+            this.setState({
+                isSelected: false
+            });
+            return <Redirect to={`/job/${this.state.selectedJobId}`} />;
+        }
         return (
             <Pane background="tint1">
                 <HeaderBar userType={this.props.user.type} />
@@ -198,7 +207,10 @@ class ClientProfileArea extends React.Component {
                                         key={job.id}
                                         isSelectable
                                         onSelect={() => {
-                                            window.location = "/job/" + job.id;
+                                            this.setState({
+                                                selectedJobId: job.id,
+                                                isSelected: true
+                                            });
                                         }}>
                                         <Table.TextCell>
                                             {job.header}
