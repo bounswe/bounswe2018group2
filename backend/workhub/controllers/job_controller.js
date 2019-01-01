@@ -312,8 +312,8 @@ exports.jobDetails = async function(req, res) {
         job: job,
         job_anno: job_annotation,
         freelancer: freelancer,
-        categories: categories
-        job_updates: job_updates,
+        categories: categories,
+        job_updates: job_updates
     });
 };
 
