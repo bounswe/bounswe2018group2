@@ -3,7 +3,7 @@ import React from "react";
 const linkRegex = /!?\[(.+?)]\((.+?)\)/g;
 class RichTextFragment extends React.Component {
     render() {
-        let { children: text } = this.props;
+        let { children: text, basic } = this.props;
         const matches = text.match(linkRegex) || [];
         matches.forEach(matchText => {
             const hasMedia = matchText[0] === "!";
@@ -11,9 +11,10 @@ class RichTextFragment extends React.Component {
             const link = matchText.split("(")[1].split(")")[0];
 
             if (hasMedia) {
+                const imgText = basic ? insideText : `<img src="${link}" alt="${insideText}"/>`;
                 text = text.replace(
                     matchText,
-                    `<img src="${link}" alt="${insideText}"/>`
+                    imgText
                 );
                 return;
             }
@@ -25,8 +26,9 @@ class RichTextFragment extends React.Component {
         });
         return (
             <span
+                ref={this.props.baseRef}
                 dangerouslySetInnerHTML={{ __html: text }}
-                class={this.props.class}
+                className={this.props.class}
             />
         );
     }

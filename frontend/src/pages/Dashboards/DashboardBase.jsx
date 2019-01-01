@@ -16,6 +16,7 @@ import { doGetAllJobs, doGetRelatedWords } from "../../data/api";
 import HeaderBar from "../../components/HeaderBar";
 import FilterPane from "./FilterPane";
 import debounce from "lodash.debounce";
+import RichTextFragment from "../../utils/RichTextFragment";
 const options = { year: "numeric", month: "long", day: "numeric" };
 const dateFormatter = new Intl.DateTimeFormat("en-EN", options);
 
@@ -44,7 +45,11 @@ const JobCard = props => {
                     <Link to={`/job/${jobId}`}>{title}</Link>
                 </Heading>
                 <Paragraph marginTop="10px" color="muted">
-                    {description && cropText(description, 220)}
+                    {description && (
+                        <RichTextFragment basic>
+                            {cropText(description, 220)}
+                        </RichTextFragment>
+                    )}
                 </Paragraph>
                 <Pane marginTop={10}>
                     <Pane display="flex" justifyContent="space-between">

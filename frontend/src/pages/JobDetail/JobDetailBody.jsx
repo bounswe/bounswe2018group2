@@ -124,25 +124,29 @@ class JobDetailBody extends React.Component {
 
     createSelectionRects() {
         const { jobAnnotations } = this.props;
+        try {
+            const annotations = jobAnnotations.map(annotation => {
+                selectRange(
+                    this.descriptionEl.firstChild,
+                    annotation.position_x,
+                    annotation.position_y
+                );
+                const selection = window.getSelection();
+                const range = selection.getRangeAt(0);
+                return {
+                    id: annotation.id,
+                    rect: range.getBoundingClientRect(),
+                    text: annotation.text
+                };
+            });
 
-        const annotations = jobAnnotations.map(annotation => {
-            selectRange(
-                this.descriptionEl.firstChild,
-                annotation.position_x,
-                annotation.position_y
-            );
-            const selection = window.getSelection();
-            const range = selection.getRangeAt(0);
-            return {
-                id: annotation.id,
-                rect: range.getBoundingClientRect(),
-                text: annotation.text
-            };
-        });
-
-        this.setState({
-            annotations
-        });
+            this.setState({
+                annotations
+            });
+        } catch (e) {
+            // noop
+            console.error(e);
+        }
     }
 
     componentDidMount() {
@@ -302,11 +306,9 @@ class JobDetailBody extends React.Component {
                     </Strong>
                 </Paragraph>
                 <Paragraph marginTop="10px">
-                    <span ref={this.handleDescriptionRef}>
-                        <RichTextFragment class="richTextSpan">
-                            {job.description}
-                        </RichTextFragment>
-                    </span>
+                    <RichTextFragment baseRef={this.handleDescriptionRef} class="richTextSpan">
+                        {job.description}
+                    </RichTextFragment>
                 </Paragraph>
                 <Paragraph marginTop="15px">
                     Price: <Strong>{job.price}₺</Strong>
