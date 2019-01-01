@@ -26,6 +26,7 @@ router.get("/job/getselfjobs", auth, job.getSelfJobs);
 router.get("/job/getuserjobs/:userId", job.getUserJobs);
 router.get("/user/getcategories", user.getAllCategories);
 router.post("/user/addinterests", auth, user.addInterests);
+router.post("/user/removeinterests", auth, user.removeInterests);
 
 router.get("/job/getfreelancers", user.getAllFreelancers);
 router.get("/job/details/:jobId", job.jobDetails);

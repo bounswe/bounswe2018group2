@@ -133,7 +133,37 @@ exports.profileInfo = function(req, res) {
     let getProfilePromise = Profile.findOne({
         where: { user_id: user_id }
     });
+    if (req.user.type === "freelancer") {
+        let freelancerCategories = Freelancer_category.findAll({
+            where: { freelancer_id: req.user.id },
+            attributes: ["category_id"]
+        });
+        if (!user_id) {
+            getProfilePromise = User.findOne({
+                where: { id: req.user.id }
+            });
+        }
 
+        getProfilePromise.then(profile => {
+            if (profile) {
+                res.status(200).send({
+                    id: req.user.id,
+                    firstName: req.user.firstName,
+                    lastName: req.user.lastName,
+                    email: req.user.email,
+                    type: req.user.type,
+                    description: profile.description,
+                    rating: profile.rating,
+                    categories: freelancerCategories,
+                    msg: "User found successfully."
+                });
+            } else {
+                res.status(400).send({
+                    msg: "User not found."
+                });
+            }
+        });
+    }
     if (!user_id) {
         getProfilePromise = req.user.getProfile();
     }
@@ -219,6 +249,38 @@ exports.addInterests = async function(req, res) {
         }
         res.status(200).send({
             msg: "Categories are added successfully"
+        });
+    }
+};
+
+/**
+ * @api {post} /user/removeinterests  removes categories from freelancer
+ * @apiName removeInterests
+ * @apiGroup User
+ * @apiParam {categories} array of integer category_ids.
+ * @apiSuccess {String} msg Success message.
+ */
+exports.removeInterests = async function(req, res) {
+    const { categories } = req.body;
+    var user_id = req.user.id;
+    let user = await User.findOne({
+        where: { id: user_id }
+    });
+    if (!user) {
+        res.status(400).send({
+            msg: "User not found!"
+        });
+    } else {
+        for (let i = 0; i < categories.length; i++) {
+            Freelancer_category.destroy({
+                where: {
+                    freelancer_id: user_id,
+                    category_id: categories[i]
+                }
+            });
+        }
+        res.status(200).send({
+            msg: "Categories are deleted successfully"
         });
     }
 };
