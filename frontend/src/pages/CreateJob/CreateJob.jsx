@@ -7,6 +7,7 @@ import {
     Textarea,
     Checkbox,
     Label,
+    Paragraph,
     toaster
 } from "evergreen-ui";
 import { Redirect } from "react-router-dom";
@@ -14,6 +15,7 @@ import DayPicker from "react-day-picker";
 import "react-day-picker/lib/style.css";
 import React from "react";
 import { doCreateJob } from "../../data/api";
+import { Code } from "evergreen-ui/commonjs/typography";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US");
 
@@ -106,7 +108,7 @@ class CreateJob extends React.Component {
 
     render() {
         if (this.state.createdJobID) {
-            return <Redirect to={`/job/${this.state.createdJobID}`}/>;
+            return <Redirect to={`/job/${this.state.createdJobID}`} />;
         }
 
         return (
@@ -152,6 +154,15 @@ class CreateJob extends React.Component {
                             label="Description"
                             placeholder="A clear description"
                         />
+                        <Paragraph marginTop={4} size={300}>
+                            Hint: You can add images with dropping into text
+                            area or writing{" "}
+                            <Code size={300}>
+                                ![image's alt text](http://placekitten.com/120)
+                            </Code>{" "}
+                            and links with writing{" "}
+                            <Code size={300}>[link text](http://ergun.sh)</Code>
+                        </Paragraph>
                         <Pane display="flex" alignItems="center" marginTop={12}>
                             <TextInputField
                                 flex="1"

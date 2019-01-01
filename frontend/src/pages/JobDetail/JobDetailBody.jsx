@@ -12,17 +12,23 @@ import {
     Label
 } from "evergreen-ui";
 import debounce from "lodash.debounce";
+import RichTextFragment from "../../utils/RichTextFragment";
 
 const options = { year: "numeric", month: "long", day: "numeric" };
 const dateFormatter = new Intl.DateTimeFormat("en-EN", options);
 
 function selectRange(el, start, end) {
-    const selection = window.getSelection();
-    const range = document.createRange();
-    range.setStart(el, start);
-    range.setEnd(el, end);
-    selection.removeAllRanges();
-    selection.addRange(range);
+    try {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.setStart(el, start);
+        range.setEnd(el, end);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    } catch (e) {
+        // no-op
+        console.log("e", e);
+    }
 }
 
 class AnnotationPane extends React.Component {
@@ -118,6 +124,7 @@ class JobDetailBody extends React.Component {
 
     createSelectionRects() {
         const { jobAnnotations } = this.props;
+
         const annotations = jobAnnotations.map(annotation => {
             selectRange(
                 this.descriptionEl.firstChild,
@@ -296,7 +303,9 @@ class JobDetailBody extends React.Component {
                 </Paragraph>
                 <Paragraph marginTop="10px">
                     <span ref={this.handleDescriptionRef}>
-                        {job.description}
+                        <RichTextFragment class="richTextSpan">
+                            {job.description}
+                        </RichTextFragment>
                     </span>
                 </Paragraph>
                 <Paragraph marginTop="15px">
