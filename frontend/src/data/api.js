@@ -125,6 +125,20 @@ function doCreateAnnotation(jobId, annotation) {
     }).then(handleResponse);
 }
 
+function doGetRelatedWords(str) {
+    const url = new URL(properties.APIURLs.relatedWords);
+    const searchParams = new URLSearchParams();
+    searchParams.append("ml", str);
+    url.search = searchParams;
+    return fetch(url).then(resp => {
+        if (resp.ok) {
+            return resp.json();
+        }
+
+        throw new Error("Couldn't fetch related words");
+    });
+}
+
 export {
     doLogin,
     doGetMember,
@@ -135,5 +149,6 @@ export {
     doCreateBid,
     doGetJobBids,
     doAcceptBid,
-    doCreateAnnotation
+    doCreateAnnotation,
+    doGetRelatedWords
 };

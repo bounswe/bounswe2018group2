@@ -11,7 +11,8 @@ const properties = {
         jobBids: `${baseURL}/job/getallbids`,
         createBid: `${baseURL}/job/createbid`,
         acceptBid: `${baseURL}/job/acceptbid`,
-        createAnnotation: `${baseURL}/job/createannotation`
+        createAnnotation: `${baseURL}/job/createannotation`,
+        relatedWords: "https://api.datamuse.com/words"
     }
 };
 
