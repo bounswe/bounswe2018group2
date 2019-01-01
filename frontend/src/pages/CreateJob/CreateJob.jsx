@@ -10,6 +10,7 @@ import {
     Paragraph,
     toaster
 } from "evergreen-ui";
+import Dropzone from 'react-dropzone'
 import { Redirect } from "react-router-dom";
 import DayPicker from "react-day-picker";
 import "react-day-picker/lib/style.css";
@@ -48,7 +49,8 @@ class CreateJob extends React.Component {
             datePickerShown: false,
             selectedCategory: null,
             hasDueDate: false,
-            dueDate: null
+            dueDate: null,
+            droppedFile: null
         };
     }
 
@@ -110,7 +112,7 @@ class CreateJob extends React.Component {
         if (this.state.createdJobID) {
             return <Redirect to={`/job/${this.state.createdJobID}`} />;
         }
-
+        console.log(this.state.droppedFile);
         return (
             <Pane
                 background="tint1"
@@ -143,17 +145,42 @@ class CreateJob extends React.Component {
                             display="block">
                             Description
                         </Label>
-                        <Textarea
-                            name="Description"
-                            value={this.state.description}
-                            onChange={e =>
-                                this.setState({ description: e.target.value })
-                            }
-                            type="text"
-                            required
-                            label="Description"
-                            placeholder="A clear description"
-                        />
+                        <Dropzone onDrop={acceptedFiles => { this.setState({ droppedFile: acceptedFiles[0] })}}>
+                            {({getRootProps, isDragActive}) => {
+                                return (
+                                    <div {...getRootProps()} style={{ position: "relative" }}>
+                                        {isDragActive && (
+                                            <Pane
+                                                position="absolute"
+                                                width="100%"
+                                                height="100%"
+                                                top={0}
+                                                left={0}
+                                                background="rgba(0, 0, 0, 0.2)"
+                                                border="2px solid #000000"
+                                                display="flex"
+                                                justifyContent="center"
+                                                alignItems="center">
+                                                Drop here
+                                            </Pane>
+                                        )}
+                                        <Pane>
+                                            <Textarea
+                                                name="Description"
+                                                value={this.state.description}
+                                                onChange={e =>
+                                                    this.setState({ description: e.target.value })
+                                                }
+                                                type="text"
+                                                required
+                                                label="Description"
+                                                placeholder="A clear description"
+                                            />
+                                        </Pane>
+                                    </div>
+                                );
+                            }}
+                        </Dropzone>
                         <Paragraph marginTop={4} size={300}>
                             Hint: You can add images with dropping into text
                             area or writing{" "}
