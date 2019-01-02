@@ -2,17 +2,14 @@ import React from "react";
 import {
     Pane,
     Tablist,
-    SidebarTab,
     Paragraph,
     Text,
     Table,
-    Button,
     Heading,
     toaster
 } from "evergreen-ui";
 import imgclient from "./images.png";
 import { Redirect } from "react-router-dom";
-import StarRatingComponent from "react-star-rating-component";
 import HeaderBar from "../../../components/HeaderBar";
 import { doGetSelfJobs, doGetJobDetail } from "../../../data/api";
 
@@ -74,7 +71,7 @@ class ClientProfileArea extends React.Component {
             return <Redirect to={`/job/${this.state.selectedJobId}`} />;
         }
         return (
-            <Pane background="tint1">
+            <Pane background="tint1" minHeight="100vh">
                 <HeaderBar userType={this.props.user.type} />
                 <Pane padding={16} background="tint1" display="flex">
                     <Pane>
@@ -93,100 +90,28 @@ class ClientProfileArea extends React.Component {
                                 width={200}
                             />
                         </Pane>
-
-                        <StarRatingComponent
-                            name="Rating"
-                            editing={false}
-                            starCount={5}
-                            value={4}
-                        />
-
-                        <Pane>
+                        <Text>
+                            <Heading is="h3">
+                                {this.props.user.firstName}{" "}
+                                {this.props.user.lastName}
+                            </Heading>
+                        </Text>
+                         <Pane>
                             <Tablist
                                 marginBottom={16}
                                 flexBasis={240}
-                                marginRight={24}>
-                                <SidebarTab
-                                    key="tab1"
-                                    id="tab1"
-                                    onSelect={() =>
-                                        this.setState({ selectedIndex: 1 })
-                                    }
-                                    isSelected={1 === this.state.selectedIndex}
-                                    aria-controls={`panel-$"tab1"`}>
-                                    Connections
-                                </SidebarTab>
-
-                                <SidebarTab
-                                    key="tab2"
-                                    id="tab2"
-                                    onSelect={() =>
-                                        this.setState({ selectedIndex: 2 })
-                                    }
-                                    isSelected={2 === this.state.selectedIndex}
-                                    aria-controls={`panel-$"tab1"`}>
-                                    Set Filters
-                                </SidebarTab>
-
-                                <SidebarTab
-                                    key="tab3"
-                                    id="tab3"
-                                    onSelect={() =>
-                                        this.setState({ selectedIndex: 3 })
-                                    }
-                                    isSelected={3 === this.state.selectedIndex}
-                                    aria-controls={`panel-$"tab1"`}>
-                                    Edit Profile
-                                </SidebarTab>
-
-                                <SidebarTab
-                                    key="tab4"
-                                    id="tab4"
-                                    onSelect={() =>
-                                        this.setState({ selectedIndex: 4 })
-                                    }
-                                    isSelected={4 === this.state.selectedIndex}
-                                    aria-controls={`panel-$"tab1"`}>
-                                    Skills
-                                </SidebarTab>
-
-                                <SidebarTab
-                                    key="tab5"
-                                    id="tab5"
-                                    onSelect={() =>
-                                        this.setState({ selectedIndex: 5 })
-                                    }
-                                    isSelected={5 === this.state.selectedIndex}
-                                    aria-controls={`panel-$"tab1"`}>
-                                    Delete Account
-                                </SidebarTab>
-
-                                <Button appearance="primary" marginTop={20}>
-                                    {" "}
-                                    START PROJECT!
-                                </Button>
-                            </Tablist>
+                                marginRight={24}
+                            />
                         </Pane>
                     </Pane>
 
-                    <Pane padding={5} background="tint1" display="vertical">
-                        <Pane
-                            height={120}
-                            width={1000}
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                            border="default">
-                            <Text>
-                                <Heading is="h3">
-                                    İlber Tatlıcı, 55 Ankara{" "}
-                                </Heading>
-                                <Paragraph size={400} marginTop="default">
-                                    Works in Finance sector. Is CEO of a
-                                    company. Has 3 kids and 1 dog.
-                                </Paragraph>
-                            </Text>
-                        </Pane>
+                    <Pane padding={16} background="tint1" display="vertical" minWidth="90%">
+                        <Text>
+                            <Heading is="h1" size={600}>
+                                {" "}
+                                Last Activities{" "}
+                            </Heading>
+                        </Text>
 
                         <Table marginTop={20}>
                             <Table.Head>

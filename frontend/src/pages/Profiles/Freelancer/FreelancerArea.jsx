@@ -2,17 +2,14 @@ import React from "react";
 import {
     Pane,
     Tablist,
-    SidebarTab,
     Paragraph,
     Text,
     Table,
-    Button,
     Heading,
     Checkbox,
     toaster
 } from "evergreen-ui";
 import imgfreelancer from "./images.jpg";
-import StarRatingComponent from "react-star-rating-component";
 import HeaderBar from "../../../components/HeaderBar";
 import debounce from "lodash.debounce";
 import {
@@ -45,7 +42,6 @@ class FreelancerProfileArea extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props.user);
         doGetSelfJobs()
             .then(body => {
                 this.setState({
@@ -99,7 +95,7 @@ class FreelancerProfileArea extends React.Component {
         }
 
         return (
-            <Pane background="tint1">
+            <Pane background="tint1" minHeight="100vh">
                 <HeaderBar userType={this.props.user.type} />
                 <Pane padding={16} background="tint1" display="flex">
                     <Pane>
