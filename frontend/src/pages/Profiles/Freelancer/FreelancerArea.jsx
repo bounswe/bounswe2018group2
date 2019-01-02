@@ -28,16 +28,24 @@ class FreelancerProfileArea extends React.Component {
         this.state = {
             selectedIndex: 0,
             isSelected: false,
-            selectedCategories: props.user.categories.fulfillmentValue.map(category => category.category_id),
+            selectedCategories: props.user.categories.fulfillmentValue.map(
+                category => category.category_id
+            ),
             selectedJobId: -1,
             jobs: []
         };
 
-        this.handleAddInterest = debounce(this.handleAddInterest, 250).bind(this);
-        this.handleRemoveInterest = debounce(this.handleRemoveInterest, 250).bind(this);
+        this.handleAddInterest = debounce(this.handleAddInterest, 250).bind(
+            this
+        );
+        this.handleRemoveInterest = debounce(
+            this.handleRemoveInterest,
+            250
+        ).bind(this);
     }
 
     componentDidMount() {
+        console.log(this.props.user);
         doGetSelfJobs()
             .then(body => {
                 this.setState({
@@ -53,21 +61,33 @@ class FreelancerProfileArea extends React.Component {
     }
 
     handleAddInterest(id) {
-        doAddInterests([id]).then(() => {
-            toaster.success(`Added category ${window.categories[id].name} to interests`);
-        }).catch(e => {
-            toaster.danger(`Couldn't add category ${window.categories[id].name}`);
-            console.error(e);
-        });
+        doAddInterests([id])
+            .then(() => {
+                toaster.success(
+                    `Added category ${window.categories[id].name} to interests`
+                );
+            })
+            .catch(e => {
+                toaster.danger(
+                    `Couldn't add category ${window.categories[id].name}`
+                );
+                console.error(e);
+            });
     }
 
     handleRemoveInterest(id) {
-        doRemoveInterests([id]).then(() => {
-            toaster.success(`Removed category ${window.categories[id].name}`);
-        }).catch(e => {
-            toaster.danger(`Couldn't remove category ${window.categories[id].name}`);
-            console.error(e);
-        });
+        doRemoveInterests([id])
+            .then(() => {
+                toaster.success(
+                    `Removed category ${window.categories[id].name}`
+                );
+            })
+            .catch(e => {
+                toaster.danger(
+                    `Couldn't remove category ${window.categories[id].name}`
+                );
+                console.error(e);
+            });
     }
 
     render() {
@@ -99,111 +119,29 @@ class FreelancerProfileArea extends React.Component {
                             />
                         </Pane>
 
-                        <StarRatingComponent
-                            name="Rating"
-                            editing={false}
-                            starCount={5}
-                            value={4}
-                        />
+                        <Text>
+                            <Heading is="h3">
+                                {this.props.user.firstName}{" "}
+                                {this.props.user.lastName}
+                            </Heading>
+                        </Text>
 
                         <Pane>
                             <Tablist
                                 marginBottom={16}
                                 flexBasis={240}
-                                marginRight={24}>
-                                <SidebarTab
-                                    key="tab0"
-                                    id="tab0"
-                                    onSelect={() =>
-                                        this.setState({ selectedIndex: 0 })
-                                    }
-                                    isSelected={0 === this.state.selectedIndex}
-                                    aria-controls={`panel-$"tab1"`}>
-                                    Homepage
-                                </SidebarTab>
-
-                                <SidebarTab
-                                    key="tab1"
-                                    id="tab1"
-                                    onSelect={() =>
-                                        this.setState({ selectedIndex: 1 })
-                                    }
-                                    isSelected={1 === this.state.selectedIndex}
-                                    aria-controls={`panel-$"tab1"`}>
-                                    Connections
-                                </SidebarTab>
-
-                                <SidebarTab
-                                    key="tab2"
-                                    id="tab2"
-                                    onSelect={() =>
-                                        this.setState({ selectedIndex: 2 })
-                                    }
-                                    isSelected={2 === this.state.selectedIndex}
-                                    aria-controls={`panel-$"tab1"`}>
-                                    Set Filters
-                                </SidebarTab>
-
-                                <SidebarTab
-                                    key="tab3"
-                                    id="tab3"
-                                    onSelect={() =>
-                                        this.setState({ selectedIndex: 3 })
-                                    }
-                                    isSelected={3 === this.state.selectedIndex}
-                                    aria-controls={`panel-$"tab1"`}>
-                                    Edit Profile
-                                </SidebarTab>
-
-                                <SidebarTab
-                                    key="tab4"
-                                    id="tab4"
-                                    onSelect={() =>
-                                        this.setState({ selectedIndex: 4 })
-                                    }
-                                    isSelected={4 === this.state.selectedIndex}
-                                    aria-controls={`panel-$"tab1"`}>
-                                    Skills
-                                </SidebarTab>
-
-                                <SidebarTab
-                                    key="tab5"
-                                    id="tab5"
-                                    onSelect={() =>
-                                        this.setState({ selectedIndex: 5 })
-                                    }
-                                    isSelected={5 === this.state.selectedIndex}
-                                    aria-controls={`panel-$"tab1"`}>
-                                    Delete Account
-                                </SidebarTab>
-
-                                <Button appearance="primary" marginTop={20}>
-                                    {" "}
-                                    GET PROJECT!
-                                </Button>
-                            </Tablist>
+                                marginRight={24}
+                            />
                         </Pane>
                     </Pane>
 
                     <Pane padding={16} background="tint1" display="vertical">
-                        <Pane
-                            height={120}
-                            width={1000}
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                            border="default">
-                            <Text>
-                                <Heading is="h3">Elenore Deren Yıldız </Heading>
-                                <Paragraph size={400} marginTop="default">
-                                    Translator : English, French, Turkish, both
-                                    ways. Looking to find short and simple jobs
-                                    to earn money, as I can not afford a full
-                                    time job.
-                                </Paragraph>
-                            </Text>
-                        </Pane>
-
+                        <Text>
+                            <Heading is="h1" size={600}>
+                                {" "}
+                                Last Activities{" "}
+                            </Heading>
+                        </Text>
                         <Table marginTop={20}>
                             <Table.Head>
                                 <Table.TextHeaderCell>Job</Table.TextHeaderCell>
@@ -328,12 +266,16 @@ class FreelancerProfileArea extends React.Component {
                                                                 index,
                                                                 1
                                                             );
-                                                            this.handleRemoveInterest(category.id);
+                                                            this.handleRemoveInterest(
+                                                                category.id
+                                                            );
                                                         } else {
                                                             selectedCategories.push(
                                                                 category.id
                                                             );
-                                                            this.handleAddInterest(category.id);
+                                                            this.handleAddInterest(
+                                                                category.id
+                                                            );
                                                         }
 
                                                         return {
