@@ -14,6 +14,7 @@ import {
 import imgfreelancer from "./images.jpg";
 import StarRatingComponent from "react-star-rating-component";
 import HeaderBar from "../../../components/HeaderBar";
+import debounce from "lodash.debounce";
 import {
     doGetSelfJobs,
     doAddInterests,
@@ -27,10 +28,13 @@ class FreelancerProfileArea extends React.Component {
         this.state = {
             selectedIndex: 0,
             isSelected: false,
-            selectedCategories: props.user.categories.fulfillmentValue,
+            selectedCategories: props.user.categories.fulfillmentValue.map(category => category.category_id),
             selectedJobId: -1,
             jobs: []
         };
+
+        this.handleAddInterest = debounce(this.handleAddInterest, 250).bind(this);
+        this.handleRemoveInterest = debounce(this.handleRemoveInterest, 250).bind(this);
     }
 
     componentDidMount() {
@@ -48,9 +52,23 @@ class FreelancerProfileArea extends React.Component {
             });
     }
 
-    handleAddInterest(id) {}
+    handleAddInterest(id) {
+        doAddInterests([id]).then(() => {
+            toaster.success(`Added category ${window.categories[id].name} to interests`);
+        }).catch(e => {
+            toaster.danger(`Couldn't add category ${window.categories[id].name}`);
+            console.error(e);
+        });
+    }
 
-    handleRemoveInterest(id) {}
+    handleRemoveInterest(id) {
+        doRemoveInterests([id]).then(() => {
+            toaster.success(`Removed category ${window.categories[id].name}`);
+        }).catch(e => {
+            toaster.danger(`Couldn't remove category ${window.categories[id].name}`);
+            console.error(e);
+        });
+    }
 
     render() {
         if (this.state.isSelected) {
@@ -310,10 +328,12 @@ class FreelancerProfileArea extends React.Component {
                                                                 index,
                                                                 1
                                                             );
+                                                            this.handleRemoveInterest(category.id);
                                                         } else {
                                                             selectedCategories.push(
                                                                 category.id
                                                             );
+                                                            this.handleAddInterest(category.id);
                                                         }
 
                                                         return {
