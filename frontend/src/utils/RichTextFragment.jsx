@@ -13,7 +13,7 @@ class RichTextFragment extends React.Component {
             if (hasMedia) {
                 const imgText = basic
                     ? insideText
-                    : `<img style="vertical-align: middle, max-width: 100%" src="${link}" alt="${insideText}"/>`;
+                    : `<img style="vertical-align: middle; max-width: 100%" src="${link}" alt="${insideText}"/>`;
                 text = text.replace(matchText, imgText);
                 return;
             }
