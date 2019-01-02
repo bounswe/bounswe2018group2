@@ -9,11 +9,12 @@ import {
     IconButton,
     Button,
     Textarea,
-    Label
+    Label,
+    Badge
 } from "evergreen-ui";
 import debounce from "lodash.debounce";
 import RichTextFragment from "../../utils/RichTextFragment";
-
+import { getCategoryColor } from "../../utils/utils";
 const options = { year: "numeric", month: "long", day: "numeric" };
 const dateFormatter = new Intl.DateTimeFormat("en-EN", options);
 
@@ -323,18 +324,16 @@ class JobDetailBody extends React.Component {
                     )}
                 </Paragraph>
                 <Paragraph marginTop="5px">
-                    {/* <Badge isSolid color="green">
-                        Article Writing
-                    </Badge>{" "}
-                    <Badge isSolid color="yellow">
-                        Finansal Araştırma
-                    </Badge>{" "}
-                    <Badge isSolid color="orange">
-                        Grafik Tasarımı
-                    </Badge>{" "}
-                    <Badge isSolid color="purple">
-                        HTML
-                    </Badge> */}
+                    {job.categories.map((category, index) => {
+                        return (
+                            <Badge
+                                isSolid
+                                color={getCategoryColor(category.id)}
+                                marginLeft={index !== 0 && 5}>
+                                {category.name}
+                            </Badge>
+                        );
+                    })}
                 </Paragraph>
             </Pane>
         );
