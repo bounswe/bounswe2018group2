@@ -4,8 +4,6 @@ const defaultHeaders = {
     "Content-Type": "application/json"
 };
 
-let jobsResultCache = null;
-
 function handleResponse(resp) {
     return resp.json().then(body => {
         if (resp.ok) {
@@ -82,19 +80,12 @@ function doGetJobDetail(jobId) {
 }
 
 function doGetAllJobs() {
-    if (jobsResultCache) {
-        return Promise.resolve(jobsResultCache);
-    }
-
     return fetch(properties.APIURLs.allJobs, {
         headers: {
             ...defaultHeaders,
             "user-token": window.workhubToken
         }
-    }).then(handleResponse).then(jobsResult => {
-        jobsResultCache = jobsResult;
-        return jobsResult;
-    });
+    }).then(handleResponse);
 }
 
 function doGetSelfJobs() {
