@@ -1,8 +1,11 @@
 package com.android.workhub.utils;
 
+import com.android.workhub.models.AddInterestModel;
 import com.android.workhub.models.CreateUpdateModel;
 import com.android.workhub.models.GetAllBidsReturnModel;
 import com.android.workhub.models.GetAllJobsReturnModel;
+import com.android.workhub.models.GetCategoriesReturnModel;
+import com.android.workhub.models.GetMediaReturnModel;
 import com.android.workhub.models.GetSelfReturnModel;
 import com.android.workhub.models.JobBidModel;
 import com.android.workhub.models.JobDetailModel;
@@ -10,24 +13,30 @@ import com.android.workhub.models.JobDetailReturnModel;
 import com.android.workhub.models.JobModel;
 import com.android.workhub.models.LoginModel;
 import com.android.workhub.models.LoginReturnModel;
+import com.android.workhub.models.MediaModel;
 import com.android.workhub.models.PostBidModel;
+import com.android.workhub.models.RemoveInterestModel;
 import com.android.workhub.models.RequestUpdateModel;
 import com.android.workhub.models.SendNotificationModel;
 import com.android.workhub.models.SimpleMessageModel;
 import com.android.workhub.models.UpdateJobBidModel;
 import com.android.workhub.models.UpdateProfileModel;
 import com.android.workhub.utils.Tasks.AcceptBidTask;
+import com.android.workhub.utils.Tasks.AddInterestTask;
 import com.android.workhub.utils.Tasks.CreateJobBidTask;
 import com.android.workhub.utils.Tasks.CreateJobTask;
 import com.android.workhub.utils.Tasks.CreateUpdateTask;
 import com.android.workhub.utils.Tasks.GetAllBidsTask;
 import com.android.workhub.utils.Tasks.GetAllJobsTask;
+import com.android.workhub.utils.Tasks.GetCategoriesTask;
 import com.android.workhub.utils.Tasks.GetSelfJobsTask;
 import com.android.workhub.utils.Tasks.GetSelfTask;
 import com.android.workhub.utils.Tasks.JobDetailTask;
 import com.android.workhub.utils.Tasks.LoginTask;
 import com.android.workhub.utils.Tasks.LogoutTask;
+import com.android.workhub.utils.Tasks.MediaUploadTask;
 import com.android.workhub.utils.Tasks.RejectBidTask;
+import com.android.workhub.utils.Tasks.RemoveInterestTask;
 import com.android.workhub.utils.Tasks.RequestJobTask;
 import com.android.workhub.utils.Tasks.SendNotificationTask;
 import com.android.workhub.utils.Tasks.SignUpTask;
@@ -117,4 +126,22 @@ public class ServerCall {
         RequestJobTask task = new RequestJobTask(listener);
         task.run(token,model);
     }
+    public static void addInterest(String token, AddInterestModel model,final WorkHubServiceListener<SimpleMessageModel> listener){
+        AddInterestTask task = new AddInterestTask(listener);
+        task.run(token,model);
+    }
+    public static void removeInterest(String token, RemoveInterestModel model, final WorkHubServiceListener<SimpleMessageModel> listener){
+        RemoveInterestTask task = new RemoveInterestTask(listener);
+        task.run(token,model);
+    }
+    public static void getCategories( final WorkHubServiceListener<GetCategoriesReturnModel> listener){
+        GetCategoriesTask task = new GetCategoriesTask(listener);
+        task.run();
+    }
+    public static void mediaUpload(String token, MediaModel model, final WorkHubServiceListener<GetMediaReturnModel> listener){
+        MediaUploadTask task = new MediaUploadTask(listener);
+        task.run(token,model);
+    }
+
+
 }

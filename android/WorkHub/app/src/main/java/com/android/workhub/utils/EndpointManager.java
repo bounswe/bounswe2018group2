@@ -48,6 +48,9 @@ public class EndpointManager {
 
     public static String getSelfJobsUrl(){ return SERVER_URL+ "/job/getselfjobs";}
     public static String getRequestUpdateUrl(){ return SERVER_URL+ "/job/requestupdate";}
-
+    public static String getAddInterestUrl(){return SERVER_URL+ "/user/addinterests";}
+    public static String getRemoveInterestUrl(){return SERVER_URL+ "/user/removeinterests";}
+    public static String getCategoriesUrl(){return SERVER_URL+ "/user/getcategories";}
+    public static String getMediaUploadUrl(){return SERVER_URL+ "/media/upload";}
 }
 
