@@ -180,7 +180,7 @@ exports.getSelfJobs = async function(req, res) {
     if (req.user.type === "client") {
         Job.findAll({
             where: { client_id: req.user.id },
-            include: [{ model: User, as: "Client", required: true }],
+            include: [{ model: User, as: "Client", required: true }, { model: Job_category, as: "Jobfields", required: false }],
             order: [["updatedAt", "DESC"]]
         }).then(jobs => {
             res.status(200).send({
@@ -200,6 +200,20 @@ exports.getSelfJobs = async function(req, res) {
         let jobs = [];
         for (i = 0; i < job_assocs.length; i++) {
             let job_single = job_assocs[i].Job.toJSON();
+            let categories = [];
+
+            let cate = await Job_category.findAll({
+                where: { job_id: job_single.id }
+            });
+            for (j = 0; j < cate.length ; j++){
+                let cate_single = await Categories.findOne({
+                    where: {id: cate[j].category_id}
+                });
+                categories.push(cate_single.toJSON());
+            }
+
+            job_single["Jobfields"] = categories;
+
             let client = await User.findOne({
                 where: { id: job_single.client_id }
             });
@@ -231,7 +245,7 @@ exports.getUserJobs = async function(req, res) {
     if (user.type === "client") {
         Job.findAll({
             where: { client_id: user.id },
-            //include: [{ model: User, as: "Client", required: true }],
+            include: [{ model: Job_category, as: "Jobfields", required: false }],
             order: [["updatedAt", "DESC"]]
         }).then(jobs => {
             res.status(200).send({
@@ -240,23 +254,40 @@ exports.getUserJobs = async function(req, res) {
             });
         });
     } else {
-        Freelancer_job.findAll({
+        let job_assocs = await Freelancer_job.findAll({
             where: { user_id: user.id },
             include: [
                 { model: Job, as: "Job", required: true },
                 { model: User, as: "Freelancer", required: true }
             ],
             order: [["updatedAt", "DESC"]]
-        }).then(job_assocs => {
-            let jobs = [];
-            for (i = 0; i < job_assocs.length; i++) {
-                let job_single = job_assocs[i].Job;
-                jobs.unshift(job_single);
-            }
-            res.status(200).send({
-                msg: "Got all jobs for freelancer.",
-                jobs
+        });
+        let jobs = [];
+        for (i = 0; i < job_assocs.length; i++) {
+            let job_single = job_assocs[i].Job.toJSON();
+            let categories = [];
+
+            let cate = await Job_category.findAll({
+                where: { job_id: job_single.id }
             });
+            for (j = 0; j < cate.length ; j++){
+                let cate_single = await Categories.findOne({
+                    where: {id: cate[j].category_id}
+                });
+                categories.push(cate_single.toJSON());
+            }
+
+            job_single["Jobfields"] = categories;
+
+            let client = await User.findOne({
+                where: { id: job_single.client_id }
+            });
+            job_single["Client"] = client.toJSON();
+            jobs.unshift(job_single);
+        }
+        res.status(200).send({
+            msg: "Got all jobs for freelancer.",
+            jobs
         });
     }
 };
