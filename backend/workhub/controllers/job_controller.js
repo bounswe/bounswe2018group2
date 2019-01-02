@@ -106,39 +106,59 @@ exports.getAllJobs = async function(req, res) {
         include: [{ model: User, as: "Client", required: true }, { model: Job_category, as: "Jobfields", required: false }],
         order: [["updatedAt", "DESC"]]
     });
-    if (req.user.type === "freelancer"){
-        let prefs = await Freelancer_category.findAll({
-            where: {freelancer_id: req.user.id}
-        })
 
-        if (prefs.length > 0){
-            let pref_ids = prefs.map(a => a.category_id);
-
-            //sort by whether they have preferred categories or not.
-            jobs.sort(function (a,b){
-                let ids_a = a["Jobfields"].map(x => x.category_id);
-                let ids_b = b["Jobfields"].map(x => x.category_id);
-                if (ids_a.length > 0 && ids_b.length === 0){
-                    return -1;
-                    console.log("more!");
-                }else if(ids_a.length === 0 && ids_b.length > 0){
-                    return 1;
-                    console.log("less!");
-                }else if(ids_a.length > 0 && ids_b.length > 0){
-                    console.log("weird...");
-                    if (arrayContains(ids_a, pref_ids) && !arrayContains(ids_b, pref_ids)){
-                        return -1;
-                    }else if (!arrayContains(ids_a, pref_ids) && arrayContains(ids_b, pref_ids)){
-                        return 1;
-                    }else{
-                        return 0;
-                    }
-                }
-                return 0;
-            });
+    const session = await Sessions.findOne({
+        where: {
+            user_token: req.headers['user-token']
         }
+    });
+    if (session) {
+        const user = await User.findOne({
+            where: {
+                id: session.user_id
+            }
+        });
 
+        req.user = user;
+        if (req.user.type === "freelancer"){
+            let prefs = await Freelancer_category.findAll({
+                where: {freelancer_id: req.user.id}
+            })
+
+            if (prefs.length > 0){
+                let pref_ids = prefs.map(a => a.category_id);
+
+                //sort by whether they have preferred categories or not.
+                jobs.sort(function (a,b){
+                    let ids_a = a["Jobfields"].map(x => x.category_id);
+                    let ids_b = b["Jobfields"].map(x => x.category_id);
+                    if (ids_a.length > 0 && ids_b.length === 0){
+                        return -1;
+                        console.log("more!");
+                    }else if(ids_a.length === 0 && ids_b.length > 0){
+                        return 1;
+                        console.log("less!");
+                    }else if(ids_a.length > 0 && ids_b.length > 0){
+                        console.log("weird...");
+                        if (arrayContains(ids_a, pref_ids) && !arrayContains(ids_b, pref_ids)){
+                            return -1;
+                        }else if (!arrayContains(ids_a, pref_ids) && arrayContains(ids_b, pref_ids)){
+                            return 1;
+                        }else{
+                            return 0;
+                        }
+                    }
+                    return 0;
+                });
+            }
+
+        }
     }
+
+
+
+
+
 
 
 
@@ -160,7 +180,7 @@ exports.getSelfJobs = async function(req, res) {
     if (req.user.type === "client") {
         Job.findAll({
             where: { client_id: req.user.id },
-            include: [{ model: User, as: "Client", required: true }],
+            include: [{ model: User, as: "Client", required: true }, { model: Job_category, as: "Jobfields", required: false }],
             order: [["updatedAt", "DESC"]]
         }).then(jobs => {
             res.status(200).send({
@@ -180,6 +200,20 @@ exports.getSelfJobs = async function(req, res) {
         let jobs = [];
         for (i = 0; i < job_assocs.length; i++) {
             let job_single = job_assocs[i].Job.toJSON();
+            let categories = [];
+
+            let cate = await Job_category.findAll({
+                where: { job_id: job_single.id }
+            });
+            for (j = 0; j < cate.length ; j++){
+                let cate_single = await Categories.findOne({
+                    where: {id: cate[j].category_id}
+                });
+                categories.push(cate_single.toJSON());
+            }
+
+            job_single["Jobfields"] = categories;
+
             let client = await User.findOne({
                 where: { id: job_single.client_id }
             });
@@ -211,7 +245,7 @@ exports.getUserJobs = async function(req, res) {
     if (user.type === "client") {
         Job.findAll({
             where: { client_id: user.id },
-            //include: [{ model: User, as: "Client", required: true }],
+            include: [{ model: Job_category, as: "Jobfields", required: false }],
             order: [["updatedAt", "DESC"]]
         }).then(jobs => {
             res.status(200).send({
@@ -220,23 +254,40 @@ exports.getUserJobs = async function(req, res) {
             });
         });
     } else {
-        Freelancer_job.findAll({
+        let job_assocs = await Freelancer_job.findAll({
             where: { user_id: user.id },
             include: [
                 { model: Job, as: "Job", required: true },
                 { model: User, as: "Freelancer", required: true }
             ],
             order: [["updatedAt", "DESC"]]
-        }).then(job_assocs => {
-            let jobs = [];
-            for (i = 0; i < job_assocs.length; i++) {
-                let job_single = job_assocs[i].Job;
-                jobs.unshift(job_single);
-            }
-            res.status(200).send({
-                msg: "Got all jobs for freelancer.",
-                jobs
+        });
+        let jobs = [];
+        for (i = 0; i < job_assocs.length; i++) {
+            let job_single = job_assocs[i].Job.toJSON();
+            let categories = [];
+
+            let cate = await Job_category.findAll({
+                where: { job_id: job_single.id }
             });
+            for (j = 0; j < cate.length ; j++){
+                let cate_single = await Categories.findOne({
+                    where: {id: cate[j].category_id}
+                });
+                categories.push(cate_single.toJSON());
+            }
+
+            job_single["Jobfields"] = categories;
+
+            let client = await User.findOne({
+                where: { id: job_single.client_id }
+            });
+            job_single["Client"] = client.toJSON();
+            jobs.unshift(job_single);
+        }
+        res.status(200).send({
+            msg: "Got all jobs for freelancer.",
+            jobs
         });
     }
 };
