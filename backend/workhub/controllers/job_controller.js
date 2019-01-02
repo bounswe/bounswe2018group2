@@ -106,39 +106,59 @@ exports.getAllJobs = async function(req, res) {
         include: [{ model: User, as: "Client", required: true }, { model: Job_category, as: "Jobfields", required: false }],
         order: [["updatedAt", "DESC"]]
     });
-    if (req.user.type === "freelancer"){
-        let prefs = await Freelancer_category.findAll({
-            where: {freelancer_id: req.user.id}
-        })
 
-        if (prefs.length > 0){
-            let pref_ids = prefs.map(a => a.category_id);
-
-            //sort by whether they have preferred categories or not.
-            jobs.sort(function (a,b){
-                let ids_a = a["Jobfields"].map(x => x.category_id);
-                let ids_b = b["Jobfields"].map(x => x.category_id);
-                if (ids_a.length > 0 && ids_b.length === 0){
-                    return -1;
-                    console.log("more!");
-                }else if(ids_a.length === 0 && ids_b.length > 0){
-                    return 1;
-                    console.log("less!");
-                }else if(ids_a.length > 0 && ids_b.length > 0){
-                    console.log("weird...");
-                    if (arrayContains(ids_a, pref_ids) && !arrayContains(ids_b, pref_ids)){
-                        return -1;
-                    }else if (!arrayContains(ids_a, pref_ids) && arrayContains(ids_b, pref_ids)){
-                        return 1;
-                    }else{
-                        return 0;
-                    }
-                }
-                return 0;
-            });
+    const session = await Sessions.findOne({
+        where: {
+            user_token: req.headers['user-token']
         }
+    });
+    if (session) {
+        const user = await User.findOne({
+            where: {
+                id: session.user_id
+            }
+        });
 
+        req.user = user;
+        if (req.user.type === "freelancer"){
+            let prefs = await Freelancer_category.findAll({
+                where: {freelancer_id: req.user.id}
+            })
+
+            if (prefs.length > 0){
+                let pref_ids = prefs.map(a => a.category_id);
+
+                //sort by whether they have preferred categories or not.
+                jobs.sort(function (a,b){
+                    let ids_a = a["Jobfields"].map(x => x.category_id);
+                    let ids_b = b["Jobfields"].map(x => x.category_id);
+                    if (ids_a.length > 0 && ids_b.length === 0){
+                        return -1;
+                        console.log("more!");
+                    }else if(ids_a.length === 0 && ids_b.length > 0){
+                        return 1;
+                        console.log("less!");
+                    }else if(ids_a.length > 0 && ids_b.length > 0){
+                        console.log("weird...");
+                        if (arrayContains(ids_a, pref_ids) && !arrayContains(ids_b, pref_ids)){
+                            return -1;
+                        }else if (!arrayContains(ids_a, pref_ids) && arrayContains(ids_b, pref_ids)){
+                            return 1;
+                        }else{
+                            return 0;
+                        }
+                    }
+                    return 0;
+                });
+            }
+
+        }
     }
+
+
+
+
+
 
 
 
