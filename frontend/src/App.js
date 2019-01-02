@@ -61,10 +61,13 @@ class App extends React.Component {
                     });
                 })
                 .catch(e => {
+                    if (e.message !== "Not a valid token") {
+                        toaster.danger(e.message);
+                    }
+
                     this.setState({
                         loading: false
                     });
-                    toaster.danger(e.msg);
                 });
         } else {
             this.setState({
