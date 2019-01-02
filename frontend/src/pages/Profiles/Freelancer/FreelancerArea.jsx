@@ -8,23 +8,33 @@ import {
     Table,
     Button,
     Heading,
+    Checkbox,
     toaster
 } from "evergreen-ui";
 import imgfreelancer from "./images.jpg";
 import StarRatingComponent from "react-star-rating-component";
 import HeaderBar from "../../../components/HeaderBar";
-import { doGetSelfJobs } from "../../../data/api";
+import debounce from "lodash.debounce";
+import {
+    doGetSelfJobs,
+    doAddInterests,
+    doRemoveInterests
+} from "../../../data/api";
 import { Redirect } from "react-router-dom";
 
 class FreelancerProfileArea extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             selectedIndex: 0,
             isSelected: false,
+            selectedCategories: props.user.categories.fulfillmentValue.map(category => category.category_id),
             selectedJobId: -1,
             jobs: []
         };
+
+        this.handleAddInterest = debounce(this.handleAddInterest, 250).bind(this);
+        this.handleRemoveInterest = debounce(this.handleRemoveInterest, 250).bind(this);
     }
 
     componentDidMount() {
@@ -42,6 +52,24 @@ class FreelancerProfileArea extends React.Component {
             });
     }
 
+    handleAddInterest(id) {
+        doAddInterests([id]).then(() => {
+            toaster.success(`Added category ${window.categories[id].name} to interests`);
+        }).catch(e => {
+            toaster.danger(`Couldn't add category ${window.categories[id].name}`);
+            console.error(e);
+        });
+    }
+
+    handleRemoveInterest(id) {
+        doRemoveInterests([id]).then(() => {
+            toaster.success(`Removed category ${window.categories[id].name}`);
+        }).catch(e => {
+            toaster.danger(`Couldn't remove category ${window.categories[id].name}`);
+            console.error(e);
+        });
+    }
+
     render() {
         if (this.state.isSelected) {
             this.setState({
@@ -49,6 +77,7 @@ class FreelancerProfileArea extends React.Component {
             });
             return <Redirect to={`/job/${this.state.selectedJobId}`} />;
         }
+
         return (
             <Pane background="tint1">
                 <HeaderBar userType={this.props.user.type} />
@@ -256,17 +285,66 @@ class FreelancerProfileArea extends React.Component {
                             </Pane>
 
                             <Pane
-                                key="tab2"
-                                id={`panel-$"tab2"`}
-                                role="tabpanel"
-                                aria-labelledby="tab2"
-                                aria-hidden={2 !== this.state.selectedIndex}
-                                display={
-                                    2 === this.state.selectedIndex
-                                        ? "block"
-                                        : "none"
-                                }>
-                                <Paragraph>Panel Content 2 </Paragraph>
+                                padding={5}
+                                background="blueTint"
+                                display="vertical">
+                                <Pane
+                                    key="tab2"
+                                    id={`panel-$"tab2"`}
+                                    role="tabpanel"
+                                    aria-labelledby="tab2"
+                                    height={200}
+                                    width={900}
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    flexWrap="wrap"
+                                    border="default">
+                                    <Heading is="h2" padding={5}>
+                                        My Preferences{" "}
+                                    </Heading>
+                                    {Object.keys(window.categories).map(key => {
+                                        const category = window.categories[key];
+                                        return (
+                                            <Checkbox
+                                                label={category.name}
+                                                checked={this.state.selectedCategories.includes(
+                                                    category.id
+                                                )}
+                                                marginLeft={15}
+                                                onChange={ev => {
+                                                    this.setState(state => {
+                                                        let selectedCategories = state.selectedCategories.splice(
+                                                            0
+                                                        );
+                                                        const isChecked = selectedCategories.includes(
+                                                            category.id
+                                                        );
+                                                        if (isChecked) {
+                                                            const index = selectedCategories.indexOf(
+                                                                category.id
+                                                            );
+                                                            selectedCategories.splice(
+                                                                index,
+                                                                1
+                                                            );
+                                                            this.handleRemoveInterest(category.id);
+                                                        } else {
+                                                            selectedCategories.push(
+                                                                category.id
+                                                            );
+                                                            this.handleAddInterest(category.id);
+                                                        }
+
+                                                        return {
+                                                            selectedCategories
+                                                        };
+                                                    });
+                                                }}
+                                            />
+                                        );
+                                    })}
+                                </Pane>
                             </Pane>
 
                             <Pane

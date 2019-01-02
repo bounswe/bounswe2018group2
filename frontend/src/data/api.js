@@ -204,6 +204,32 @@ function doGetAllCategories() {
     return fetch(properties.APIURLs.allCategories).then(handleResponse);
 }
 
+function doAddInterests(interestIds) {
+    return fetch(properties.APIURLs.addInterests, {
+        method: "POST",
+        headers: {
+            ...defaultHeaders,
+            "user-token": window.workhubToken
+        },
+        body: JSON.stringify({
+            categories: interestIds
+        })
+    });
+}
+
+function doRemoveInterests(interestIds) {
+    return fetch(properties.APIURLs.removeInterests, {
+        method: "POST",
+        headers: {
+            ...defaultHeaders,
+            "user-token": window.workhubToken
+        },
+        body: JSON.stringify({
+            categories: interestIds
+        })
+    });
+}
+
 export {
     doLogin,
     doGetMember,
@@ -220,5 +246,7 @@ export {
     doUpload,
     doRequestUpdate,
     doCreateUpdate,
-    doGetAllCategories
+    doGetAllCategories,
+    doAddInterests,
+    doRemoveInterests
 };

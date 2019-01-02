@@ -169,7 +169,7 @@ class ClientProfileArea extends React.Component {
                         </Pane>
                     </Pane>
 
-                    <Pane padding={16} background="tint1" display="vertical">
+                    <Pane padding={5} background="tint1" display="vertical">
                         <Pane
                             height={120}
                             width={1000}
