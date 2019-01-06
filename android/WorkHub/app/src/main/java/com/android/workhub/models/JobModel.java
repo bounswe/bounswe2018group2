@@ -1,6 +1,6 @@
 package com.android.workhub.models;
 
-public class JobModel{
+public class JobModel {
 
     private int id;
     private int client_id;
@@ -8,29 +8,29 @@ public class JobModel{
     private String description;
     private String duedate;
     private int price;
-    private int[] categories;
     private int duration;
     private String bidding_status;
+    private String status;
     private String createdAt;
     private String updatedAt;
+    private JobField[] Jobfields;
+    private int[] categories;
 
     public JobModel() {
 
     }
 
-
-    public JobModel(int id, int clientId, String header, String description, String dueDate, int price, int[] categories, int duration, String bidding_status, String createdAt, String updatedAt) {
+    public JobModel(int id, int client_id, String header, String description, String duedate, int price, int duration, String bidding_status, JobField[] jobfields, String status) {
         this.id = id;
-        this.client_id = clientId;
+        this.client_id = client_id;
         this.header = header;
         this.description = description;
-        this.duedate = dueDate;
+        this.duedate = duedate;
         this.price = price;
-        this.categories = categories;
         this.duration = duration;
         this.bidding_status = bidding_status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.Jobfields = jobfields;
+        this.status = status;
     }
 
     public String getHeader() {
@@ -63,14 +63,6 @@ public class JobModel{
 
     public void setPrice(int price) {
         this.price = price;
-    }
-
-    public int[] getCategories() {
-        return categories;
-    }
-
-    public void setCategories(int[] categories) {
-        this.categories = categories;
     }
 
     public int getDuration() {
@@ -117,7 +109,34 @@ public class JobModel{
         return updatedAt;
     }
 
+    public JobField[] getJobfields() {
+        return Jobfields;
+    }
+
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+
+    }
+
+    public void setJobfields(JobField[] jobfields) {
+        Jobfields = jobfields;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int[] getCategories() {
+        return categories;
+    }
+
+    public void setCategories(int[] categories) {
+        this.categories = categories;
     }
 }
+
+

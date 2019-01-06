@@ -143,10 +143,8 @@ public class ProfilePage extends Fragment {
                 bitmap = rotateImageIfRequired(bitmap,selectedImage);
                 image.setImageBitmap(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight()));
             } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }

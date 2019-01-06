@@ -48,6 +48,7 @@ public class MainPage extends Fragment {
     private TextView guestView;
     private int id;
     private String type;
+    private String token;
 
     FloatingActionButton addJobButton;
     @Override
@@ -55,6 +56,7 @@ public class MainPage extends Fragment {
                              Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.fragment_main_page, container, false);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        token = sharedPreferences.getString("token","");
         guestView = mainView.findViewById(R.id.guestText);
         email = sharedPreferences.getString("email","");
         addJobButton = mainView.findViewById(R.id.button_add_job);
@@ -79,7 +81,6 @@ public class MainPage extends Fragment {
 
 
                 for(JobModel job:data.getJobs()){
-
 
                     jobList.add(job);
                     jobAdapter.notifyDataSetChanged();

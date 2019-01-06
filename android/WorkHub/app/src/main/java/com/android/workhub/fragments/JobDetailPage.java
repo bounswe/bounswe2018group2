@@ -4,10 +4,12 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,12 +33,15 @@ import com.android.workhub.models.SimpleMessageModel;
 import com.android.workhub.utils.ServerCall;
 import com.android.workhub.utils.Tasks.SendNotificationTask;
 import com.android.workhub.utils.WorkHubServiceListener;
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class JobDetailPage extends Fragment {
     View mainView;
@@ -64,7 +69,7 @@ public class JobDetailPage extends Fragment {
 
     //see bids
     Button seeAllBidsButton;
-
+    ImageView imageView;
 
     private String token;
     private String type;
@@ -85,6 +90,9 @@ public class JobDetailPage extends Fragment {
         token = sharedPreferences.getString("token","");
         type=sharedPreferences.getString("type","");
         isMine = getArguments().getBoolean("isMine");
+
+
+        // init
 
 
         clientName=mainView.findViewById(R.id.clientName);
@@ -112,14 +120,13 @@ public class JobDetailPage extends Fragment {
         list.add("milestone");
         list.add("completion");
         spinnerCreateUpdate.setAdapter(new ArrayAdapter<String>(getActivity().getApplicationContext(),R.layout.sample_dropdown_spinner_item,list));
+        imageView = mainView.findViewById(R.id.imageView);
 
-
-        if(!isMine){
+        if(!isMine){ // not mine job
             seeAllBidsButton.setVisibility(View.GONE);
             spinnerCreateUpdate.setVisibility(View.GONE);
             createUpdateButton.setVisibility(View.GONE);
             requestUpdateButton.setVisibility(View.GONE);
-
 
         }
         else{
@@ -131,13 +138,14 @@ public class JobDetailPage extends Fragment {
                 spinnerCreateUpdate.setVisibility(View.GONE);
                 createUpdateButton.setVisibility(View.GONE);
                 requestUpdateButton.setVisibility(View.VISIBLE);
-            }else{
+            }else{ // guest
                 spinnerCreateUpdate.setVisibility(View.GONE);
                 createUpdateButton.setVisibility(View.GONE);
                 requestUpdateButton.setVisibility(View.GONE);
             }
         }
 
+        // custom switch
 
         customButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,6 +159,9 @@ public class JobDetailPage extends Fragment {
 
             }
         });
+
+        // see all bids
+
         seeAllBidsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -166,7 +177,7 @@ public class JobDetailPage extends Fragment {
             }
         });
 
-
+        // set job details
 
         ServerCall.getJobDetail(job_id, new WorkHubServiceListener<JobDetailReturnModel>() {
             @Override
@@ -197,7 +208,7 @@ public class JobDetailPage extends Fragment {
                     bidding_status.setTextColor(Color.GREEN);
                     isBiddingOpen = true;
                 }
-                else{
+                else{ // closed
                     bidding_status.setText("closed");
                     bidding_status.setTextColor(Color.RED);
                     isBiddingOpen = false;
@@ -210,6 +221,31 @@ public class JobDetailPage extends Fragment {
 
 
                 duration.setText(data.getJob().getDuration()+" days");
+
+
+                // set image
+
+                boolean found = false;
+                String link = "";
+                Pattern p = Pattern.compile("!\\[[\\w|\\s|\\.]+\\]\\((([\\s|\\w|\\.|:|\\/|-])+)\\)");
+                Matcher m = p.matcher(description.getText().toString());
+                if(m.find()){
+                    found = true;
+                    link = m.group(1);
+                    link = link.replace(" ","");
+                    Picasso.get()
+                            .load(link)
+                            .resize((int)dpToPx(250), (int)dpToPx(150))
+                            .into(imageView);
+
+
+                }
+
+                if(found){
+                    description.setText(description.getText().toString().substring(0,description.getText().toString().indexOf("!")));
+                }else{
+                    description.setText(description.getText().toString());
+                }
             }
 
             @Override
@@ -217,6 +253,9 @@ public class JobDetailPage extends Fragment {
                 Log.e("JobDetail", "onFailure: " + e.toString() );
             }
         });
+
+        // notify freelancer if client, else otherwise
+
         notifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -302,14 +341,13 @@ public class JobDetailPage extends Fragment {
             //for freelance
             else {
                 seeAllBidsButton.setVisibility(View.INVISIBLE);
-
-
-
             }
 
 
 
         }
+
+        // create update
 
         createUpdateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -330,6 +368,8 @@ public class JobDetailPage extends Fragment {
                });
             }
         });
+
+        // request update
 
         requestUpdateButton.setOnClickListener(new View.OnClickListener() {
             RequestUpdateModel model=new RequestUpdateModel(job_id);
@@ -367,4 +407,16 @@ public class JobDetailPage extends Fragment {
 
         return mainView;
     }
+
+    public static float dpToPx(int dip){
+        Resources r = Resources.getSystem();
+        float px = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dip,
+                r.getDisplayMetrics()
+        );
+        return px;
+    }
+
+
 }

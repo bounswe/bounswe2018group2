@@ -66,7 +66,7 @@
 
     <EditText
         android:id="@+id/date"
-        android:layout_width="100dp"
+        android:layout_width="120dp"
         android:layout_height="50dp"
         android:gravity="center"
         android:layout_marginStart="8dp"
@@ -102,7 +102,7 @@
 
     <EditText
         android:id="@+id/price"
-        android:layout_width="100dp"
+        android:layout_width="120dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -127,7 +127,7 @@
 
     <EditText
         android:id="@+id/duration"
-        android:layout_width="100dp"
+        android:layout_width="120dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -138,14 +138,28 @@
         app:layout_constraintTop_toBottomOf="@+id/price" />
 
     <Button
-        android:id="@+id/createJobButton"
-        android:layout_width="wrap_content"
+        android:id="@+id/addMedia"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
-        android:text="CreateJob"
+        android:text="Add Media"
+        android:textAllCaps="false"
         android:background="@drawable/button_shape"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+
+    <Button
+        android:id="@+id/createJobButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_shape"
+        android:text="Create Job"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addMedia" />
 
 </android.support.constraint.ConstraintLayout>
