@@ -42,6 +42,7 @@ public class JobAdapter extends ArrayAdapter {
 
         JobModel currentNavigationItem = jobList.get(position);
 
+
         TextView header = (TextView) listItem.findViewById(R.id.header);
         header.setText(currentNavigationItem.getHeader());
 
@@ -50,6 +51,9 @@ public class JobAdapter extends ArrayAdapter {
 
         TextView dueDate = (TextView) listItem.findViewById(R.id.dueDate);
         boolean isError = false;
+
+        // set date if error set nothing
+
         if(currentNavigationItem.getDueDate()!=null){
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             Date date = new Date();
@@ -73,6 +77,8 @@ public class JobAdapter extends ArrayAdapter {
         TextView status = (TextView) listItem.findViewById(R.id.status);
 
 
+        // color status
+
         if(currentNavigationItem.getBidding_status()!=null){
             if(currentNavigationItem.getBidding_status().equals("open")){
                 status.setText(currentNavigationItem.getBidding_status());
@@ -90,22 +96,6 @@ public class JobAdapter extends ArrayAdapter {
         TextView duration = (TextView) listItem.findViewById(R.id.duration);
 
         duration.setText(currentNavigationItem.getDuration() + " days");
-
-
-
-
-
-
-
-
-
-
-
-
-        if(currentNavigationItem.getCategories()!=null){
-            TextView categories = listItem.findViewById(R.id.categories);
-            categories.setText(currentNavigationItem.getCategories()[0] + "");
-        }
 
 
         return listItem;

@@ -59,6 +59,8 @@ public class BidAdapter extends ArrayAdapter {
         token = sharedPreferences.getString("token","");
 
 
+        // init
+
         final BidModel currentNavigationItem = bidList.get(position);
         acceptButton = listItem.findViewById(R.id.acceptButton);
         rejectButton =listItem.findViewById(R.id.rejectButton);
@@ -70,7 +72,7 @@ public class BidAdapter extends ArrayAdapter {
         description.setText(currentNavigationItem.getDescription());
         name.setText(currentNavigationItem.getFreelancer().getFirstName()+" "+currentNavigationItem.getFreelancer().getLastName());
 
-
+        // accept bid
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
             PostBidModel model = new PostBidModel(currentNavigationItem.getId());
@@ -90,6 +92,8 @@ public class BidAdapter extends ArrayAdapter {
                 });
             }
         });
+
+        // reject bid
 
         rejectButton.setOnClickListener(new View.OnClickListener() {
             @Override

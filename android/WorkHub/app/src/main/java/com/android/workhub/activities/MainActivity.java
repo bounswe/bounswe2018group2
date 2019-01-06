@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -44,11 +45,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // get token and email from sharedprefs
+
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         email = sharedPreferences.getString("email","");
         token = sharedPreferences.getString("token","");
 
-        if(!token.equals("")){
+        if(!token.equals("")){ // if not guest get type and id
             ServerCall.getSelf(token, new WorkHubServiceListener<GetSelfReturnModel>() {
                 @Override
                 public void onSuccess(GetSelfReturnModel data) {
@@ -63,7 +67,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-        // Toast.makeText(this, email, Toast.LENGTH_SHORT).show();
+
+        // set bottom navigation bar
+
         ahBottomNavigation = findViewById(R.id.bottom_navigation);
 
         AHBottomNavigationItem item1 = new AHBottomNavigationItem("Main Page", R.drawable.ic_main);
@@ -81,9 +87,6 @@ public class MainActivity extends AppCompatActivity {
 
         ahBottomNavigation.setCurrentItem(0);
         ahBottomNavigation.setNotificationBackgroundColor(Color.parseColor("#F63D2B"));
-
-        //ahBottomNavigation.setNotification("1", 1);
-        //todo
 
         ahBottomNavigation.setItemDisableColor(Color.parseColor("#3A000000"));
 
@@ -112,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    // set menu on create
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -130,18 +133,18 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    // top left settings menu
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case(R.id.menu_login):
                 Intent loginIntent = new Intent(MainActivity.this,LoginActivity.class);
-                //   login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(loginIntent);
                 break;
             case(R.id.menu_signup):
                 Intent signUpIntent = new Intent(MainActivity.this,SignupActivity.class);
-                //  signUpIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(signUpIntent);
+                 startActivity(signUpIntent);
                 break;
             case (R.id.menu_logout):
                 sharedPreferences.edit()
@@ -172,6 +175,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    // open profile page
+
     private void goToProfilePage() {
         if(email==null || email.equals("")){
             Toast.makeText(this, "You need to login to see your profile, please click settings menu on the top right",
@@ -194,6 +200,9 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+
+    // go opening screen
+
     private void goToOpeningScreen() {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -205,6 +214,9 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+
+    // open jobs page
+
     private void goToJobsPage(){
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -213,6 +225,8 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.frame,fragment);
         transaction.commit();
     }
+
+    // adjust bottom bar on back pressed
 
     @Override
     public void onBackPressed() {

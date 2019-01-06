@@ -75,6 +75,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnKeyListen
         });
     }
 
+    // when enter key on keyboard pressed
+
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
         if(event.getKeyCode()==KeyEvent.KEYCODE_ENTER){
